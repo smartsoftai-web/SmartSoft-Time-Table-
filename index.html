@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSoft - පාසල් කාලසටහන් පද්ධතිය</title>
+    
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        /* Professional Colors & Grid System */
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #d1d5db; margin: 0; padding: 10px; font-size: 13px; color: #1f2937; height: 100vh; box-sizing: border-box;}
+        
+        .layout { display: flex; gap: 10px; height: calc(100vh - 20px); }
+        .panel { background: white; padding: 15px; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); box-sizing: border-box; }
+        
+        .left-panel { flex: 1.2; min-width: 340px; max-width: 400px; background-color: #f3f4f6; border-right: 1px solid #e5e7eb; overflow-y: auto; }
+        .right-panel { flex: 3; display: flex; flex-direction: column; min-width: 0; background-color: #ffffff; overflow: hidden; }
+        
+        h2.school-title { text-align: center; color: #111827; margin: 0 0 5px 0; font-size: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+        .term-info-display { text-align: center; font-weight: bold; color: #2563eb; margin-bottom: 5px; font-size: 13px; display: none; }
+        h3.main-title { text-align: center; color: #4b5563; margin: 0 0 15px 0; font-size: 14px; font-weight: 600; }
+        
+        /* Modern Buttons */
+        .btn-primary { color: white; width: 100%; padding: 10px; border-radius: 4px; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 8px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2); border: 1px solid transparent;}
+        .btn-auto { background: linear-gradient(to bottom, #10b981, #059669); border-color: #047857; font-size: 14px; margin-top: 5px; }
+        .btn-auto:hover { background: linear-gradient(to bottom, #059669, #047857); }
+        .btn-attendance { background: linear-gradient(to bottom, #14b8a6, #0d9488); border-color: #0f766e; }
+        .btn-attendance:hover { background: linear-gradient(to bottom, #0d9488, #0f766e); }
+        .btn-relief { background: linear-gradient(to bottom, #8b5cf6, #7c3aed); border-color: #6d28d9; }
+        .btn-relief:hover { background: linear-gradient(to bottom, #7c3aed, #6d28d9); }
+        .btn-print-menu { background: linear-gradient(to bottom, #6b7280, #4b5563); border-color: #374151; }
+        .btn-print-menu:hover { background: linear-gradient(to bottom, #4b5563, #374151); }
+        .btn-summary { background: linear-gradient(to bottom, #3b82f6, #2563eb); border-color: #1d4ed8; }
+        .btn-summary:hover { background: linear-gradient(to bottom, #2563eb, #1d4ed8); }
+        .btn-data { background: linear-gradient(to bottom, #f59e0b, #d97706); border-color: #b45309; }
+        .btn-data:hover { background: linear-gradient(to bottom, #d97706, #b45309); }
+        .btn-clear { background: linear-gradient(to bottom, #ef4444, #dc2626); border-color: #b91c1c; margin-top: 15px; }
+        .btn-clear:hover { background: linear-gradient(to bottom, #dc2626, #b91c1c); }
+        
+        .btn-small { background-color: #3b82f6; color: white; border: 1px solid #2563eb; padding: 6px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; font-weight: bold; width: 100%; }
+        .btn-small:hover { background-color: #2563eb; }
+        .btn-delete { background: #ef4444; color: white; border: 1px solid #dc2626; padding: 3px 6px; border-radius: 3px; cursor: pointer; font-size: 10px; }
+        .btn-wa { background: #25D366; color: white; border: 1px solid #20b958; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 4px;}
+
+        /* Fieldsets */
+        fieldset { border: 1px solid #d1d5db; border-radius: 4px; padding: 12px 10px; margin-bottom: 12px; background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        legend { font-size: 12px; font-weight: bold; color: #1e40af; background: #ffffff; padding: 2px 8px; border-radius: 3px; border: 1px solid #d1d5db; }
+
+        /* Form Grid */
+        .form-grid { display: grid; grid-template-columns: 85px 1fr; gap: 8px; align-items: center; margin-bottom: 8px; }
+        .form-grid label { font-size: 11px; font-weight: bold; color: #374151; text-align: right; padding-right: 5px; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 6px 8px; border: 1px solid #9ca3af; border-radius: 3px; font-size: 12px; box-sizing: border-box; background: #f9fafb; outline: none; }
+        input[type="text"]:focus, select:focus { border-color: #2563eb; background: #ffffff; }
+
+        .basket-box { background: #eff6ff; padding: 8px; border: 1px dashed #93c5fd; border-radius: 3px; margin-bottom: 8px; }
+        .rules-list { max-height: 180px; overflow-y: auto; background: #fff; border: 1px solid #d1d5db; padding: 4px; border-radius: 3px;}
+        .rule-item { background: #f3f4f6; padding: 6px; border: 1px solid #e5e7eb; margin-bottom: 4px; border-radius: 3px; font-size: 11px; display: flex; justify-content: space-between; align-items: center;}
+        
+        /* Ribbon & Filters */
+        .view-controls { background: #f3f4f6; padding: 10px; border-radius: 4px; margin-bottom: 12px; border: 1px solid #d1d5db; display: flex; flex-direction: column; gap: 10px;}
+        .radio-group { display: flex; gap: 15px; font-weight: bold; font-size: 12px; justify-content: center; flex-wrap: wrap;}
+        .radio-group label { cursor: pointer; display: flex; align-items: center; gap: 4px; color: #374151;}
+        
+        /* Table View */
+        .table-container { flex: 1; min-height: 0; overflow: auto; border: 2px solid #9ca3af; background: #e5e7eb; padding: 2px;}
+        table { width: 100%; height: 100%; border-collapse: separate; border-spacing: 2px; table-layout: fixed; min-width: 700px; }
+        
+        tr.period-row { height: 11%; } 
+        tr.special-row { height: 25px !important; }
+        
+        th, td { text-align: center; vertical-align: middle; padding: 2px; border-radius: 2px; overflow: hidden; }
+        
+        th:first-child, td:first-child { width: 50px !important; max-width: 50px !important; min-width: 50px !important; white-space: nowrap; }
+        
+        th { background: linear-gradient(to bottom, #e5e7eb, #d1d5db); color: #1f2937; padding: 6px; font-size: 12px; border: 1px solid #9ca3af;}
+        td:first-child { background: linear-gradient(to bottom, #d1d5db, #9ca3af); font-weight: bold; font-size: 11px; position: sticky; left: 0; z-index: 1; border: 1px solid #6b7280;}
+        td.cell-empty { background-color: #ffffff; border: 1px solid #d1d5db; }
+        
+        .attendance-row { background: linear-gradient(to right, #bfdbfe, #93c5fd) !important; color: #1e3a8a !important; font-weight: bold; padding: 4px !important; font-size: 10px; letter-spacing: 1px; border: 1px solid #60a5fa !important; text-transform: uppercase;}
+        .interval { background: linear-gradient(to right, #6b7280, #4b5563) !important; color: white !important; font-weight: bold; padding: 4px !important; font-size: 11px; letter-spacing: 2px; border: 1px solid #374151 !important; text-transform: uppercase;}
+        .day-header { background: linear-gradient(to right, #4b5563, #374151) !important; color: white !important; font-weight: bold; padding: 4px; font-size: 12px; text-align: center; border: 1px solid #1f2937 !important;}
+        
+        /* Timetable Cards */
+        .card { padding: 4px; border-radius: 4px; font-size: 11px; font-weight: 700; width: 100%; height: 100%; min-height: 38px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; line-height: 1.1; border: 1px solid rgba(0,0,0,0.3); box-shadow: 1px 1px 3px rgba(0,0,0,0.2); color: #111827; box-sizing: border-box; position: relative; overflow: hidden;}
+        .card::before { content: ''; position: absolute; top:0; left:0; width:100%; height: 30%; background: linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0)); pointer-events: none;}
+        .card-subj { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block; z-index: 2; text-align: center;}
+        .card span { font-weight: 600; font-size: 9px; color: #1f2937; display: block; margin-top: 2px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-align: center;}
+        .empty-slot { color: #9ca3af; font-size: 10px; font-style: italic; }
+
+        .footer { text-align: center; font-size: 12px; font-weight: bold; color: #4b5563; padding-top: 10px; margin-top: 10px; border-top: 1px solid #e5e7eb; }
+
+        /* Modals */
+        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items:center; justify-content:center; padding: 10px; box-sizing: border-box;}
+        .modal { background: #ffffff; padding: 20px; border-radius: 6px; width: 100%; max-width: 500px; border: 1px solid #9ca3af; box-shadow: 0 10px 25px rgba(0,0,0,0.5); position: relative; /* නව වෙනස්කම් - Mobile Scrolling සඳහා */
+    max-height: 90vh; 
+    overflow-y: auto; }
+        .close-btn { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 18px; font-weight: bold; color: #6b7280; background: none; border: none; }
+        .close-btn:hover { color: #ef4444; }
+
+        /* LOADING ANIMATION (AI Engine) */
+        .loading-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(17, 24, 39, 0.9); z-index: 4000; flex-direction: column; align-items:center; justify-content:center; color: white; backdrop-filter: blur(5px); }
+        .spinner { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid #3b82f6; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-title { font-size: 22px; font-weight: bold; margin-bottom: 10px; color: #60a5fa; letter-spacing: 1px;}
+        .loading-sub { font-size: 13px; color: #9ca3af; }
+
+        /* SUCCESS ANIMATION MODAL */
+        .success-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 3000; align-items:center; justify-content:center; backdrop-filter: blur(4px); transition: opacity 0.5s ease;}
+        .success-modal { background: linear-gradient(135deg, #10b981, #059669); padding: 30px 50px; border-radius: 15px; text-align: center; color: white; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); border: 2px solid #34d399; animation: popBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .success-emoji { font-size: 60px; margin-bottom: 10px; animation: tada 1.2s ease-in-out infinite; }
+        .success-text { font-size: 22px; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+
+        @keyframes popBounce { 0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+        @keyframes tada { 0% { transform: scale(1); } 10%, 20% { transform: scale(0.9) rotate(-3deg); } 30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); } 40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); } 100% { transform: scale(1); } }
+
+        @media screen and (max-width: 768px) {
+            .layout { flex-direction: column; height: auto; }
+            .left-panel { min-width: 100%; max-width: 100%; }
+            .table-container { padding: 0; border: none; overflow-x: auto; }
+            table { border-spacing: 0; border-collapse: collapse; }
+            th, td { border: 1px solid #d1d5db; border-radius: 0; }
+        }
+        
+        #printArea { display: none; }
+
+        /* Print Settings */
+        @media print {
+            @page { margin: 8mm; size: landscape; } 
+            body { background-color: white; padding: 0; font-size: 12px; margin: 0; }
+            .layout, .modal-overlay, .success-overlay, .loading-overlay { display: none !important; }
+            #printArea { display: block !important; width: 100%; }
+            
+            .print-page { page-break-after: always; width: 100%; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column;}
+            .timetable-box { break-inside: avoid; flex: 1; display: flex; flex-direction: column; margin-bottom: 5mm;}
+            
+            .layout-1 .timetable-box { width: 100%; height: 100%; }
+            .layout-1 h2.school-title { font-size: 22px; color: black; margin-bottom: 2px; text-align: center; }
+            .layout-1 .print-term-info { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: black; }
+            .layout-1 h3.main-title { font-size: 16px; color: black; margin-bottom: 10px; text-align: center; }
+            .layout-1 table { flex: 1; border: 2px solid #000; border-collapse: collapse; width: 100%; height: 100%; border-spacing: 0; table-layout: fixed; }
+            .layout-1 th, .layout-1 td { border: 1px solid #000 !important; color: black !important; padding: 4px !important; border-radius: 0; }
+            
+            .layout-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; align-items: start; height: 100vh;}
+            .layout-2 h2.school-title { font-size: 16px; margin-bottom: 2px; text-align: center; color: black;}
+            .layout-2 .print-term-info { text-align: center; font-weight: bold; font-size: 12px; margin-bottom: 3px; color: black; }
+            .layout-2 h3.main-title { font-size: 13px; margin-bottom: 5px; text-align: center; color: black;}
+            .layout-2 table { flex: 1; border: 2px solid #000; border-collapse: collapse; width: 100%; height: 100%; border-spacing: 0; table-layout: fixed; }
+            .layout-2 th, .layout-2 td { border: 1px solid #000 !important; color: black !important; padding: 2px !important; font-size: 10px !important; border-radius: 0;}
+            
+            .layout-4 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 6mm; height: 100vh;}
+            .layout-4 h2.school-title { font-size: 12px; margin-bottom: 1px; text-align: center; color: black;}
+            .layout-4 .print-term-info { text-align: center; font-weight: bold; font-size: 9px; margin-bottom: 2px; color: black; }
+            .layout-4 h3.main-title { font-size: 10px; margin-bottom: 3px; text-align: center; color: black;}
+            .layout-4 table { flex: 1; border: 1px solid #000; border-collapse: collapse; width: 100%; height: 100%; border-spacing: 0; table-layout: fixed;}
+            .layout-4 th, .layout-4 td { border: 1px solid #000 !important; color: black !important; padding: 1px !important; font-size: 8px !important; border-radius: 0;}
+
+            tr.period-row { height: 11% !important; }
+            tr.special-row { height: auto !important; }
+
+            .card { padding: 2px !important; margin: 0 !important; box-shadow: none !important; border: 1px solid #444 !important; color: #000 !important; background-image: none !important; height: 100% !important; min-height: 0 !important; display: flex !important; flex-direction: column; justify-content: center; align-items: center; overflow: visible !important; white-space: normal !important; word-wrap: break-word !important; border-radius: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .card::before { display: none !important; } 
+            .card-subj { white-space: normal !important; overflow: visible !important; display: block !important; font-weight: bold !important; text-align: center;}
+            .card span { color: #000 !important; border-top: 1px solid #999; margin-top: 1px; padding-top: 1px; white-space: normal !important; overflow: visible !important; text-align: center;}
+            
+            .layout-2 .card { font-size: 9px !important; line-height: 1.1 !important; }
+            .layout-2 .card span { font-size: 8px !important; }
+            .layout-4 .card { font-size: 7.5px !important; line-height: 1.0 !important; padding: 1px !important;}
+            .layout-4 .card span { font-size: 6px !important; border-top: none; }
+
+            th { background: #e5e7eb !important; color: black !important; text-shadow: none !important; -webkit-print-color-adjust: exact; border: 1px solid #000 !important;}
+            td:first-child { background: #e5e7eb !important; color: black !important; border: 1px solid #000 !important; width: 40px !important; min-width: 40px !important;}
+            td.cell-empty { background-color: white !important; }
+            
+            .interval { background: #d1d5db !important; color: black !important; border: 1px solid #000 !important; -webkit-print-color-adjust: exact; letter-spacing: normal; text-transform: none; text-shadow: none !important; box-shadow: none !important;}
+            .attendance-row { background: #e2e8f0 !important; color: black !important; border: 1px solid #000 !important; text-shadow: none !important; box-shadow: none !important; -webkit-print-color-adjust: exact; padding: 1px !important;}
+            .day-header { background: #ccc !important; color: black !important; border: 1px solid #000 !important; -webkit-print-color-adjust: exact; text-shadow: none !important;}
+            
+            .print-footer { text-align: center; font-size: 10px; font-weight:bold; color: black; margin-top: 5px; border-top: 1px solid #000; padding-top: 3px; }
+            .print-footer span { color: #10b981 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            .relief-card { background-color: #fef2f2 !important; border: 1px solid #000 !important; -webkit-print-color-adjust: exact; }
+            .relief-text { color: #000 !important; font-weight: bold; }
+            .btn-wa { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AI Loading Animation -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-title">කාලසටහන විශ්ලේෂණය කරමින්...</div>
+        <div id="loadingText" class="loading-sub">උත්සාහයන්: 0/10000</div>
+    </div>
+
+    <!-- Success Animation Modal -->
+    <div id="successOverlay" class="success-overlay">
+        <div class="success-modal">
+            <div class="success-emoji">🎉✨</div>
+            <div class="success-text">කාලසටහන සාර්ථකව<br>සැකසී අවසන්!</div>
+        </div>
+    </div>
+
+    <!-- Attendance Modal (Updated for Day-specific Attendance) -->
+    <div id="attendanceModal" class="modal-overlay">
+        <div class="modal" style="max-width: 400px;">
+            <button class="close-btn" onclick="closeModals()">✖</button>
+            <h3 style="margin-top:0; color:#0d9488; border-bottom: 2px solid #e5e7eb; padding-bottom:8px;">📅 ගුරු පැමිණීම</h3>
+            <p style="font-size: 11px; color: gray;">අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. දවස තෝරා අදාළ ගුරුවරුන් ලකුණු කරන්න.</p>
+            
+            <div class="form-grid" style="margin-top: 10px; background: #f0fdf4; padding: 10px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                <label style="color:#166534;">දවස තෝරන්න:</label>
+                <select id="attendanceDay" onchange="renderAttendanceList()" style="border-color: #4ade80; font-weight: bold; color: #166534;"></select>
+            </div>
+
+            <div id="attendanceList" style="max-height: 250px; overflow-y: auto; padding-right: 5px; margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- Summary Modal -->
+    <div id="summaryModal" class="modal-overlay">
+        <div class="modal" style="max-width: 600px;">
+            <button class="close-btn" onclick="closeModals()">✖</button>
+            <h3 style="margin-top:0; color:#1d4ed8; border-bottom: 2px solid #e5e7eb; padding-bottom:8px;">📊 කාලච්ඡේද සාරාංශය</h3>
+            <p style="font-size: 11px; color: gray;">ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.</p>
+            
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                <div style="flex: 1; min-width: 250px;">
+                    <h4 style="margin: 0 0 8px 0; color: #b45309;">🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය</h4>
+                    <div id="teacherSummary" style="max-height: 300px; overflow-y: auto; background: #fff; border: 1px solid #d1d5db; padding: 5px; border-radius: 4px;"></div>
+                </div>
+                <div style="flex: 1; min-width: 250px;">
+                    <h4 style="margin: 0 0 8px 0; color: #047857;">📚 පන්ති කාලච්ඡේද ප්‍රමාණය</h4>
+                    <div id="classSummary" style="max-height: 300px; overflow-y: auto; background: #fff; border: 1px solid #d1d5db; padding: 5px; border-radius: 4px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relief Management Modal -->
+    <div id="reliefModal" class="modal-overlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModals()">✖</button>
+            <h3 style="margin-top:0; color:#7c3aed; border-bottom: 2px solid #e5e7eb; padding-bottom:8px;">👨‍🏫 සහන කාලච්ඡේද (Relief)</h3>
+            
+            <div style="background:#fef2f2; border:1px solid #fca5a5; padding:10px; border-radius:4px; margin-bottom:15px;">
+                <h4 style="margin:0 0 8px 0; color:#b91c1c;">⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)</h4>
+                <div class="form-grid" style="margin-bottom:8px;">
+                    <label>දවස:</label><select id="relFilterDay" onchange="updateAbsenteeReliefList()"></select>
+                </div>
+                <div id="absenteePeriods" style="max-height:100px; overflow-y:auto;"></div>
+            </div>
+
+            <hr style="border:0; border-top:1px dashed #d1d5db; margin:15px 0;">
+            <p style="font-size: 11px; color: gray;">අතින් සහන යෙදීම (Manual Assignment):</p>
+            
+            <div class="form-grid">
+                <label>දවස:</label><select id="relDay" onchange="updateReliefUI()"></select>
+                <label>කාලච්ඡේදය:</label><select id="relPeriod" onchange="updateReliefUI()">
+                    <option value="1">1 වැනි කාලච්ඡේදය</option><option value="2">2 වැනි කාලච්ඡේදය</option>
+                    <option value="3">3 වැනි කාලච්ඡේදය</option><option value="4">4 වැනි කාලච්ඡේදය</option>
+                    <option value="5">5 වැනි කාලච්ඡේදය</option><option value="6">6 වැනි කාලච්ඡේදය</option>
+                    <option value="7">7 වැනි කාලච්ඡේදය</option><option value="8">8 වැනි කාලච්ඡේදය</option>
+                </select>
+                <label>පන්තිය:</label><select id="relClass" onchange="updateReliefUI()"></select>
+            </div>
+            
+            <div id="relStatus" style="margin: 10px 0; padding: 10px; background: #fef2f2; border: 1px dashed #ef4444; border-radius: 4px; font-weight: bold; color: #b91c1c; font-size: 12px; text-align: center;">
+                දත්ත පරීක්ෂා කරමින්...
+            </div>
+
+            <div class="form-grid" id="relTeacherDiv" style="display:none;">
+                <label>සහන ගුරුවරයා:</label><select id="relAvailTeacher"></select>
+                <label></label><button class="btn-small" style="background: #8b5cf6; border-color:#7c3aed;" onclick="addRelief()">+ සහනය එක් කරන්න</button>
+            </div>
+
+            <h4 style="margin-top: 15px; border-bottom: 1px solid #d1d5db;">ලබා දී ඇති සහන ලැයිස්තුව</h4>
+            <div class="rules-list" id="activeReliefsList" style="max-height: 120px;"></div>
+
+            <button class="btn-primary" style="background: linear-gradient(to bottom, #4b5563, #374151); border-color:#1f2937; margin-top: 10px; margin-bottom: 0;" onclick="printReliefList()">🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF</button>
+        </div>
+    </div>
+
+    <!-- Print Modal -->
+    <div id="printModal" class="modal-overlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModals()">✖</button>
+            <h3 style="margin-top:0; color:#1e40af; border-bottom: 2px solid #e5e7eb; padding-bottom:8px;">🖨️ මුද්‍රණ මෙනුව</h3>
+            <fieldset style="background:#f9fafb;">
+                <legend>පිටු සැකසුම (Print Layout)</legend>
+                <div class="radio-group" style="justify-content: flex-start;">
+                    <label><input type="radio" name="printLayout" value="1" checked> 1ක් පෙන්වන්න (A4)</label>
+                    <label><input type="radio" name="printLayout" value="2"> 2ක් පෙන්වන්න</label>
+                    <label><input type="radio" name="printLayout" value="4"> 4ක් පෙන්වන්න</label>
+                </div>
+            </fieldset>
+            <p style="font-size: 11px; color: #4b5563; margin-bottom: 10px;">මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:</p>
+            <button class="btn-primary" style="background: linear-gradient(to bottom, #3b82f6, #2563eb); border-color:#1d4ed8;" onclick="triggerPrint('all_master')">🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)</button>
+            <button class="btn-primary" style="background: linear-gradient(to bottom, #10b981, #059669); border-color:#047857;" onclick="triggerPrint('classes')">📚 සියලුම පන්ති කාලසටහන්</button>
+            <button class="btn-primary" style="background: linear-gradient(to bottom, #f59e0b, #d97706); border-color:#b45309;" onclick="triggerPrint('teachers')">🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්</button>
+        </div>
+    </div>
+
+    <!-- Data Management Modal -->
+    <div id="dataModal" class="modal-overlay">
+        <div class="modal" style="max-width: 800px;">
+            <button class="close-btn" onclick="closeModals()">✖</button>
+            <h3 style="margin-top:0; color:#1e40af; border-bottom: 2px solid #e5e7eb; padding-bottom:8px;">⚙️ දත්ත කළමනාකරණය</h3>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="margin: 0 0 10px 0; color: #374151; border-bottom: 1px solid #d1d5db;">📚 ශ්‍රේණි / පන්ති</h4>
+                    <div id="modalClasses" style="max-height: 200px; overflow-y: auto;"></div>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="margin: 0 0 10px 0; color: #374151; border-bottom: 1px solid #d1d5db;">🧑‍🏫 ගුරුවරුන්</h4>
+                    <div id="modalTeachers" style="max-height: 200px; overflow-y: auto;"></div>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <h4 style="margin: 0 0 10px 0; color: #374151; border-bottom: 1px solid #d1d5db;">📖 විෂයයන්</h4>
+                    <div id="modalSubjects" style="max-height: 200px; overflow-y: auto;"></div>
+                </div>
+            </div>
+
+            <hr style="border:0; border-top:1px dashed #d1d5db; margin:20px 0;">
+            <h4 style="margin: 0 0 10px 0; color: #047857; border-bottom: 1px solid #d1d5db;">🧑‍🏫 පන්තිභාර ගුරුවරුන් වෙනස් කිරීම (Class Teacher Management)</h4>
+            <div id="modalClassTeachers" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; max-height: 200px; overflow-y: auto; background: #ecfdf5; padding: 10px; border: 1px solid #a7f3d0; border-radius: 4px;"></div>
+            
+            <hr style="border:0; border-top:1px dashed #d1d5db; margin:20px 0;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-primary" style="background: #2563eb; flex:1; margin:0;" onclick="exportData()">💾 දත්ත Save කරන්න (Backup)</button>
+                <button class="btn-primary" style="background: #10b981; flex:1; margin:0;" onclick="document.getElementById('importFile').click()">📂 දත්ත Restore කරන්න</button>
+                <button class="btn-primary btn-clear" style="flex:1; margin:0;" onclick="clearAllData()">⚠️ සියලුම දත්ත මකා දමන්න</button>
+                <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+            </div>
+        </div>
+    </div>
+
+    <div id="printArea"></div>
+
+    <div class="layout">
+        <!-- Left Panel -->
+        <div class="panel left-panel">
+            <fieldset>
+                <legend>🏢 පාසලේ විස්තර</legend>
+                <div class="form-grid" style="grid-template-columns: 1fr; margin-bottom: 5px;">
+                    <input type="text" id="schoolNameInput" placeholder="පාසලේ නම මෙහි ඇතුළත් කරන්න" onkeyup="updateSchoolInfo()" style="font-weight: bold; text-align: center; color: #1d4ed8; font-size: 14px;">
+                </div>
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 5px;">
+                    <input type="number" id="yearInput" placeholder="වර්ෂය (උදා: 2026)" onkeyup="updateSchoolInfo()" onchange="updateSchoolInfo()" style="text-align: center; font-weight: bold;">
+                    <select id="termInput" onchange="updateSchoolInfo()" style="text-align: center; font-weight: bold;">
+                        <option value="">-- වාරය --</option>
+                        <option value="1 වන වාරය">1 වන වාරය</option>
+                        <option value="2 වන වාරය">2 වන වාරය</option>
+                        <option value="3 වන වාරය">3 වන වාරය</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>⚙️ ප්‍රධාන සැකසුම් (Settings)</legend>
+                <div class="form-grid">
+                    <label>විවේක කාලය:</label>
+                    <select id="intervalSetting" style="font-weight: bold; color: #b91c1c;" onchange="updateInterval()">
+                        <option value="4">කාලච්ඡේද 4 කට පසුව</option>
+                        <option value="5">කාලච්ඡේද 5 කට පසුව</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <button class="btn-primary btn-auto" onclick="startGenerationAsync()">⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න</button>
+            <button class="btn-primary btn-attendance" onclick="openAttendanceModal()">📅 ගුරු පැමිණීම (Attendance)</button>
+            <button class="btn-primary btn-relief" onclick="openReliefModal()">👨‍🏫 සහන කාලච්ඡේද (Relief)</button>
+            <button class="btn-primary btn-summary" onclick="openSummaryModal()">📊 කාලච්ඡේද සාරාංශය (Workload)</button>
+            <button class="btn-primary btn-print-menu" onclick="openPrintModal()">🖨️ මුද්‍රණය කිරීම (Print)</button>
+            <button class="btn-primary btn-data" onclick="openDataModal()">⚙️ ඇතුළත් කළ දත්ත / පන්තිභාර වෙනස්කම්</button>
+            
+            <fieldset>
+                <legend>👨‍🏫 මූලික දත්ත එක් කරන්න</legend>
+                <div class="form-grid">
+                    <label>ශ්‍රේණිය:</label><input type="text" id="inClass" placeholder="උදා: 6, 7-A">
+                    <label></label><button class="btn-small" onclick="addMasterClassMain()">+ ශ්‍රේණිය එක් කරන්න</button>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed #d1d5db; margin: 10px 0;">
+                <div class="form-grid">
+                    <label>විෂයය:</label><input type="text" id="inSubject" placeholder="උදා: ගණිතය">
+                    <label></label><button class="btn-small" onclick="addMasterSubject()">+ විෂයය එක් කරන්න</button>
+                </div>
+                <hr style="border: 0; border-top: 1px dashed #d1d5db; margin: 10px 0;">
+                <div class="form-grid">
+                    <label>ගුරුවරයා:</label><input type="text" id="inTeacher" placeholder="උදා: නිමල් සර්">
+                    <label></label>
+                    <div style="display: flex; gap: 5px; align-items: center; width: 100%;">
+                        <input type="checkbox" id="isClassTeacher" onchange="toggleCTGrade()"> <label for="isClassTeacher" style="font-size:10px; padding:0; text-align: left;">පන්තිභාරද?</label>
+                        <select id="inTeacherClass" style="display:none; padding:4px;"><option value="">පන්තිය</option></select>
+                    </div>
+                    <label></label><button class="btn-small" onclick="addMasterTeacher()">+ ගුරුවරයා එක් කරන්න</button>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්</legend>
+                <div class="form-grid">
+                    <label>ගුරුවරයා:</label><select id="cTeacher"></select>
+                    <label>දවස:</label><select id="cDay"></select>
+                    <label>කාලච්ඡේදය:</label>
+                    <select id="cPeriod">
+                        <option value="All">සම්පූර්ණ දිනයම නිදහස්</option>
+                        <option value="1">1 වැනි කාලච්ඡේදය</option>
+                        <option value="2">2 වැනි කාලච්ඡේදය</option>
+                        <option value="3">3 වැනි කාලච්ඡේදය</option>
+                        <option value="4">4 වැනි කාලච්ඡේදය</option>
+                        <option value="5">5 වැනි කාලච්ඡේදය</option>
+                        <option value="6">6 වැනි කාලච්ඡේදය</option>
+                        <option value="7">7 වැනි කාලච්ඡේදය</option>
+                        <option value="8">8 වැනි කාලච්ඡේදය</option>
+                    </select>
+                    <label></label><button class="btn-small" style="background:#ef4444; border-color:#dc2626;" onclick="addConstraint()">+ නිදහස් කාලය යොදන්න</button>
+                </div>
+                <div class="rules-list" id="constraintsList" style="max-height: 100px;"></div>
+            </fieldset>
+
+            <fieldset>
+                <legend>⚙️ ඉගැන්වීම් නීති සැකසීම</legend>
+                <div class="form-grid">
+                    <label>ශ්‍රේණිය:</label><select id="rClass"></select>
+                    <label>වර්ගය:</label>
+                    <select id="rType" onchange="toggleRuleType()">
+                        <option value="core">සාමාන්‍ය විෂයය</option>
+                        <option value="basket">කාණ්ඩ විෂයය (Basket)</option>
+                    </select>
+                </div>
+
+                <div id="coreRuleDiv">
+                    <div class="form-grid">
+                        <label>විෂයය:</label><select id="rSubjectCore"></select>
+                        <label>ගුරුවරයා:</label><select id="rTeacherCore"></select>
+                        <label>කාලච්ඡේද ගණන:</label><input type="number" id="rPeriodsCore" min="1" max="8">
+                        <label></label><button class="btn-small" style="background-color: #3b82f6; border-color:#2563eb;" onclick="addCoreRule()">+ නීතිය එක් කරන්න</button>
+                    </div>
+                </div>
+
+                <div id="basketRuleDiv" style="display: none;">
+                    <div class="basket-box">
+                        <div class="form-grid" style="margin-bottom: 5px;">
+                            <label>විෂයය:</label><select id="rSubjectBasket"></select>
+                            <label>ගුරුවරයා:</label><select id="rTeacherBasket"></select>
+                            <label></label><button class="btn-small" style="background:#6b7280; border-color:#4b5563;" onclick="addToTempBasket()">+ කාණ්ඩයට එක් කරන්න</button>
+                        </div>
+                        <div id="tempBasketItems" class="basket-items"></div>
+                    </div>
+                    <div class="form-grid">
+                        <label>කාලච්ඡේද ගණන:</label><input type="number" id="rPeriodsBasket" min="1" max="8">
+                        <label></label><button class="btn-small" style="background-color: #3b82f6; border-color:#2563eb;" onclick="addBasketRule()">+ කාණ්ඩ නීතිය එක් කරන්න</button>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <fieldset style="padding: 5px; background: transparent; border: none; box-shadow: none;">
+                <legend style="background:transparent; border:none; padding:0; color: #4b5563;">සකසන ලද නීති ලැයිස්තුව</legend>
+                <div class="rules-list" id="rulesList"></div>
+            </fieldset>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="panel right-panel">
+            <h2 id="displaySchoolName" class="school-title">ඔබේ පාසලේ නම</h2>
+            <div id="displayTermInfo" class="term-info-display"></div> 
+            <h3 id="mainTitle" class="main-title">පාසල් කාලසටහන</h3>
+
+            <div class="view-controls">
+                <div class="radio-group">
+                    <label><input type="radio" name="viewMode" value="class_wise" checked onchange="changeViewMode()"> 📚 පන්තිය අනුව</label>
+                    <label><input type="radio" name="viewMode" value="day_master" onchange="changeViewMode()"> 🏫 දවස අනුව</label>
+                    <label><input type="radio" name="viewMode" value="all_master" onchange="changeViewMode()"> 🌐 සම්පූර්ණ (Master)</label>
+                </div>
+
+                <div id="filterControls" style="display: flex; justify-content: center; gap: 10px;">
+                    <select id="classSelector" onchange="selectClass(this.value)" style="display: block; padding: 4px 12px; width: auto; font-weight: bold; border: 2px solid #3b82f6; color: #1e40af;"></select>
+                    <select id="daySelector" onchange="selectDay(this.value)" style="display: none; padding: 4px 12px; width: auto; font-weight: bold; border: 2px solid #3b82f6; color: #1e40af;"></select>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="mainTable">
+                    <thead id="tableHeader"></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="footer">&copy; 2026 Kelum Konara | Smart<span style="color: #10b981;">Soft</span> | Time Table version 1.0</div>
+        </div>
+    </div>
+
+    <script>
+        // --- Security: Disable Right-Click and DevTools Shortcuts ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) return false;
+            if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        };
+
+        let classes = [];
+        let masterTeachers = [];
+        // යාවත්කාලීන කළ ගුරු පැමිණීම් ලැයිස්තුව (දින අනුව)
+        let absentTeachers = { 'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': [] }; 
+        let classTeacherMap = {}; 
+        let masterSubjects = [];
+        let teachingRules = [];
+        let teacherConstraints = []; 
+        let reliefAssignments = []; 
+        
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const dayNames = { 'Monday':'සඳුදා', 'Tuesday':'අඟහරුවාදා', 'Wednesday':'බදාදා', 'Thursday':'බ්‍රහස්පතින්දා', 'Friday':'සිකුරාදා' };
+        
+        let currentDay = 'Monday';
+        let currentViewMode = 'class_wise'; 
+        let currentSelectedClass = '';
+        
+        const colors = ['#fca5a5', '#fcd34d', '#86efac', '#6ee7b7', '#93c5fd', '#a5b4fc', '#d8b4fe', '#f9a8d4', '#f87171', '#fbbf24'];
+        let subjectColorMap = {};
+        function getSubjectColor(sub) {
+            let baseSub = sub.replace(' (කාණ්ඩ)', '').trim();
+            if(!subjectColorMap[baseSub]) {
+                subjectColorMap[baseSub] = colors[Object.keys(subjectColorMap).length % colors.length];
+            }
+            return subjectColorMap[baseSub];
+        }
+        
+        let generatedTimetable = {};
+        let tempBasketArr = [];
+
+        function saveData() {
+            const data = {
+                classes, masterTeachers, absentTeachers, classTeacherMap, masterSubjects,
+                teachingRules, teacherConstraints, reliefAssignments, generatedTimetable, tempBasketArr,
+                schoolName: document.getElementById('schoolNameInput').value,
+                year: document.getElementById('yearInput').value,
+                term: document.getElementById('termInput').value,
+                interval: document.getElementById('intervalSetting').value
+            };
+            localStorage.setItem('smartSoftTimetableData', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('smartSoftTimetableData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                classes = data.classes || [];
+                masterTeachers = data.masterTeachers || [];
+                
+                // පැරණි Array දත්ත නව Object දත්ත ක්‍රමයට මාරු කිරීම (Data Migration)
+                if (data.absentTeachers) {
+                    if (Array.isArray(data.absentTeachers)) {
+                        absentTeachers = { 'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': [] };
+                    } else {
+                        absentTeachers = data.absentTeachers;
+                    }
+                } else {
+                    absentTeachers = { 'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': [] };
+                }
+
+                classTeacherMap = data.classTeacherMap || {};
+                masterSubjects = data.masterSubjects || [];
+                teachingRules = data.teachingRules || [];
+                teacherConstraints = data.teacherConstraints || [];
+                reliefAssignments = data.reliefAssignments || [];
+                generatedTimetable = data.generatedTimetable || {};
+                tempBasketArr = data.tempBasketArr || [];
+                
+                if(data.schoolName) document.getElementById('schoolNameInput').value = data.schoolName;
+                if(data.year) document.getElementById('yearInput').value = data.year;
+                if(data.term) document.getElementById('termInput').value = data.term;
+                updateSchoolInfo();
+
+                if(data.interval) document.getElementById('intervalSetting').value = data.interval;
+            } else {
+                initEmptyTimetable();
+            }
+            initDropdowns();
+            changeViewMode(); 
+            renderRules();
+            renderConstraints();
+        }
+
+        function clearAllData() {
+            if(confirm("සියලුම දත්ත සම්පූර්ණයෙන්ම මැකී යනු ඇත. ඔබට විශ්වාසද?")) {
+                localStorage.removeItem('smartSoftTimetableData');
+                location.reload();
+            }
+        }
+
+       async function exportData() {
+    saveData(); 
+    let dataStr = localStorage.getItem('smartSoftTimetableData');
+    if(!dataStr) return alert("සුරැකීමට දත්ත නොමැත!");
+
+    try {
+        // නවීන බ්‍රවුසර සඳහා (Save As Dialog එක පෙන්වීමට)
+        if (window.showSaveFilePicker) {
+            const fileHandle = await window.showSaveFilePicker({
+                suggestedName: 'SmartSoft_Timetable_Backup.json',
+                types: [{
+                    description: 'JSON Backup File',
+                    accept: {'application/json': ['.json']}
+                }],
+            });
+            
+            const writable = await fileHandle.createWritable();
+            await writable.write(dataStr);
+            await writable.close();
+            alert("දත්ත සාර්ථකව Save කරන ලදී!");
+        } else {
+            // File Picker එකට සහය නොදක්වන පැරණි බ්‍රවුසර හෝ සමහර Mobile බ්‍රවුසර සඳහා පැරණි ක්‍රමය
+            let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            let exportFileDefaultName = 'SmartSoft_Timetable_Backup.json';
+            let linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+    } catch (err) {
+        // පරිශීලකයා Save කිරීම අවලංගු කළහොත් (Cancel) දෝෂයක් නොපෙන්වීමට
+        if (err.name !== 'AbortError') {
+            console.error(err);
+            alert("දත්ත Save කිරීම අසාර්ථක විය!");
+        }
+    }
+}
+        function importData(event) {
+            let file = event.target.files[0];
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let contents = e.target.result;
+                    let json = JSON.parse(contents);
+                    if(json && json.classes !== undefined) {
+                        localStorage.setItem('smartSoftTimetableData', contents);
+                        alert("දත්ත සාර්ථකව Restore කරන ලදී!");
+                        location.reload();
+                    } else {
+                        alert("මෙය නිවැරදි Backup ගොනුවක් නොවේ!");
+                    }
+                } catch(err) {
+                    alert("ගොනුව කියවීමේදී දෝෂයක් මතු විය!");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        window.onload = () => { loadData(); };
+
+        function updateSchoolInfo() {
+            let name = document.getElementById('schoolNameInput').value;
+            let year = document.getElementById('yearInput').value;
+            let term = document.getElementById('termInput').value;
+            document.getElementById('displaySchoolName').innerText = name ? name : "ඔබේ පාසලේ නම";
+            let termText = "";
+            if(year) termText += year + " වර්ෂය";
+            if(term) termText += (year ? " | " : "") + term;
+            let termDisplay = document.getElementById('displayTermInfo');
+            termDisplay.innerText = termText;
+            termDisplay.style.display = termText ? "block" : "none";
+            saveData();
+        }
+        
+        function updateInterval() { renderTable(); saveData(); }
+
+        function openPrintModal() { document.getElementById('printModal').style.display = 'flex'; }
+        function openDataModal() { document.getElementById('dataModal').style.display = 'flex'; renderDataModal(); }
+        
+        function openAttendanceModal() { 
+            document.getElementById('attendanceModal').style.display = 'flex'; 
+            let dayDropdown = document.getElementById('attendanceDay');
+            if(!dayDropdown.value) dayDropdown.value = currentDay; // පවතින දිනය පෙරනිමියෙන් තෝරන්න
+            renderAttendanceList(); 
+        }
+
+        function openReliefModal() { 
+            if(classes.length === 0) return alert("කරුණාකර පළමුව කාලසටහන සකස් කරන්න!");
+            document.getElementById('reliefModal').style.display = 'flex'; 
+            initDropdowns(); updateAbsenteeReliefList(); updateReliefUI(); renderReliefList();
+        }
+
+        function openSummaryModal() {
+            document.getElementById('summaryModal').style.display = 'flex';
+            let teacherSum = {}; let classSum = {};
+            masterTeachers.forEach(t => teacherSum[t] = 0);
+            classes.forEach(c => classSum[c] = 0);
+            teachingRules.forEach(r => {
+                let p = parseInt(r.periods) || 0;
+                if(classSum[r.grade] !== undefined) classSum[r.grade] += p;
+                r.teacher.split(',').forEach(t => {
+                    let tName = t.trim();
+                    if(teacherSum[tName] !== undefined) teacherSum[tName] += p;
+                });
+            });
+            let tHtml = "";
+            for(let t in teacherSum) tHtml += `<div class="rule-item"><span>${t}</span> <b>${teacherSum[t]} කාලච්ඡේද</b></div>`;
+            document.getElementById('teacherSummary').innerHTML = tHtml || "<span style='font-size:11px;color:gray;'>දත්ත නොමැත</span>";
+            let cHtml = "";
+            for(let c in classSum) cHtml += `<div class="rule-item"><span>${c} ශ්‍රේණිය</span> <b>${classSum[c]} කාලච්ඡේද</b></div>`;
+            document.getElementById('classSummary').innerHTML = cHtml || "<span style='font-size:11px;color:gray;'>දත්ත නොමැත</span>";
+        }
+        
+        function closeModals() { 
+            document.getElementById('printModal').style.display = 'none'; 
+            document.getElementById('dataModal').style.display = 'none';
+            document.getElementById('reliefModal').style.display = 'none';
+            document.getElementById('attendanceModal').style.display = 'none';
+            document.getElementById('summaryModal').style.display = 'none';
+        }
+
+        function showSuccessAnimation() {
+            let overlay = document.getElementById('successOverlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '0'; setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = '1'; }, 500); }, 3000); 
+        }
+
+        function renderAttendanceList() {
+            let day = document.getElementById('attendanceDay').value;
+            let html = '';
+            if(masterTeachers.length === 0) {
+                html = "<p style='font-size:11px; color:gray;'>පද්ධතියට ගුරුවරුන් ඇතුළත් කර නොමැත.</p>";
+            } else {
+                masterTeachers.forEach(t => {
+                    let isAbsent = absentTeachers[day] && absentTeachers[day].includes(t);
+                    let bg = isAbsent ? '#fef2f2' : '#f0fdf4';
+                    let border = isAbsent ? '#f87171' : '#86efac';
+                    let txtColor = isAbsent ? '#dc2626' : '#166534';
+                    let icon = isAbsent ? '❌ නොපැමිණි' : '✔️ පැමිණි';
+                    html += `<div class="rule-item" style="cursor:pointer; background:${bg}; border-color:${border};" onclick="toggleAttendance('${t}', '${day}')">
+                                <span style="color:${txtColor}; font-weight:bold;">${t}</span><span style="font-weight:bold; font-size:10px;">${icon}</span></div>`;
+                });
+            }
+            document.getElementById('attendanceList').innerHTML = html;
+        }
+
+        function toggleAttendance(t, day) {
+            if(!absentTeachers[day]) absentTeachers[day] = [];
+            if(absentTeachers[day].includes(t)) {
+                absentTeachers[day] = absentTeachers[day].filter(x => x !== t); 
+            } else {
+                absentTeachers[day].push(t);
+            }
+            renderAttendanceList(); saveData(); renderTable(); 
+        }
+
+        function sendWhatsApp(tName, dStr, pNum, cName) {
+            let msg = encodeURIComponent(`සුබ දවසක් ${tName} ගුරුතුමනි/තුමියනි. අද දින (${dStr}) ${pNum} වැනි කාලච්ඡේදය ${cName} ශ්‍රේණිය සඳහා ඔබට සහන (Relief) කාලච්ඡේදයක් යොදා ඇත. කරුණාකර අදාළ පන්තියට වාර්තා කරන්න.`);
+            window.open(`https://wa.me/?text=${msg}`, '_blank');
+        }
+
+        function updateAbsenteeReliefList() {
+            let d = document.getElementById('relFilterDay').value;
+            let absents = absentTeachers[d] || [];
+            let html = '';
+            
+            absents.forEach(t => {
+                for(let p=1; p<=8; p++) {
+                    classes.forEach(c => {
+                        let cell = generatedTimetable[d] && generatedTimetable[d][p] ? generatedTimetable[d][p][c] : null;
+                        if(cell && cell.teacher.includes(t)) {
+                            let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
+                            if(!relief) {
+                                html += `<div class="rule-item" style="border-color:#fca5a5; background:#fff; padding:4px;">
+                                    <div style="line-height:1.2;"><span style="color:#b91c1c; font-size:11px;"><b>කා:${p} - ${c} ශ්‍රේණිය</b></span><br>
+                                    <span style="font-size:9px; color:gray;">${cell.subject} (${t})</span></div>
+                                    <button class="btn-small" style="width:auto; padding:4px 6px; background:#ef4444; border-color:#dc2626;" onclick="setupManualRelief('${d}', ${p}, '${c}')">සහනයක් යොදන්න</button></div>`;
+                            }
+                        }
+                    });
+                }
+            });
+            document.getElementById('absenteePeriods').innerHTML = html || "<span style='font-size:11px;color:gray;'>මෙම දිනට සහන යෙදීමට හිස් පන්ති නොමැත.</span>";
+        }
+
+        function setupManualRelief(d, p, c) {
+            document.getElementById('relDay').value = d; document.getElementById('relPeriod').value = p; document.getElementById('relClass').value = c;
+            updateReliefUI();
+        }
+
+        function updateReliefUI() {
+            let d = document.getElementById('relDay').value, p = parseInt(document.getElementById('relPeriod').value), c = document.getElementById('relClass').value;
+            let statusDiv = document.getElementById('relStatus'), teacherDiv = document.getElementById('relTeacherDiv'), teacherSelect = document.getElementById('relAvailTeacher');
+            if(!d || !p || !c) return;
+            let cell = generatedTimetable[d] && generatedTimetable[d][p] ? generatedTimetable[d][p][c] : null;
+            let activeRelief = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
+            
+            if(!cell) {
+                statusDiv.innerHTML = "මෙම වේලාවට අදාළ පන්තියේ කිසිදු විෂයයක් නොමැත."; statusDiv.style.color = "gray"; statusDiv.style.borderColor = "gray"; teacherDiv.style.display = "none";
+            } else {
+                let isTeacherAbsent = false;
+                cell.teacher.split(',').forEach(t => { if(absentTeachers[d] && absentTeachers[d].includes(t.trim())) isTeacherAbsent = true; });
+                
+                let txt = `පවතින විෂයය: <b>${cell.subject}</b> (${cell.teacher})`;
+                if(isTeacherAbsent) txt += `<br><span style="color:#dc2626; font-size:13px;">⚠️ ගුරුවරයා මෙම දිනයට නොපැමිණි බැවින් සහනයක් අනිවාර්ය වේ!</span>`;
+                if(activeRelief) txt += `<br><span style="color:#7c3aed">දැනටමත් සහනයක් ලබාදී ඇත (සහන: ${activeRelief.reliefTeacher})</span>`;
+                
+                statusDiv.innerHTML = txt; statusDiv.style.color = isTeacherAbsent ? "#991b1b" : "#b91c1c"; statusDiv.style.borderColor = isTeacherAbsent ? "#dc2626" : "#ef4444";
+                teacherDiv.style.display = "grid";
+                
+                let tHtml = "";
+                masterTeachers.forEach(t => {
+                    if(absentTeachers[d] && absentTeachers[d].includes(t)) return; // අදාළ දිනට නොපැමිණි නම් මඟ හරින්න
+                    let isBusy = false;
+                    classes.forEach(cls => { if(generatedTimetable[d][p][cls] && generatedTimetable[d][p][cls].teacher.includes(t)) isBusy = true; });
+                    if(reliefAssignments.find(r => r.day === d && r.period === p && r.reliefTeacher === t)) isBusy = true;
+                    if(!isBusy) tHtml += `<option value="${t}">${t} (නිදහස්)</option>`;
+                });
+                teacherSelect.innerHTML = tHtml || "<option value=''>සියලුම ගුරුවරු කාර්යබහුලයි</option>";
+            }
+        }
+
+        function addRelief() {
+            let d = document.getElementById('relDay').value, p = parseInt(document.getElementById('relPeriod').value), c = document.getElementById('relClass').value, t = document.getElementById('relAvailTeacher').value;
+            if(!t) return alert("සහනයක් ලබාදීමට නිදහස් ගුරුවරයෙකු නොමැත!");
+            reliefAssignments = reliefAssignments.filter(r => !(r.day === d && r.period === p && r.grade === c));
+            reliefAssignments.push({ day: d, period: p, grade: c, reliefTeacher: t });
+            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); renderTable(); saveData();
+        }
+
+        function deleteRelief(d, p, c) {
+            reliefAssignments = reliefAssignments.filter(r => !(r.day === d && r.period === p && r.grade === c));
+            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); renderTable(); saveData();
+        }
+
+        function renderReliefList() {
+            let html = "";
+            reliefAssignments.forEach(r => {
+                html += `<div class="rule-item" style="background:#f5f3ff; border-color:#ddd6fe; display:block;">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <div><b>${dayNames[r.day]} | කා: ${r.period} | ${r.grade} ශ්‍රේණිය</b><br><span style="color:#7c3aed; font-weight:bold;">සහනය: ${r.reliefTeacher}</span></div>
+                                <button class="btn-delete" onclick="deleteRelief('${r.day}', ${r.period}, '${r.grade}')">X</button>
+                            </div>
+                            <button class="btn-wa" onclick="sendWhatsApp('${r.reliefTeacher}', '${dayNames[r.day]}', ${r.period}, '${r.grade}')">💬 WhatsApp පණිවිඩය යවන්න</button>
+                         </div>`;
+            });
+            document.getElementById('activeReliefsList').innerHTML = html || "<span style='font-size:11px;color:gray;'>දැනට සහන ලබා දී නොමැත.</span>";
+        }
+
+        function printReliefList() {
+            if(reliefAssignments.length === 0) return alert("මුද්‍රණය කිරීමට සහන දත්ත නොමැත!");
+            closeModals();
+            let pArea = document.getElementById('printArea'), schoolName = document.getElementById('schoolNameInput').value || "ඔබේ පාසලේ නම", dateStr = new Date().toLocaleDateString('si-LK');
+            
+            let sortedReliefs = [...reliefAssignments].sort((a,b) => {
+                let dayOrder = { 'Monday':1, 'Tuesday':2, 'Wednesday':3, 'Thursday':4, 'Friday':5 };
+                if(dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
+                return a.period - b.period;
+            });
+            
+            let printHtml = `<div class="print-page layout-1"><div class="timetable-box"><h2 class="school-title">${schoolName}</h2><div class="print-term-info">මුද්‍රණය කළ දිනය: ${dateStr}</div>
+                <h3 class="main-title" style="margin-top: 10px; color: #1d4ed8; text-decoration: underline;">දෛනික සහන කාලච්ඡේද ලැයිස්තුව (Relief Duties)</h3>
+                <table style="width:100%; border-collapse: collapse; border: 2px solid #000; font-size: 14px; text-align: center; margin-top: 15px;">
+                    <thead><tr><th style="border: 1px solid #000; padding: 10px; background: #e5e7eb; width: 15%;">දවස</th><th style="border: 1px solid #000; padding: 10px; background: #e5e7eb; width: 15%;">කාලච්ඡේදය</th><th style="border: 1px solid #000; padding: 10px; background: #e5e7eb; width: 20%;">ශ්‍රේණිය / පන්තිය</th><th style="border: 1px solid #000; padding: 10px; background: #e5e7eb; width: 30%;">සහනය ලබාදුන් ගුරුවරයා</th><th style="border: 1px solid #000; padding: 10px; background: #e5e7eb; width: 20%;">ගුරුවරයාගේ අත්සන</th></tr></thead><tbody>`;
+            
+            sortedReliefs.forEach(r => { printHtml += `<tr><td style="border: 1px solid #000; padding: 10px; font-weight: bold;">${dayNames[r.day]}</td><td style="border: 1px solid #000; padding: 10px; font-weight: bold;">${r.period}</td><td style="border: 1px solid #000; padding: 10px; font-weight: bold;">${r.grade} ශ්‍රේණිය</td><td style="border: 1px solid #000; padding: 10px; color: #1d4ed8; font-weight: bold; font-size: 15px;">${r.reliefTeacher}</td><td style="border: 1px solid #000; padding: 10px;"></td></tr>`; });
+            printHtml += `</tbody></table>`;
+            
+            // මුද්‍රණයේදී අදාළ දිනවලට පමණක් නොපැමිණි ගුරුවරුන් පෙන්වීම
+            let absWarningHtml = "";
+            days.forEach(d => {
+                if(absentTeachers[d] && absentTeachers[d].length > 0) {
+                    absWarningHtml += `<b>${dayNames[d]}:</b> <span style="color:#b91c1c;">${absentTeachers[d].join(', ')}</span> &nbsp; | &nbsp; `;
+                }
+            });
+            if(absWarningHtml === "") absWarningHtml = "<span style='color:#b91c1c;'>කිසිවෙකු නැත</span>";
+
+            printHtml += `<div style="margin-top:25px; font-size: 14px; text-align:left; border: 1px dashed #6b7280; padding: 10px; background: #f9fafb;"><p style="margin: 0;"><b>⚠️ නොපැමිණි ගුරුවරුන්:</b> <br><br> ${absWarningHtml}</p></div>
+                <div class="print-footer" style="margin-top: 30px;">&copy; 2026 Kelum Konara | Smart<span>Soft</span> | Time Table version 1.0</div></div></div>`;
+            pArea.innerHTML = printHtml; window.print();
+        }
+
+        function renderDataModal() {
+            let cHtml = ''; classes.forEach(c => cHtml += `<div class="rule-item"><span>${c} ශ්‍රේණිය</span><div><button class="btn-small" style="background:#f59e0b;" onclick="editItem('class', '${c}')">✏️</button> <button class="btn-delete" onclick="deleteItem('class', '${c}')">❌</button></div></div>`);
+            document.getElementById('modalClasses').innerHTML = cHtml || "<span style='font-size:11px;color:gray;'>දත්ත නොමැත</span>";
+            let tHtml = ''; masterTeachers.forEach(t => tHtml += `<div class="rule-item"><span>${t}</span><div><button class="btn-small" style="background:#f59e0b;" onclick="editItem('teacher', '${t}')">✏️</button> <button class="btn-delete" onclick="deleteItem('teacher', '${t}')">❌</button></div></div>`);
+            document.getElementById('modalTeachers').innerHTML = tHtml || "<span style='font-size:11px;color:gray;'>දත්ත නොමැත</span>";
+            let sHtml = ''; masterSubjects.forEach(s => sHtml += `<div class="rule-item"><span>${s}</span><div><button class="btn-small" style="background:#f59e0b;" onclick="editItem('subject', '${s}')">✏️</button> <button class="btn-delete" onclick="deleteItem('subject', '${s}')">❌</button></div></div>`);
+            document.getElementById('modalSubjects').innerHTML = sHtml || "<span style='font-size:11px;color:gray;'>දත්ත නොමැත</span>";
+
+            let ctHtml = '';
+            classes.forEach(c => {
+                let currentCT = classTeacherMap[c] || "";
+                let opts = `<option value="">-- ගුරුවරයෙක් පවරන්න --</option>`;
+                masterTeachers.forEach(t => {
+                    let sel = (t === currentCT) ? "selected" : "";
+                    opts += `<option value="${t}" ${sel}>${t}</option>`;
+                });
+                ctHtml += `<div style="background:#fff; padding:8px; border:1px solid #d1d5db; border-radius:4px;"><label style="font-size:11px; font-weight:bold; color:#047857;">${c} ශ්‍රේණිය පන්තිභාර:</label><br><select style="margin-top:4px;" onchange="updateClassTeacher('${c}', this.value)">${opts}</select></div>`;
+            });
+            document.getElementById('modalClassTeachers').innerHTML = ctHtml || "<span style='font-size:11px;color:gray;'>පළමුව පන්ති සහ ගුරුවරුන් එක් කරන්න.</span>";
+        }
+
+        function updateClassTeacher(cls, newTeacher) {
+            if(newTeacher) { classTeacherMap[cls] = newTeacher; } else { delete classTeacherMap[cls]; }
+            saveData();
+        }
+
+        function editItem(type, oldVal) {
+            let newVal = prompt(`"${oldVal}" වෙනුවට නව නාමය ඇතුළත් කරන්න:`, oldVal);
+            if(!newVal || newVal.trim() === "" || newVal === oldVal) return;
+            newVal = newVal.trim();
+            if (type === 'class') {
+                classes[classes.indexOf(oldVal)] = newVal;
+                teachingRules.forEach(r => { if(r.grade === oldVal) r.grade = newVal; });
+                if(classTeacherMap[oldVal]) { classTeacherMap[newVal] = classTeacherMap[oldVal]; delete classTeacherMap[oldVal]; }
+            } else if (type === 'teacher') {
+                masterTeachers[masterTeachers.indexOf(oldVal)] = newVal;
+                teachingRules.forEach(r => { if(r.teacher.includes(oldVal)) r.teacher = r.teacher.replace(new RegExp(oldVal, 'g'), newVal); });
+                for (let k in classTeacherMap) { if(classTeacherMap[k] === oldVal) classTeacherMap[k] = newVal; }
+                days.forEach(d => {
+                    if(absentTeachers[d] && absentTeachers[d].includes(oldVal)) {
+                        absentTeachers[d][absentTeachers[d].indexOf(oldVal)] = newVal;
+                    }
+                });
+                teacherConstraints.forEach(tc => { if(tc.teacher === oldVal) tc.teacher = newVal; });
+            } else if (type === 'subject') {
+                masterSubjects[masterSubjects.indexOf(oldVal)] = newVal;
+                teachingRules.forEach(r => { if(r.subject.includes(oldVal)) r.subject = r.subject.replace(new RegExp(oldVal, 'g'), newVal); });
+            }
+            saveData(); initDropdowns(); initEmptyTimetable(); renderTable(); renderDataModal(); renderRules(); renderConstraints();
+        }
+
+        function deleteItem(type, val) {
+            if(!confirm(`"${val}" සම්පූර්ණයෙන්ම මකා දැමීමට අවශ්‍ය බව විශ්වාසද?`)) return;
+            if (type === 'class') {
+                classes = classes.filter(c => c !== val); teachingRules = teachingRules.filter(r => r.grade !== val); delete classTeacherMap[val];
+            } else if (type === 'teacher') {
+                masterTeachers = masterTeachers.filter(t => t !== val); 
+                days.forEach(d => { if(absentTeachers[d]) absentTeachers[d] = absentTeachers[d].filter(t => t !== val); });
+                teacherConstraints = teacherConstraints.filter(tc => tc.teacher !== val);
+                for (let k in classTeacherMap) { if(classTeacherMap[k] === val) delete classTeacherMap[k]; }
+            } else if (type === 'subject') { masterSubjects = masterSubjects.filter(s => s !== val); }
+            saveData(); initDropdowns(); initEmptyTimetable(); renderTable(); renderDataModal(); renderRules(); renderConstraints();
+        }
+
+        function toggleCTGrade() { document.getElementById('inTeacherClass').style.display = document.getElementById('isClassTeacher').checked ? 'block' : 'none'; }
+        
+        function addMasterClassMain() {
+            let c = document.getElementById('inClass').value.trim();
+            if(c && !classes.includes(c)) { classes.push(c); saveData(); initDropdowns(); initEmptyTimetable(); renderTable(); }
+            document.getElementById('inClass').value = "";
+        }
+        
+        function addMasterTeacher() {
+            let t = document.getElementById('inTeacher').value.trim(), isCT = document.getElementById('isClassTeacher').checked, c = document.getElementById('inTeacherClass').value;
+            if(t && !masterTeachers.includes(t)) { masterTeachers.push(t); if(isCT && c) classTeacherMap[c] = t; saveData(); initDropdowns(); }
+            document.getElementById('inTeacher').value = ""; document.getElementById('isClassTeacher').checked = false; toggleCTGrade();
+        }
+        
+        function addMasterSubject() {
+            let s = document.getElementById('inSubject').value.trim();
+            if(s && !masterSubjects.includes(s)) { masterSubjects.push(s); saveData(); initDropdowns(); }
+            document.getElementById('inSubject').value = "";
+        }
+
+        function initDropdowns() {
+            let tHtml = '<option value="">-- ගුරුවරයා --</option>' + masterTeachers.map(t => `<option value="${t}">${t}</option>`).join('');
+            let sHtml = '<option value="">-- විෂයය --</option>' + masterSubjects.map(s => `<option value="${s}">${s}</option>`).join('');
+            let cHtml = classes.map(c => `<option value="${c}">${c} ශ්‍රේණිය</option>`).join('');
+            let dHtml = days.map(d => `<option value="${d}">${dayNames[d]}</option>`).join('');
+            
+            document.getElementById('rTeacherCore').innerHTML = tHtml; document.getElementById('rTeacherBasket').innerHTML = tHtml; document.getElementById('cTeacher').innerHTML = tHtml; 
+            document.getElementById('rSubjectCore').innerHTML = sHtml; document.getElementById('rSubjectBasket').innerHTML = sHtml; 
+            document.getElementById('rClass').innerHTML = cHtml; document.getElementById('classSelector').innerHTML = cHtml; 
+            document.getElementById('inTeacherClass').innerHTML = '<option value="">-- පන්තිය --</option>' + cHtml; document.getElementById('relClass').innerHTML = cHtml;
+            
+            document.getElementById('daySelector').innerHTML = dHtml; document.getElementById('relDay').innerHTML = dHtml; 
+            document.getElementById('relFilterDay').innerHTML = dHtml; document.getElementById('cDay').innerHTML = dHtml;
+            document.getElementById('attendanceDay').innerHTML = dHtml; // නව දින තේරීම
+
+            if(classes.length > 0 && !classes.includes(currentSelectedClass)) currentSelectedClass = classes[0];
+        }
+
+        function addConstraint() {
+            const t = document.getElementById('cTeacher').value, d = document.getElementById('cDay').value, p = document.getElementById('cPeriod').value;
+            if(!t || !d || !p) return alert("කරුණාකර සියලුම දත්ත තෝරන්න!");
+            if(teacherConstraints.some(tc => tc.teacher === t && tc.day === d && tc.period === p)) return alert("මෙම නීතිය දැනටමත් යොදා ඇත!");
+            teacherConstraints.push({ id: Date.now(), teacher: t, day: d, period: p }); saveData(); renderConstraints();
+        }
+        function deleteConstraint(id) { teacherConstraints = teacherConstraints.filter(tc => tc.id !== id); saveData(); renderConstraints(); }
+        function renderConstraints() {
+            let html = "";
+            teacherConstraints.forEach(tc => {
+                let pText = tc.period === 'All' ? "සම්පූර්ණ දිනයම" : `කා: ${tc.period}`;
+                html += `<div class="rule-item" style="background:#fef2f2; border-color:#fca5a5;"><div><b style="color:#b91c1c;">${tc.teacher}</b><br><span style="color:#6b7280; font-size:10px;">${dayNames[tc.day]} - ${pText}</span></div><button class="btn-delete" onclick="deleteConstraint(${tc.id})">X</button></div>`;
+            });
+            document.getElementById('constraintsList').innerHTML = html || "<span style='font-size:11px;color:gray;'>නිදහස් කාල සීමාවන් යොදා නොමැත.</span>";
+        }
+
+        function toggleRuleType() {
+            let type = document.getElementById('rType').value;
+            document.getElementById('coreRuleDiv').style.display = type === 'core' ? 'block' : 'none'; document.getElementById('basketRuleDiv').style.display = type === 'basket' ? 'block' : 'none';
+        }
+        function addCoreRule() {
+            const rClass = document.getElementById('rClass').value, rSubject = document.getElementById('rSubjectCore').value, rTeacher = document.getElementById('rTeacherCore').value, rPeriods = parseInt(document.getElementById('rPeriodsCore').value);
+            if(!rClass || !rSubject || !rTeacher || !rPeriods) return alert("කරුණාකර සියලුම දත්ත තෝරන්න!");
+            teachingRules.push({ id: Date.now(), grade: rClass, subject: rSubject, teacher: rTeacher, periods: rPeriods, type: 'core' });
+            document.getElementById('rPeriodsCore').value = ""; saveData(); renderRules();
+        }
+        function addToTempBasket() {
+            const s = document.getElementById('rSubjectBasket').value, t = document.getElementById('rTeacherBasket').value;
+            if(!s || !t) return;
+            tempBasketArr.push({ subject: s, teacher: t });
+            document.getElementById('tempBasketItems').innerHTML += `<div style="padding:2px; border-bottom:1px solid #bfdbfe;">✔️ ${s} (${t})</div>`;
+            saveData();
+        }
+        function addBasketRule() {
+            if(tempBasketArr.length === 0) return alert("කරුණාකර විෂයයන් එක් කරන්න!");
+            const rClass = document.getElementById('rClass').value, rPeriods = parseInt(document.getElementById('rPeriodsBasket').value);
+            if(!rClass || !rPeriods) return alert("කරුණාකර ශ්‍රේණිය සහ කාලච්ඡේද ගණන ඇතුළත් කරන්න!");
+            let combinedSubject = tempBasketArr.map(i => i.subject).join(' / ') + " (කාණ්ඩ)", combinedTeacher = tempBasketArr.map(i => i.teacher).join(', ');
+            teachingRules.push({ id: Date.now(), grade: rClass, subject: combinedSubject, teacher: combinedTeacher, periods: rPeriods, type: 'basket' });
+            tempBasketArr = []; document.getElementById('tempBasketItems').innerHTML = ""; document.getElementById('rPeriodsBasket').value = ""; saveData(); renderRules();
+        }
+        function deleteRule(id) { teachingRules = teachingRules.filter(r => r.id !== id); saveData(); renderRules(); }
+        function renderRules() {
+            let html = "";
+            teachingRules.forEach(r => {
+                html += `<div class="rule-item"><div><b style="color:#1e40af;">${r.grade} ශ්‍රේණිය</b> | ${r.subject}<br><span style="color:#6b7280; font-size:10px;">${r.teacher} (කා: ${r.periods})</span></div><button class="btn-delete" onclick="deleteRule(${r.id})">X</button></div>`;
+            });
+            document.getElementById('rulesList').innerHTML = html || "<span style='font-size:11px;color:gray;'>තවමත් නීති සකසා නොමැත.</span>";
+        }
+
+        function changeViewMode() {
+            let mode = document.querySelector('input[name="viewMode"]:checked').value; currentViewMode = mode;
+            document.getElementById('daySelector').style.display = mode === 'day_master' ? 'block' : 'none'; document.getElementById('classSelector').style.display = mode === 'class_wise' ? 'block' : 'none';
+            renderTable();
+        }
+        function selectClass(cls) { currentSelectedClass = cls; renderTable(); }
+        function selectDay(day) { currentDay = day; renderTable(); }
+
+        function initEmptyTimetable() {
+            days.forEach(day => {
+                generatedTimetable[day] = {};
+                for(let p=1; p<=8; p++) {
+                    generatedTimetable[day][p] = {};
+                    classes.forEach(c => generatedTimetable[day][p][c] = null);
+                }
+            });
+            reliefAssignments = []; 
+        }
+
+        function startGenerationAsync() {
+            if(teachingRules.length === 0) return alert("කරුණාකර පළමුව නීති ඇතුළත් කරන්න!");
+            let teacherSum = {}; let classSum = {}; let errors = [];
+            teachingRules.forEach(r => {
+                let p = parseInt(r.periods) || 0; classSum[r.grade] = (classSum[r.grade] || 0) + p;
+                r.teacher.split(',').forEach(t => { teacherSum[t.trim()] = (teacherSum[t.trim()] || 0) + p; });
+            });
+            for(let c in classSum) if(classSum[c] > 40) errors.push(`${c} ශ්‍රේණියට කාලච්ඡේද 40 කට වඩා ලබා දී ඇත.`);
+            for(let t in teacherSum) if(teacherSum[t] > 40) errors.push(`${t} ගුරුතුමාට/තුමියට කාලච්ඡේද 40 කට වඩා ලබා දී ඇත.`);
+            if(errors.length > 0) return alert("කාලසටහන සෑදීමට පෙර පහත දෝෂ නිවැරදි කරන්න:\n\n" + errors.join('\n'));
+
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('loadingText').innerText = "උත්සාහයන්: 0 / 10000";
+            
+            setTimeout(runAdvancedAlgorithm, 50);
+        }
+
+        function runAdvancedAlgorithm() {
+            let bestTimetable = null, bestUnassigned = null, minUnassignedCount = 9999, maxAttempts = 10000, attempt = 0;
+            const coreSubjectsList = ['සිංහල', 'ඉංග්‍රීසි', 'ඉංග්‍රිසි', 'ගණිතය', 'විද්‍යාව'];
+            const isCoreSubject = (sub) => coreSubjectsList.some(cs => sub.includes(cs));
+
+            function runChunk() {
+                let chunkLimit = Math.min(attempt + 500, maxAttempts); 
+                for (; attempt < chunkLimit; attempt++) {
+                    let tempTimetable = {};
+                    days.forEach(d => {
+                        tempTimetable[d] = {};
+                        for(let p=1; p<=8; p++) {
+                            tempTimetable[d][p] = {};
+                            classes.forEach(c => tempTimetable[d][p][c] = null);
+                        }
+                    });
+
+                    let unassigned = [];
+                    let isRelaxed = attempt > 8000; 
+                    let currentRules = JSON.parse(JSON.stringify(teachingRules));
+
+                    let availableDaysForCT = {};
+                    classes.forEach(c => { availableDaysForCT[c] = [...days].sort(() => Math.random() - 0.5); });
+
+                    classes.forEach(c => {
+                        let ct = classTeacherMap[c];
+                        if (ct) {
+                            let ctRules = currentRules.filter(r => r.grade === c && r.teacher.includes(ct));
+                            ctRules.sort((a,b) => isCoreSubject(b.subject) ? -1 : 1); 
+
+                            for (let r of ctRules) {
+                                let daysToUse = [];
+                                for(let i = 0; i < availableDaysForCT[c].length; i++) {
+                                    if(r.periods <= 0) break;
+                                    let d = availableDaysForCT[c][i];
+                                    let isFree = true;
+                                    let teachersInRule = r.teacher.split(',').map(t=>t.trim());
+                                    
+                                    for(let tName of teachersInRule) {
+                                        if (teacherConstraints.some(tc => tc.teacher === tName && tc.day === d && (tc.period === 'All' || parseInt(tc.period) === 1))) isFree = false;
+                                        for(let otherC of classes) {
+                                            if(tempTimetable[d][1][otherC] && tempTimetable[d][1][otherC].teacher.includes(tName)) isFree = false;
+                                        }
+                                    }
+                                    if(isFree) {
+                                        tempTimetable[d][1][c] = { subject: r.subject, teacher: r.teacher, type: r.type, isCT: true };
+                                        r.periods--; daysToUse.push(d);
+                                    }
+                                }
+                                availableDaysForCT[c] = availableDaysForCT[c].filter(d => !daysToUse.includes(d));
+                            }
+                        }
+                    });
+
+                    let remainingRules = currentRules.filter(r => r.periods > 0);
+
+                    let sortedRules = remainingRules.sort((a, b) => {
+                        let aTeachers = a.teacher.split(',').length, bTeachers = b.teacher.split(',').length;
+                        let weightA = (a.periods * 10) + (aTeachers * 15) + (a.type === 'basket' ? 20 : 0) + (Math.random() * 5);
+                        let weightB = (b.periods * 10) + (bTeachers * 15) + (b.type === 'basket' ? 20 : 0) + (Math.random() * 5);
+                        return weightB - weightA;
+                    });
+
+                    sortedRules.forEach(rule => {
+                        let periodsToAssign = rule.periods;
+                        let daysAssigned = { 'Monday':0, 'Tuesday':0, 'Wednesday':0, 'Thursday':0, 'Friday':0 };
+                        
+                        for(let d of days) {
+                            for(let p=1; p<=8; p++) {
+                                if(tempTimetable[d][p][rule.grade] && tempTimetable[d][p][rule.grade].subject === rule.subject) daysAssigned[d]++;
+                            }
+                        }
+
+                        let ruleAttempts = 50;
+                        let hasPlacedDouble = false;
+
+                        while (periodsToAssign > 0 && ruleAttempts > 0) {
+                            ruleAttempts--;
+                            let placed = false;
+                            let dayOrder = [...days].sort(() => Math.random() - 0.5);
+
+                            if ((rule.periods === 3 || rule.periods === 6) && periodsToAssign >= 2 && !hasPlacedDouble) {
+                                for (let d of dayOrder) {
+                                    if (!isRelaxed && daysAssigned[d] >= 1) continue; 
+                                    let periodOrder = [3, 4, 5, 6, 7].sort(()=>Math.random()-0.5).concat([2, 1]);
+
+                                    for (let p of periodOrder) {
+                                        let p1 = p, p2 = p + 1, intervalPos = parseInt(document.getElementById('intervalSetting').value) || 4;
+                                        if (p1 === intervalPos) continue; 
+
+                                        if (tempTimetable[d][p1][rule.grade] === null && tempTimetable[d][p2][rule.grade] === null) {
+                                            let busy = false, rTeachers = rule.teacher.split(',');
+                                            for(let t of rTeachers) {
+                                                let tName = t.trim();
+                                                if (teacherConstraints.some(tc => tc.teacher === tName && tc.day === d && (tc.period === 'All' || parseInt(tc.period) === p1))) busy = true;
+                                                if (teacherConstraints.some(tc => tc.teacher === tName && tc.day === d && (tc.period === 'All' || parseInt(tc.period) === p2))) busy = true;
+                                                for(let c of classes) {
+                                                    if(tempTimetable[d][p1][c] && tempTimetable[d][p1][c].teacher.includes(tName)) busy = true;
+                                                    if(tempTimetable[d][p2][c] && tempTimetable[d][p2][c].teacher.includes(tName)) busy = true;
+                                                }
+                                            }
+                                            if (!busy) {
+                                                tempTimetable[d][p1][rule.grade] = { subject: rule.subject, teacher: rule.teacher, type: rule.type };
+                                                tempTimetable[d][p2][rule.grade] = { subject: rule.subject, teacher: rule.teacher, type: rule.type };
+                                                daysAssigned[d] += 2; periodsToAssign -= 2; hasPlacedDouble = true; placed = true; break;
+                                            }
+                                        }
+                                    }
+                                    if(placed) break;
+                                }
+                            }
+
+                            if (!placed && periodsToAssign > 0) {
+                                for (let d of dayOrder) {
+                                    if (!isRelaxed) {
+                                        if (daysAssigned[d] >= 2) continue;
+                                        if (daysAssigned[d] === 1) {
+                                            let usedDays = 0;
+                                            for (let check of days) if (daysAssigned[check] > 0) usedDays++;
+                                            if (periodsToAssign <= (5 - usedDays)) continue; 
+                                        }
+                                    }
+                                    let periodOrderSingle = [3, 4, 5, 6, 7, 8].sort(()=>Math.random()-0.5).concat([2, 1]);
+
+                                    for (let p of periodOrderSingle) {
+                                        if (tempTimetable[d][p][rule.grade] === null) {
+                                            let busy = false, rTeachers = rule.teacher.split(',');
+                                            for(let t of rTeachers) {
+                                                let tName = t.trim();
+                                                if (teacherConstraints.some(tc => tc.teacher === tName && tc.day === d && (tc.period === 'All' || parseInt(tc.period) === p))) { busy = true; break; }
+                                                for(let c of classes) {
+                                                    if (tempTimetable[d][p][c] && tempTimetable[d][p][c].teacher.includes(tName)) { busy = true; break; }
+                                                }
+                                            }
+                                            if (!busy) {
+                                                tempTimetable[d][p][rule.grade] = { subject: rule.subject, teacher: rule.teacher, type: rule.type };
+                                                daysAssigned[d]++; periodsToAssign--; placed = true; break;
+                                            }
+                                        }
+                                    }
+                                    if(placed) break;
+                                }
+                            }
+                        }
+                        if(periodsToAssign > 0) unassigned.push(rule.subject + " (" + rule.grade + " ශ්‍රේ.) - ඉතිරි කා: " + periodsToAssign);
+                    });
+
+                    if (unassigned.length < minUnassignedCount) {
+                        minUnassignedCount = unassigned.length;
+                        bestTimetable = JSON.parse(JSON.stringify(tempTimetable)); 
+                        bestUnassigned = unassigned;
+                    }
+                    if (minUnassignedCount === 0) break; 
+                }
+
+                if (minUnassignedCount === 0 || attempt >= maxAttempts) {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    generatedTimetable = bestTimetable;
+                    if(bestUnassigned.length > 0) {
+                        alert("උත්සාහයන් 10,000 කට පසුවද පහත විෂයයන් සඳහා ගැටීම් පවතී. ඔබ යොදා ඇති ගුරු නිදහස් නීති (Constraints) හේතුවෙන් මෙය විසඳිය නොහැකි විය හැක:\n\n" + bestUnassigned.join('\n'));
+                    } else {
+                        showSuccessAnimation();
+                    }
+                    saveData(); renderTable();
+                } else {
+                    document.getElementById('loadingText').innerText = `උත්සාහයන්: ${attempt} / ${maxAttempts}`;
+                    requestAnimationFrame(runChunk);
+                }
+            }
+            requestAnimationFrame(runChunk);
+        }
+
+        function getCellHTML(cellData, d, p, c) {
+            let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
+
+            if (cellData) {
+                if (relief) {
+                    return `<td><div class="card relief-card"><span class="card-subj">${cellData.subject}</span><span class="relief-text">(සහන: ${relief.reliefTeacher})</span></div></td>`;
+                } else {
+                    let color = getSubjectColor(cellData.subject);
+                    let isTeacherAbsent = false;
+                    cellData.teacher.split(',').forEach(t => { if(absentTeachers[d] && absentTeachers[d].includes(t.trim())) isTeacherAbsent = true; });
+                    
+                    if(isTeacherAbsent) {
+                        return `<td><div class="card" style="background-color: #fef2f2; border: 2px dashed #ef4444;"><span class="card-subj" style="color:#ef4444;">${cellData.subject}</span><span style="color:#b91c1c;">(⚠️ ${cellData.teacher} නොපැමිණි)</span></div></td>`;
+                    }
+                    let ctHighlight = cellData.isCT ? 'border: 2px solid #2563eb; box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);' : '';
+                    return `<td><div class="card" style="background-color: ${color}; ${ctHighlight}"><span class="card-subj">${cellData.subject}</span><span>(${cellData.teacher})</span></div></td>`;
+                }
+            } else {
+                if (relief) {
+                    return `<td><div class="card relief-card"><span class="card-subj" style="color:gray;">හිස් කාලච්ඡේදය</span><span class="relief-text">(සහන: ${relief.reliefTeacher})</span></div></td>`;
+                }
+                return `<td class="cell-empty"><span class="empty-slot">- හිස් -</span></td>`;
+            }
+        }
+
+        function renderTable() {
+            let h = `<tr><th>කාලච්ඡේද</th>`; let b = ""; let title = "";
+            let intervalPos = parseInt(document.getElementById('intervalSetting').value) || 4;
+
+            if(classes.length === 0) {
+                document.getElementById('tableHeader').innerHTML = ""; 
+                document.getElementById('tableBody').innerHTML = "<tr><td style='padding:40px; color:#ef4444; font-size:14px; font-weight:bold; background:white; text-align:center;'>කරුණාකර වම්පස මෙනුවෙන් නව ශ්‍රේණි (පන්ති), විෂයයන් සහ ගුරුවරුන් පද්ධතියට එක් කරන්න.</td></tr>";
+                document.getElementById('mainTitle').innerText = "පද්ධතිය හිස්ව ඇත"; return;
+            }
+
+            if (currentViewMode === 'all_master') {
+                title = "සම්පූර්ණ ප්‍රධාන කාලසටහන (දින 5ම)";
+                classes.forEach(c => h += `<th>${c} ශ්‍රේණිය</th>`);
+                let colSpan = classes.length + 1;
+                days.forEach(d => {
+                    b += `<tr class="special-row"><td colspan="${colSpan}" class="day-header">${dayNames[d]}</td></tr>`;
+                    for (let p = 1; p <= 8; p++) {
+                        b += `<tr class="period-row"><td>කා: ${p}</td>`;
+                        classes.forEach(c => { b += getCellHTML(generatedTimetable[d][p][c], d, p, c); });
+                        b += `</tr>`;
+                        if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">නාමලේඛන ලකුණු කිරීම</td></tr>`;
+                        if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">විවේක කාලය (Interval)</td></tr>`;
+                    }
+                });
+            } else if (currentViewMode === 'day_master') {
+                title = `${dayNames[currentDay]} - ප්‍රධාන කාලසටහන`;
+                classes.forEach(c => h += `<th>${c} ශ්‍රේණිය</th>`);
+                let colSpan = classes.length + 1;
+                for (let p = 1; p <= 8; p++) {
+                    b += `<tr class="period-row"><td>කා: ${p}</td>`;
+                    classes.forEach(c => { b += getCellHTML(generatedTimetable[currentDay][p][c], currentDay, p, c); });
+                    b += `</tr>`;
+                    if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">නාමලේඛන ලකුණු කිරීම</td></tr>`;
+                    if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">විවේක කාලය (Interval)</td></tr>`;
+                }
+            } else {
+                title = `${currentSelectedClass} ශ්‍රේණියේ කාලසටහන (දින 5 සඳහා)`;
+                days.forEach(d => h += `<th>${dayNames[d]}</th>`);
+                let colSpan = days.length + 1;
+                for (let p = 1; p <= 8; p++) {
+                    b += `<tr class="period-row"><td>කා: ${p}</td>`;
+                    days.forEach(d => { b += getCellHTML(generatedTimetable[d][p][currentSelectedClass], d, p, currentSelectedClass); });
+                    b += `</tr>`;
+                    if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">නාමලේඛන ලකුණු කිරීම</td></tr>`;
+                    if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">විවේක කාලය (Interval)</td></tr>`;
+                }
+            }
+            document.getElementById('tableHeader').innerHTML = h; document.getElementById('tableBody').innerHTML = b; document.getElementById('mainTitle').innerText = title;
+        }
+
+        function triggerPrint(type) {
+            if(classes.length === 0) return alert("මුද්‍රණය කිරීමට දත්ත නොමැත!");
+            let layoutSetting = parseInt(document.querySelector('input[name="printLayout"]:checked').value);
+            let intervalPos = parseInt(document.getElementById('intervalSetting').value) || 4;
+            closeModals();
+            let pArea = document.getElementById('printArea'), schoolName = document.getElementById('schoolNameInput').value || "ඔබේ පාසලේ නම";
+            let yearStr = document.getElementById('yearInput').value, termStr = document.getElementById('termInput').value;
+            let termHtml1 = (yearStr || termStr) ? `<div class="print-term-info">${yearStr ? yearStr + ' වර්ෂය' : ''} ${yearStr && termStr ? ' | ' : ''} ${termStr ? termStr : ''}</div>` : '';
+            let termHtml2 = termHtml1, termHtml4 = termHtml1;
+            let printHtml = "", generatedItems = [];
+
+            if (type === 'all_master') {
+                printHtml += `<div class="print-page layout-1"><div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml1}<h3 class="main-title">සම්පූර්ණ ප්‍රධාන කාලසටහන</h3>`;
+                printHtml += document.getElementById('mainTable').outerHTML;
+                printHtml += `<div class="print-footer">&copy; 2026 Kelum Konara | Smart<span>Soft</span> | Time Table version 1.0</div></div></div>`;
+            } 
+            else {
+                if (type === 'classes') {
+                    let colSpan = days.length + 1;
+                    classes.forEach(c => {
+                        let termHtml = layoutSetting === 1 ? termHtml1 : (layoutSetting === 2 ? termHtml2 : termHtml4);
+                        let tbl = `<div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${c} ශ්‍රේණියේ කාලසටහන</h3>`;
+                        tbl += `<table><thead><tr><th>කාලච්ඡේද</th>` + days.map(d=>`<th>${dayNames[d]}</th>`).join('') + `</tr></thead><tbody>`;
+                        for(let p=1; p<=8; p++) {
+                            tbl += `<tr class="period-row"><td>කා: ${p}</td>`;
+                            days.forEach(d => tbl += getCellHTML(generatedTimetable[d][p][c], d, p, c));
+                            tbl += `</tr>`;
+                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">නාමලේඛන ලකුණු කිරීම</td></tr>`;
+                            if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">විවේක කාලය</td></tr>`;
+                        }
+                        tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | Smart<span>Soft</span> | Time Table version 1.0</div></div>`;
+                        generatedItems.push(tbl);
+                    });
+                }
+                else if (type === 'teachers') {
+                    let colSpan = days.length + 1;
+                    masterTeachers.forEach(t => {
+                        let termHtml = layoutSetting === 1 ? termHtml1 : (layoutSetting === 2 ? termHtml2 : termHtml4);
+                        let tbl = `<div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${t} - ගුරු කාලසටහන</h3>`;
+                        tbl += `<table><thead><tr><th>කාලච්ඡේද</th>` + days.map(d=>`<th>${dayNames[d]}</th>`).join('') + `</tr></thead><tbody>`;
+                        for(let p=1; p<=8; p++) {
+                            tbl += `<tr class="period-row"><td>කා: ${p}</td>`;
+                            days.forEach(d => {
+                                let assignedClass = "-", assignedSubject = "", color = "#ffffff", isRelief = false;
+                                classes.forEach(c => {
+                                    let cell = generatedTimetable[d][p][c];
+                                    if(cell && cell.teacher.includes(t)) { assignedClass = c + " ශ්‍රේ."; assignedSubject = cell.subject; color = getSubjectColor(cell.subject); }
+                                });
+                                let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.reliefTeacher === t);
+                                if(relief) { assignedClass = relief.grade + " ශ්‍රේ."; let baseCell = generatedTimetable[d][p][relief.grade]; assignedSubject = baseCell ? baseCell.subject : "හිස් කාලච්ඡේදය"; isRelief = true; }
+                                if(isRelief) tbl += `<td><div class="card relief-card"><span class="card-subj">${assignedSubject}</span><span class="relief-text">(සහන: ${assignedClass})</span></div></td>`;
+                                else if(assignedClass !== "-") tbl += `<td><div class="card" style="background:${color};"><span class="card-subj">${assignedSubject}</span><span>(${assignedClass})</span></div></td>`;
+                                else tbl += `<td class="cell-empty"><span class="empty-slot">- හිස් -</span></td>`;
+                            });
+                            tbl += `</tr>`;
+                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">නාමලේඛන ලකුණු කිරීම</td></tr>`;
+                            if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">විවේක කාලය</td></tr>`;
+                        }
+                        tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | Smart<span>Soft</span> | Time Table version 1.0</div></div>`;
+                        generatedItems.push(tbl);
+                    });
+                }
+                for (let i = 0; i < generatedItems.length; i += layoutSetting) {
+                    printHtml += `<div class="print-page layout-${layoutSetting}">`;
+                    for (let j = 0; j < layoutSetting; j++) { if (generatedItems[i + j]) printHtml += generatedItems[i + j]; }
+                    printHtml += `</div>`;
+                }
+            }
+            pArea.innerHTML = printHtml; window.print();
+        }
+
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(err => console.log(err)); }
+    </script>
+</body>
+</html>

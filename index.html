@@ -114,6 +114,14 @@
         .close-btn { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 18px; font-weight: bold; color: #6b7280; background: none; border: none; z-index: 10;}
         .close-btn:hover { color: #ef4444; }
 
+        /* Modern Alert Dialog */
+        #modernDialogOverlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(17, 24, 39, 0.7); z-index: 6000; align-items:center; justify-content:center; backdrop-filter: blur(3px); }
+        .modern-dialog { background: #ffffff; padding: 25px; border-radius: 8px; width: 100%; max-width: 350px; border: 1px solid #9ca3af; box-shadow: 0 15px 30px rgba(0,0,0,0.3); text-align: center; animation: popIn 0.3s ease;}
+        #modernDialogTitle { margin-top:0; color:#1e40af; border-bottom: 2px solid #e5e7eb; padding-bottom:8px; font-size:18px; }
+        #modernDialogMsg { font-size: 14px; color: #374151; margin: 15px 0 25px 0; word-wrap: break-word; line-height: 1.4; font-weight: bold;}
+        #modernDialogInput { display:none; width:100%; margin-bottom: 20px; padding: 8px; border: 1px solid #9ca3af; border-radius: 4px; box-sizing: border-box; text-align:center; font-weight:bold; outline:none; }
+        #modernDialogInput:focus { border-color: #2563eb; }
+
         /* LOADING ANIMATION */
         .loading-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(17, 24, 39, 0.9); z-index: 4000; flex-direction: column; align-items:center; justify-content:center; color: white; backdrop-filter: blur(5px); }
         .spinner { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid #3b82f6; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
@@ -127,6 +135,7 @@
         .success-emoji { font-size: 60px; margin-bottom: 10px; animation: tada 1.2s ease-in-out infinite; }
         .success-text { font-size: 22px; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
 
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         @keyframes popBounce { 0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
         @keyframes tada { 0% { transform: scale(1); } 10%, 20% { transform: scale(0.9) rotate(-3deg); } 30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); } 40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); } 100% { transform: scale(1); } }
 
@@ -160,7 +169,7 @@
             @page { size: A4 landscape; margin: 10mm; } 
             body { background-color: white !important; padding: 0 !important; margin: 0 !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-            .layout, .modal-overlay, .success-overlay, .loading-overlay { display: none !important; }
+            .layout, .modal-overlay, .success-overlay, .loading-overlay, #modernDialogOverlay { display: none !important; }
             #printArea { display: block !important; width: 100% !important; }
             .print-page { page-break-after: always; width: 100%; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column;}
             .timetable-box { break-inside: avoid; flex: 1; display: flex; flex-direction: column; margin-bottom: 5mm; width: 100%;}
@@ -215,6 +224,19 @@
     </style>
 </head>
 <body>
+
+    <!-- Modern Custom Dialog -->
+    <div id="modernDialogOverlay">
+        <div class="modern-dialog">
+            <h3 id="modernDialogTitle">Alert</h3>
+            <p id="modernDialogMsg"></p>
+            <input type="text" id="modernDialogInput" />
+            <div style="display: flex; justify-content: center; gap: 10px;">
+                <button id="modernDialogYes" class="btn-primary" style="margin:0; width:auto; padding: 8px 20px; background: #3b82f6; border: none; border-radius: 4px;">OK</button>
+                <button id="modernDialogNo" class="btn-primary" style="margin:0; width:auto; padding: 8px 20px; background: #ef4444; border: none; border-radius: 4px; display: none;">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <!-- AI Loading Animation -->
     <div id="loadingOverlay" class="loading-overlay">
@@ -558,10 +580,72 @@
             if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
         };
 
+        // --- MODERN DIALOG SYSTEM ---
+        function showModernAlert(msg, title = 'SmartSoft') {
+            document.getElementById('modernDialogOverlay').style.display = 'flex';
+            document.getElementById('modernDialogTitle').innerText = title;
+            document.getElementById('modernDialogMsg').innerHTML = msg;
+            document.getElementById('modernDialogInput').style.display = 'none';
+            document.getElementById('modernDialogNo').style.display = 'none';
+            
+            let yesBtn = document.getElementById('modernDialogYes');
+            yesBtn.innerText = 'OK';
+            yesBtn.onclick = function() {
+                document.getElementById('modernDialogOverlay').style.display = 'none';
+            };
+        }
+
+        function showModernConfirm(msg, callback, title = 'Confirm / තහවුරු කරන්න') {
+            document.getElementById('modernDialogOverlay').style.display = 'flex';
+            document.getElementById('modernDialogTitle').innerText = title;
+            document.getElementById('modernDialogMsg').innerHTML = msg;
+            document.getElementById('modernDialogInput').style.display = 'none';
+            document.getElementById('modernDialogNo').style.display = 'inline-block';
+            
+            let yesBtn = document.getElementById('modernDialogYes');
+            yesBtn.innerText = 'Yes';
+            yesBtn.onclick = function() {
+                document.getElementById('modernDialogOverlay').style.display = 'none';
+                if(callback) callback();
+            };
+            
+            let noBtn = document.getElementById('modernDialogNo');
+            noBtn.innerText = 'No';
+            noBtn.onclick = function() {
+                document.getElementById('modernDialogOverlay').style.display = 'none';
+            };
+        }
+
+        function showModernPrompt(msg, defaultVal, callback, title = 'Input Required') {
+            document.getElementById('modernDialogOverlay').style.display = 'flex';
+            document.getElementById('modernDialogTitle').innerText = title;
+            document.getElementById('modernDialogMsg').innerHTML = msg;
+            
+            let input = document.getElementById('modernDialogInput');
+            input.style.display = 'block';
+            input.value = defaultVal;
+            input.focus();
+            
+            document.getElementById('modernDialogNo').style.display = 'inline-block';
+            
+            let yesBtn = document.getElementById('modernDialogYes');
+            yesBtn.innerText = 'Save';
+            yesBtn.onclick = function() {
+                document.getElementById('modernDialogOverlay').style.display = 'none';
+                if(callback) callback(input.value);
+            };
+            
+            let noBtn = document.getElementById('modernDialogNo');
+            noBtn.innerText = 'Cancel';
+            noBtn.onclick = function() {
+                document.getElementById('modernDialogOverlay').style.display = 'none';
+            };
+        }
+
         // --- I18N Language Dictionary ---
         const langDict = {
             si: {
-                appTitle: "පාසල් කාලසටහන V1.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත තෝරන්න!", alert_no_data: "දත්ත නොමැත"
+                appTitle: "පාසල් කාලසටහන V1.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති (Rules) ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත නිවැරදිව තෝරන්න!", alert_no_data: "දත්ත නොමැත"
             },
             en: {
                 appTitle: "School Timetable V1.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data"
@@ -712,16 +796,16 @@
         }
 
         function clearAllData() {
-            if(confirm(t('btn_clear') + "?")) {
+            showModernConfirm(t('btn_clear') + "?", function() {
                 localStorage.removeItem('smartSoftTimetableData');
                 location.reload();
-            }
+            });
         }
 
         function exportData() {
             saveData(); 
             let dataStr = localStorage.getItem('smartSoftTimetableData');
-            if(!dataStr) return alert(t('alert_no_data'));
+            if(!dataStr) return showModernAlert(t('alert_no_data'));
             let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             let exportFileDefaultName = 'SmartSoft_Timetable_Backup.json';
             let linkElement = document.createElement('a');
@@ -742,10 +826,10 @@
                         localStorage.setItem('smartSoftTimetableData', contents);
                         location.reload();
                     } else {
-                        alert("Invalid Backup!");
+                        showModernAlert("Invalid Backup!");
                     }
                 } catch(err) {
-                    alert("Error reading file!");
+                    showModernAlert("Error reading file!");
                 }
             };
             reader.readAsText(file);
@@ -783,13 +867,13 @@
         function openAttendanceModal() { document.getElementById('attendanceModal').style.display = 'flex'; renderAttendanceList(); }
 
         function openReliefModal() { 
-            if(classes.length === 0) return alert(t('err_rule'));
+            if(classes.length === 0) return showModernAlert(t('err_rule'));
             document.getElementById('reliefModal').style.display = 'flex'; 
             initDropdowns(); updateAbsenteeReliefList(); updateReliefUI(); renderReliefList();
         }
 
         function openClassTeacherModal() {
-            if(classes.length === 0) return alert(t('err_rule'));
+            if(classes.length === 0) return showModernAlert(t('err_rule'));
             document.getElementById('classTeacherModal').style.display = 'flex';
             renderClassTeacherList();
         }
@@ -1010,7 +1094,7 @@
         }
 
         function printReliefList() {
-            if(reliefAssignments.length === 0) return alert(t('alert_no_data'));
+            if(reliefAssignments.length === 0) return showModernAlert(t('alert_no_data'));
             
             closeModals();
             let pArea = document.getElementById('printArea');
@@ -1073,43 +1157,45 @@
         }
 
         function editItem(type, oldVal) {
-            let newVal = prompt(`Enter new value for "${oldVal}":`, oldVal);
-            if(!newVal || newVal.trim() === "" || newVal === oldVal) return;
-            newVal = newVal.trim();
+            showModernPrompt(`Enter new value for "${oldVal}":`, oldVal, function(newVal) {
+                if(!newVal || newVal.trim() === "" || newVal === oldVal) return;
+                newVal = newVal.trim();
 
-            if (type === 'class') {
-                classes[classes.indexOf(oldVal)] = newVal;
-                teachingRules.forEach(r => { r.grade = r.grade.replace(new RegExp(oldVal, 'g'), newVal); });
-                if(classTeacherMap[oldVal]) { classTeacherMap[newVal] = classTeacherMap[oldVal]; delete classTeacherMap[oldVal]; }
-            } else if (type === 'teacher') {
-                masterTeachers[masterTeachers.indexOf(oldVal)] = newVal;
-                teachingRules.forEach(r => { r.teacher = r.teacher.replace(new RegExp(oldVal, 'g'), newVal); });
-                for (let k in classTeacherMap) { if(classTeacherMap[k] === oldVal) classTeacherMap[k] = newVal; }
-                if(absentTeachers.includes(oldVal)) { absentTeachers[absentTeachers.indexOf(oldVal)] = newVal; }
-                teacherConstraints.forEach(tc => { if(tc.teacher === oldVal) tc.teacher = newVal; });
-            } else if (type === 'subject') {
-                masterSubjects[masterSubjects.indexOf(oldVal)] = newVal;
-                teachingRules.forEach(r => { r.subject = r.subject.replace(new RegExp(oldVal, 'g'), newVal); });
-            }
-            initEmptyTimetable(); 
-            saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
+                if (type === 'class') {
+                    classes[classes.indexOf(oldVal)] = newVal;
+                    teachingRules.forEach(r => { r.grade = r.grade.replace(new RegExp(oldVal, 'g'), newVal); });
+                    if(classTeacherMap[oldVal]) { classTeacherMap[newVal] = classTeacherMap[oldVal]; delete classTeacherMap[oldVal]; }
+                } else if (type === 'teacher') {
+                    masterTeachers[masterTeachers.indexOf(oldVal)] = newVal;
+                    teachingRules.forEach(r => { r.teacher = r.teacher.replace(new RegExp(oldVal, 'g'), newVal); });
+                    for (let k in classTeacherMap) { if(classTeacherMap[k] === oldVal) classTeacherMap[k] = newVal; }
+                    if(absentTeachers.includes(oldVal)) { absentTeachers[absentTeachers.indexOf(oldVal)] = newVal; }
+                    teacherConstraints.forEach(tc => { if(tc.teacher === oldVal) tc.teacher = newVal; });
+                } else if (type === 'subject') {
+                    masterSubjects[masterSubjects.indexOf(oldVal)] = newVal;
+                    teachingRules.forEach(r => { r.subject = r.subject.replace(new RegExp(oldVal, 'g'), newVal); });
+                }
+                initEmptyTimetable(); 
+                saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
+            });
         }
 
         function deleteItem(type, val) {
-            if(!confirm(`Delete "${val}"?`)) return;
-            if (type === 'class') {
-                classes = classes.filter(c => c !== val);
-                teachingRules = teachingRules.filter(r => !r.grade.includes(val));
-                delete classTeacherMap[val];
-            } else if (type === 'teacher') {
-                masterTeachers = masterTeachers.filter(t => t !== val);
-                absentTeachers = absentTeachers.filter(t => t !== val);
-                teacherConstraints = teacherConstraints.filter(tc => tc.teacher !== val);
-            } else if (type === 'subject') {
-                masterSubjects = masterSubjects.filter(s => s !== val);
-            }
-            initEmptyTimetable(); 
-            saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
+            showModernConfirm(`Delete "${val}"?`, function() {
+                if (type === 'class') {
+                    classes = classes.filter(c => c !== val);
+                    teachingRules = teachingRules.filter(r => !r.grade.includes(val));
+                    delete classTeacherMap[val];
+                } else if (type === 'teacher') {
+                    masterTeachers = masterTeachers.filter(t => t !== val);
+                    absentTeachers = absentTeachers.filter(t => t !== val);
+                    teacherConstraints = teacherConstraints.filter(tc => tc.teacher !== val);
+                } else if (type === 'subject') {
+                    masterSubjects = masterSubjects.filter(s => s !== val);
+                }
+                initEmptyTimetable(); 
+                saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
+            });
         }
 
         function toggleCTGrade() { document.getElementById('inTeacherClass').style.display = document.getElementById('isClassTeacher').checked ? 'block' : 'none'; }
@@ -1194,7 +1280,7 @@
             const tea = document.getElementById('cTeacher').value;
             const d = document.getElementById('cDay').value;
             const p = document.getElementById('cPeriod').value;
-            if(!tea || !d || !p) return alert(t('err_fill'));
+            if(!tea || !d || !p) return showModernAlert(t('err_fill'));
             
             let isExist = teacherConstraints.some(tc => tc.teacher === tea && tc.day === d && tc.period === p);
             if(isExist) return;
@@ -1232,7 +1318,7 @@
             const rSubject = document.getElementById('rSubjectCore').value;
             const rTeacher = document.getElementById('rTeacherCore').value;
             const rPeriods = parseInt(document.getElementById('rPeriodsCore').value);
-            if(!rClasses || !rSubject || !rTeacher || !rPeriods) return alert(t('err_fill'));
+            if(!rClasses || !rSubject || !rTeacher || !rPeriods) return showModernAlert(t('err_fill'));
             teachingRules.push({ id: Date.now(), grade: rClasses, subject: rSubject, teacher: rTeacher, periods: rPeriods, type: 'core' });
             
             document.getElementById('rPeriodsCore').value = ""; 
@@ -1252,10 +1338,10 @@
         }
 
         function addBasketRule() {
-            if(tempBasketArr.length === 0) return alert(t('err_fill'));
+            if(tempBasketArr.length === 0) return showModernAlert(t('err_fill'));
             const rClasses = getSelectedRuleClasses();
             const rPeriods = parseInt(document.getElementById('rPeriodsBasket').value);
-            if(!rClasses || !rPeriods) return alert(t('err_fill'));
+            if(!rClasses || !rPeriods) return showModernAlert(t('err_fill'));
             
             let combinedSubject = tempBasketArr.map(i => i.subject).join(' / ') + (currentLang==='si' ? " (කාණ්ඩ)" : " (Basket)");
             let combinedTeacher = tempBasketArr.map(i => i.tea).join(', ');
@@ -1293,7 +1379,7 @@
         function selectDay(day) { currentDay = day; try { renderTable(); }catch(e){} }
 
         function startGenerationAsync() {
-            if(teachingRules.length === 0) return alert(t('err_rule'));
+            if(teachingRules.length === 0) return showModernAlert(t('err_rule'));
 
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('loadingText').innerText = t('load_msg');
@@ -1555,9 +1641,30 @@
                 
                 days.forEach(d => {
                     b += `<tr class="special-row"><td colspan="${colSpan}" class="day-header">${getDayName(d)}</td></tr>`;
+                    let skipMap = {};
                     for (let p = 1; p <= 8; p++) {
                         b += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
-                        classes.forEach(c => { b += getCellHTML(generatedTimetable[d][p][c], d, p, c); });
+                        classes.forEach(c => { 
+                            if(skipMap[`${p}_${c}`]) return;
+
+                            let cellData = generatedTimetable[d][p][c];
+                            let nextCellData = (p < 8 && p !== intervalPos) ? generatedTimetable[d][p+1][c] : null;
+                            let isDouble = false;
+                            
+                            // Check for vertical joining of double periods
+                            if(cellData && nextCellData && cellData.subject === nextCellData.subject && cellData.teacher === nextCellData.teacher) {
+                                let r1 = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
+                                let r2 = reliefAssignments.find(r => r.day === d && r.period === p+1 && r.grade === c);
+                                if((!r1 && !r2) || (r1 && r2 && r1.reliefTeacher === r2.reliefTeacher)) {
+                                    isDouble = true; 
+                                    skipMap[`${p+1}_${c}`] = true;
+                                }
+                            }
+
+                            let cellHTML = getCellHTML(cellData, d, p, c);
+                            if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
+                            b += cellHTML;
+                        });
                         b += `</tr>`;
                         if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
                         if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')}</td></tr>`;
@@ -1568,10 +1675,29 @@
                 title = `${getDayName(currentDay)} - ${t('tt_title')}`;
                 classes.forEach(c => h += `<th>${c}</th>`);
                 let colSpan = classes.length + 1;
-                
+                let skipMap = {};
+
                 for (let p = 1; p <= 8; p++) {
                     b += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
-                    classes.forEach(c => { b += getCellHTML(generatedTimetable[currentDay][p][c], currentDay, p, c); });
+                    classes.forEach(c => { 
+                        if(skipMap[`${p}_${c}`]) return;
+
+                        let cellData = generatedTimetable[currentDay][p][c];
+                        let nextCellData = (p < 8 && p !== intervalPos) ? generatedTimetable[currentDay][p+1][c] : null;
+                        let isDouble = false;
+
+                        if(cellData && nextCellData && cellData.subject === nextCellData.subject && cellData.teacher === nextCellData.teacher) {
+                            let r1 = reliefAssignments.find(r => r.day === currentDay && r.period === p && r.grade === c);
+                            let r2 = reliefAssignments.find(r => r.day === currentDay && r.period === p+1 && r.grade === c);
+                            if((!r1 && !r2) || (r1 && r2 && r1.reliefTeacher === r2.reliefTeacher)) {
+                                isDouble = true; skipMap[`${p+1}_${c}`] = true;
+                            }
+                        }
+
+                        let cellHTML = getCellHTML(cellData, currentDay, p, c);
+                        if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
+                        b += cellHTML;
+                    });
                     b += `</tr>`;
                     if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
                     if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')}</td></tr>`;
@@ -1581,10 +1707,29 @@
                 title = `${currentSelectedClass} ${t('cls_tt')}`;
                 days.forEach(d => h += `<th>${getDayName(d)}</th>`);
                 let colSpan = days.length + 1;
-                
+                let skipMap = {};
+
                 for (let p = 1; p <= 8; p++) {
                     b += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
-                    days.forEach(d => { b += getCellHTML(generatedTimetable[d][p][currentSelectedClass], d, p, currentSelectedClass); });
+                    days.forEach(d => { 
+                        if(skipMap[`${p}_${d}`]) return;
+
+                        let cellData = generatedTimetable[d][p][currentSelectedClass];
+                        let nextCellData = (p < 8 && p !== intervalPos) ? generatedTimetable[d][p+1][currentSelectedClass] : null;
+                        let isDouble = false;
+
+                        if(cellData && nextCellData && cellData.subject === nextCellData.subject && cellData.teacher === nextCellData.teacher) {
+                            let r1 = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === currentSelectedClass);
+                            let r2 = reliefAssignments.find(r => r.day === d && r.period === p+1 && r.grade === currentSelectedClass);
+                            if((!r1 && !r2) || (r1 && r2 && r1.reliefTeacher === r2.reliefTeacher)) {
+                                isDouble = true; skipMap[`${p+1}_${d}`] = true;
+                            }
+                        }
+
+                        let cellHTML = getCellHTML(cellData, d, p, currentSelectedClass);
+                        if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
+                        b += cellHTML;
+                    });
                     b += `</tr>`;
                     if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
                     if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')}</td></tr>`;
@@ -1597,7 +1742,7 @@
         }
 
         function triggerPrint(type) {
-            if(classes.length === 0) return alert(t('alert_no_data'));
+            if(classes.length === 0) return showModernAlert(t('alert_no_data'));
             
             let layoutSetting = parseInt(document.querySelector('input[name="printLayout"]:checked').value);
             let intervalPos = parseInt(document.getElementById('intervalSetting').value) || 4;
@@ -1633,9 +1778,28 @@
                         let termHtml = layoutSetting === 1 ? termHtml1 : (layoutSetting === 2 ? termHtml2 : termHtml4);
                         let tbl = `<div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${c} ${t('cls_tt')}</h3>`;
                         tbl += `<table><thead><tr><th>${t('per_txt')}</th>` + days.map(d=>`<th>${getDayName(d)}</th>`).join('') + `</tr></thead><tbody>`;
+                        
+                        let skipMap = {};
                         for(let p=1; p<=8; p++) {
                             tbl += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
-                            days.forEach(d => tbl += getCellHTML(generatedTimetable[d][p][c], d, p, c));
+                            days.forEach(d => {
+                                if(skipMap[`${p}_${d}`]) return;
+                                let cellData = generatedTimetable[d][p][c];
+                                let nextCellData = (p < 8 && p !== intervalPos) ? generatedTimetable[d][p+1][c] : null;
+                                let isDouble = false;
+                                
+                                if(cellData && nextCellData && cellData.subject === nextCellData.subject && cellData.teacher === nextCellData.teacher) {
+                                    let r1 = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
+                                    let r2 = reliefAssignments.find(r => r.day === d && r.period === p+1 && r.grade === c);
+                                    if((!r1 && !r2) || (r1 && r2 && r1.reliefTeacher === r2.reliefTeacher)) {
+                                        isDouble = true; skipMap[`${p+1}_${d}`] = true;
+                                    }
+                                }
+
+                                let cellHTML = getCellHTML(cellData, d, p, c);
+                                if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
+                                tbl += cellHTML;
+                            });
                             tbl += `</tr>`;
                             if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
                             if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')}</td></tr>`;
@@ -1650,36 +1814,56 @@
                         let termHtml = layoutSetting === 1 ? termHtml1 : (layoutSetting === 2 ? termHtml2 : termHtml4);
                         let tbl = `<div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${tea} ${t('tea_tt')}</h3>`;
                         tbl += `<table><thead><tr><th>${t('per_txt')}</th>` + days.map(d=>`<th>${getDayName(d)}</th>`).join('') + `</tr></thead><tbody>`;
+                        
+                        let skipMap = {};
                         for(let p=1; p<=8; p++) {
                             tbl += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
                             days.forEach(d => {
-                                let assignedClasses = []; let assignedSubject = ""; let color = "#ffffff";
-                                let isRelief = false; let relGrade = "";
+                                if(skipMap[`${p}_${d}`]) return;
                                 
-                                classes.forEach(c => {
-                                    let cell = generatedTimetable[d][p][c];
-                                    if(cell && cell.teacher && cell.teacher.includes(tea)) { 
-                                        assignedClasses.push(c); 
-                                        assignedSubject = cell.subject || ''; 
-                                        color = getSubjectColor(cell.subject || '');
+                                let getTeacherCellInfo = function(per) {
+                                    let assignedClasses = []; let assignedSubject = ""; let color = "#ffffff";
+                                    let isRelief = false; let relGrade = "";
+                                    
+                                    classes.forEach(cls => {
+                                        let cell = generatedTimetable[d][per][cls];
+                                        if(cell && cell.teacher && cell.teacher.includes(tea)) { 
+                                            assignedClasses.push(cls); 
+                                            assignedSubject = cell.subject || ''; 
+                                            color = getSubjectColor(cell.subject || '');
+                                        }
+                                    });
+
+                                    let relief = reliefAssignments.find(r => r.day === d && r.period === per && r.reliefTeacher === tea);
+                                    if(relief) {
+                                        relGrade = relief.grade;
+                                        let baseCell = generatedTimetable[d][per][relief.grade];
+                                        assignedSubject = baseCell ? (baseCell.subject || '') : "";
+                                        isRelief = true;
                                     }
-                                });
-
-                                let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.reliefTeacher === tea);
-                                if(relief) {
-                                    relGrade = relief.grade;
-                                    let baseCell = generatedTimetable[d][p][relief.grade];
-                                    assignedSubject = baseCell ? (baseCell.subject || '') : "";
-                                    isRelief = true;
+                                    return { assignedClasses, assignedSubject, color, isRelief, relGrade };
+                                };
+                                
+                                let cInfo1 = getTeacherCellInfo(p);
+                                let cInfo2 = (p < 8 && p !== intervalPos) ? getTeacherCellInfo(p+1) : null;
+                                let isDouble = false;
+                                
+                                if(cInfo2 && cInfo1.assignedSubject !== "" && cInfo1.assignedSubject === cInfo2.assignedSubject && cInfo1.assignedClasses.join(',') === cInfo2.assignedClasses.join(',') && cInfo1.isRelief === cInfo2.isRelief && cInfo1.relGrade === cInfo2.relGrade) {
+                                    isDouble = true; 
+                                    skipMap[`${p+1}_${d}`] = true;
                                 }
 
-                                if(isRelief) {
-                                    tbl += `<td><div class="card relief-card"><span class="card-subj">${assignedSubject}</span><span class="relief-text">(${relGrade})</span></div></td>`;
-                                } else if(assignedClasses.length > 0) {
-                                    tbl += `<td><div class="card" style="background:${color};"><span class="card-subj">${assignedSubject}</span><span>(${assignedClasses.join(', ')})</span></div></td>`;
+                                let cellHTML = "";
+                                if(cInfo1.isRelief) {
+                                    cellHTML = `<td><div class="card relief-card"><span class="card-subj">${cInfo1.assignedSubject}</span><span class="relief-text">(${cInfo1.relGrade})</span></div></td>`;
+                                } else if(cInfo1.assignedClasses.length > 0) {
+                                    cellHTML = `<td><div class="card" style="background:${cInfo1.color};"><span class="card-subj">${cInfo1.assignedSubject}</span><span>(${cInfo1.assignedClasses.join(', ')})</span></div></td>`;
                                 } else {
-                                    tbl += `<td class="cell-empty"></td>`;
+                                    cellHTML = `<td class="cell-empty"></td>`;
                                 }
+
+                                if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
+                                tbl += cellHTML;
                             });
                             tbl += `</tr>`;
                             if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;

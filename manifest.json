@@ -3,9 +3,15 @@
   "short_name": "Timetable",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f0f4f8",
-  "theme_color": "#2b6cb0",
+  "background_color": "#d1d5db",
+  "theme_color": "#2563eb",
+  "description": "SmartSoft Timetable Generator App",
   "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1047/1047326.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
     {
       "src": "https://cdn-icons-png.flaticon.com/512/1047/1047326.png",
       "sizes": "512x512",

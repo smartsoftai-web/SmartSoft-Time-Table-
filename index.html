@@ -114,14 +114,6 @@
         .close-btn { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 18px; font-weight: bold; color: #6b7280; background: none; border: none; z-index: 10;}
         .close-btn:hover { color: #ef4444; }
 
-        /* Modern Alert Dialog */
-        #modernDialogOverlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(17, 24, 39, 0.7); z-index: 6000; align-items:center; justify-content:center; backdrop-filter: blur(3px); }
-        .modern-dialog { background: #ffffff; padding: 25px; border-radius: 8px; width: 100%; max-width: 350px; border: 1px solid #9ca3af; box-shadow: 0 15px 30px rgba(0,0,0,0.3); text-align: center; animation: popIn 0.3s ease;}
-        #modernDialogTitle { margin-top:0; color:#1e40af; border-bottom: 2px solid #e5e7eb; padding-bottom:8px; font-size:18px; }
-        #modernDialogMsg { font-size: 14px; color: #374151; margin: 15px 0 25px 0; word-wrap: break-word; line-height: 1.4; font-weight: bold;}
-        #modernDialogInput { display:none; width:100%; margin-bottom: 20px; padding: 8px; border: 1px solid #9ca3af; border-radius: 4px; box-sizing: border-box; text-align:center; font-weight:bold; outline:none; }
-        #modernDialogInput:focus { border-color: #2563eb; }
-
         /* LOADING ANIMATION */
         .loading-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(17, 24, 39, 0.9); z-index: 4000; flex-direction: column; align-items:center; justify-content:center; color: white; backdrop-filter: blur(5px); }
         .spinner { border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid #3b82f6; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
@@ -135,7 +127,6 @@
         .success-emoji { font-size: 60px; margin-bottom: 10px; animation: tada 1.2s ease-in-out infinite; }
         .success-text { font-size: 22px; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
 
-        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         @keyframes popBounce { 0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
         @keyframes tada { 0% { transform: scale(1); } 10%, 20% { transform: scale(0.9) rotate(-3deg); } 30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); } 40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); } 100% { transform: scale(1); } }
 
@@ -169,7 +160,7 @@
             @page { size: A4 landscape; margin: 10mm; } 
             body { background-color: white !important; padding: 0 !important; margin: 0 !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-            .layout, .modal-overlay, .success-overlay, .loading-overlay, #modernDialogOverlay { display: none !important; }
+            .layout, .modal-overlay, .success-overlay, .loading-overlay { display: none !important; }
             #printArea { display: block !important; width: 100% !important; }
             .print-page { page-break-after: always; width: 100%; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column;}
             .timetable-box { break-inside: avoid; flex: 1; display: flex; flex-direction: column; margin-bottom: 5mm; width: 100%;}
@@ -225,19 +216,6 @@
 </head>
 <body>
 
-    <!-- Modern Custom Dialog -->
-    <div id="modernDialogOverlay">
-        <div class="modern-dialog">
-            <h3 id="modernDialogTitle">Alert</h3>
-            <p id="modernDialogMsg"></p>
-            <input type="text" id="modernDialogInput" />
-            <div style="display: flex; justify-content: center; gap: 10px;">
-                <button id="modernDialogYes" class="btn-primary" style="margin:0; width:auto; padding: 8px 20px; background: #3b82f6; border: none; border-radius: 4px;">OK</button>
-                <button id="modernDialogNo" class="btn-primary" style="margin:0; width:auto; padding: 8px 20px; background: #ef4444; border: none; border-radius: 4px; display: none;">Cancel</button>
-            </div>
-        </div>
-    </div>
-
     <!-- AI Loading Animation -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
@@ -250,6 +228,17 @@
         <div class="success-modal">
             <div class="success-emoji">🎉✨</div>
             <div class="success-text" data-i18n="success_msg">කාලසටහන සාර්ථකව<br>සැකසී අවසන්!</div>
+        </div>
+    </div>
+
+    
+    <!-- Custom Modern Message Modal -->
+    <div id="customMsgModal" class="modal-overlay" style="z-index: 5000;">
+        <div class="modal" style="max-width: 350px; text-align: center; padding: 20px;">
+            <h3 id="customMsgTitle" style="margin-top:0; font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom:8px;">SmartSoft</h3>
+            <p id="customMsgText" style="font-size: 13px; margin: 15px 0; color: #374151; font-weight: bold;"></p>
+            <input type="text" id="customMsgInput" style="display:none; width:100%; margin-bottom:15px; padding:8px; border:1px solid #9ca3af; border-radius:4px; font-size:13px; box-sizing: border-box; text-align: center;" />
+            <div id="customMsgButtons" style="display: flex; gap: 10px; justify-content: center;"></div>
         </div>
     </div>
 
@@ -411,6 +400,8 @@
                 </div>
             </div>
 
+            
+            <button id="installAppBtn" class="btn-primary" style="background: linear-gradient(to bottom, #eab308, #ca8a04); border-color: #a16207; display: none; margin-bottom: 10px;" onclick="installApp()">📲 App එක Install කරගන්න</button>
             <fieldset>
                 <legend data-i18n="sch_details">🏢 පාසලේ විස්තර</legend>
                 <div class="form-grid" style="grid-template-columns: 1fr; margin-bottom: 5px;">
@@ -457,6 +448,9 @@
                     <label data-i18n="lbl_sub">විෂයය:</label><input type="text" id="inSubject" data-i18n-ph="sub_ph" placeholder="උදා: ගණිතය">
                     <label></label><button class="btn-small" onclick="addMasterSubject()" data-i18n="btn_add_sub">+ විෂයය එක් කරන්න</button>
                 </div>
+                
+
+
                 <hr style="border: 0; border-top: 1px dashed #d1d5db; margin: 10px 0;">
                 <div class="form-grid">
                     <label data-i18n="lbl_tea">ගුරුවරයා:</label><input type="text" id="inTeacher" data-i18n-ph="tea_ph" placeholder="උදා: නිමල් සර්">
@@ -510,7 +504,13 @@
 
                 <div id="coreRuleDiv">
                     <div class="form-grid">
-                        <label data-i18n="lbl_sub">විෂයය:</label><select id="rSubjectCore"></select>
+                        <label data-i18n="lbl_sub">විෂයය:</label>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select-display" onclick="toggleMultiSelect('rSubCoreOptions')">
+                                <span id="rSubCoreText">-- විෂයයන් තෝරන්න --</span> ⏷
+                            </div>
+                            <div id="rSubCoreOptions" class="custom-select-options"></div>
+                        </div>
                         <label data-i18n="lbl_tea">ගුරුවරයා:</label><select id="rTeacherCore"></select>
                         <label data-i18n="lbl_pcount">කාලච්ඡේද ගණන:</label><input type="number" id="rPeriodsCore" min="1" max="8">
                         <label></label><button class="btn-small" style="background-color: #3b82f6; border-color:#2563eb;" onclick="addCoreRule()" data-i18n="btn_add_rule">+ නීතිය එක් කරන්න</button>
@@ -520,7 +520,13 @@
                 <div id="basketRuleDiv" style="display: none;">
                     <div class="basket-box">
                         <div class="form-grid" style="margin-bottom: 5px;">
-                            <label data-i18n="lbl_sub">විෂයය:</label><select id="rSubjectBasket"></select>
+                            <label data-i18n="lbl_sub">විෂයය:</label>
+                            <div class="custom-select-wrapper">
+                                <div class="custom-select-display" onclick="toggleMultiSelect('rSubBasketOptions')">
+                                    <span id="rSubBasketText">-- විෂයයන් තෝරන්න --</span> ⏷
+                                </div>
+                                <div id="rSubBasketOptions" class="custom-select-options"></div>
+                            </div>
                             <label data-i18n="lbl_tea">ගුරුවරයා:</label><select id="rTeacherBasket"></select>
                             <label></label><button class="btn-small" style="background:#6b7280; border-color:#4b5563;" onclick="addToTempBasket()" data-i18n="btn_add_to_b">+ කාණ්ඩයට එක් කරන්න</button>
                         </div>
@@ -580,80 +586,240 @@
             if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
         };
 
-        // --- MODERN DIALOG SYSTEM ---
-        function showModernAlert(msg, title = 'SmartSoft') {
-            document.getElementById('modernDialogOverlay').style.display = 'flex';
-            document.getElementById('modernDialogTitle').innerText = title;
-            document.getElementById('modernDialogMsg').innerHTML = msg;
-            document.getElementById('modernDialogInput').style.display = 'none';
-            document.getElementById('modernDialogNo').style.display = 'none';
-            
-            let yesBtn = document.getElementById('modernDialogYes');
-            yesBtn.innerText = 'OK';
-            yesBtn.onclick = function() {
-                document.getElementById('modernDialogOverlay').style.display = 'none';
-            };
-        }
-
-        function showModernConfirm(msg, callback, title = 'Confirm / තහවුරු කරන්න') {
-            document.getElementById('modernDialogOverlay').style.display = 'flex';
-            document.getElementById('modernDialogTitle').innerText = title;
-            document.getElementById('modernDialogMsg').innerHTML = msg;
-            document.getElementById('modernDialogInput').style.display = 'none';
-            document.getElementById('modernDialogNo').style.display = 'inline-block';
-            
-            let yesBtn = document.getElementById('modernDialogYes');
-            yesBtn.innerText = 'Yes';
-            yesBtn.onclick = function() {
-                document.getElementById('modernDialogOverlay').style.display = 'none';
-                if(callback) callback();
-            };
-            
-            let noBtn = document.getElementById('modernDialogNo');
-            noBtn.innerText = 'No';
-            noBtn.onclick = function() {
-                document.getElementById('modernDialogOverlay').style.display = 'none';
-            };
-        }
-
-        function showModernPrompt(msg, defaultVal, callback, title = 'Input Required') {
-            document.getElementById('modernDialogOverlay').style.display = 'flex';
-            document.getElementById('modernDialogTitle').innerText = title;
-            document.getElementById('modernDialogMsg').innerHTML = msg;
-            
-            let input = document.getElementById('modernDialogInput');
-            input.style.display = 'block';
-            input.value = defaultVal;
-            input.focus();
-            
-            document.getElementById('modernDialogNo').style.display = 'inline-block';
-            
-            let yesBtn = document.getElementById('modernDialogYes');
-            yesBtn.innerText = 'Save';
-            yesBtn.onclick = function() {
-                document.getElementById('modernDialogOverlay').style.display = 'none';
-                if(callback) callback(input.value);
-            };
-            
-            let noBtn = document.getElementById('modernDialogNo');
-            noBtn.innerText = 'Cancel';
-            noBtn.onclick = function() {
-                document.getElementById('modernDialogOverlay').style.display = 'none';
-            };
-        }
-
         // --- I18N Language Dictionary ---
         const langDict = {
             si: {
-                appTitle: "පාසල් කාලසටහන V1.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති (Rules) ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත නිවැරදිව තෝරන්න!", alert_no_data: "දත්ත නොමැත"
+                appTitle: "School Timetable V1.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත තෝරන්න!", alert_no_data: "දත්ත නොමැත"
             },
             en: {
                 appTitle: "School Timetable V1.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data"
             },
             ta: {
-                appTitle: "நேர அட்டவணை V1.0 ", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை"
+                appTitle: "School Timetable V1.0 ", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை"
             }
         };
+
+        
+        // Custom Alert/Confirm/Prompt replacements
+        function customAlert(msg, title="SmartSoft") {
+            return new Promise(resolve => {
+                document.getElementById('customMsgTitle').innerText = title;
+                document.getElementById('customMsgTitle').style.color = "#ef4444"; 
+                document.getElementById('customMsgText').innerText = msg;
+                document.getElementById('customMsgInput').style.display = 'none';
+                document.getElementById('customMsgButtons').innerHTML = `<button class="btn-primary" style="width: auto; padding: 6px 20px; margin:0;" onclick="closeCustomMsg(true)">OK</button>`;
+                document.getElementById('customMsgModal').style.display = 'flex';
+                window.customMsgResolve = resolve;
+            });
+        }
+
+        function customConfirm(msg, title="SmartSoft") {
+            return new Promise(resolve => {
+                document.getElementById('customMsgTitle').innerText = title;
+                document.getElementById('customMsgTitle').style.color = "#f59e0b"; 
+                document.getElementById('customMsgText').innerText = msg;
+                document.getElementById('customMsgInput').style.display = 'none';
+                document.getElementById('customMsgButtons').innerHTML = `
+                    <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #10b981; border-color: #059669; margin:0;" onclick="closeCustomMsg(true)">Yes</button>
+                    <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #ef4444; border-color: #dc2626; margin:0;" onclick="closeCustomMsg(false)">No</button>
+                `;
+                document.getElementById('customMsgModal').style.display = 'flex';
+                window.customMsgResolve = resolve;
+            });
+        }
+
+        function customPrompt(msg, def="", title="SmartSoft") {
+            return new Promise(resolve => {
+                document.getElementById('customMsgTitle').innerText = title;
+                document.getElementById('customMsgTitle').style.color = "#3b82f6"; 
+                document.getElementById('customMsgText').innerText = msg;
+                let inp = document.getElementById('customMsgInput');
+                inp.style.display = 'block';
+                inp.value = def;
+                document.getElementById('customMsgButtons').innerHTML = `
+                    <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #3b82f6; border-color: #2563eb; margin:0;" onclick="closeCustomMsg(true)">OK</button>
+                    <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #6b7280; border-color: #4b5563; margin:0;" onclick="closeCustomMsg(false)">Cancel</button>
+                `;
+                document.getElementById('customMsgModal').style.display = 'flex';
+                inp.focus();
+                window.customMsgResolve = resolve;
+            });
+        }
+
+        function closeCustomMsg(result) {
+            document.getElementById('customMsgModal').style.display = 'none';
+            if (window.customMsgResolve) {
+                if (document.getElementById('customMsgInput').style.display === 'block' && result) {
+                    window.customMsgResolve(document.getElementById('customMsgInput').value);
+                } else {
+                    window.customMsgResolve(result);
+                }
+                window.customMsgResolve = null;
+            }
+        }
+
+                function updateMultiSubDisplayCore() {
+            let checked = document.querySelectorAll('#rSubCoreOptions input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            document.getElementById('rSubCoreText').innerText = vals.length > 0 ? vals.join(' + ') : "-- විෂයයන් තෝරන්න --";
+        }
+        function updateMultiSubDisplayBasket() {
+            let checked = document.querySelectorAll('#rSubBasketOptions input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            document.getElementById('rSubBasketText').innerText = vals.length > 0 ? vals.join(' + ') : "-- විෂයයන් තෝරන්න --";
+        }
+        function obsolete_updateMultiSubDisplay() {
+            let checked = document.querySelectorAll('#joinSubOptions input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            let text = vals.join(' + ');
+            if(text === "") text = "-- විෂයයන් තෝරන්න --";
+            document.getElementById('joinSubText').innerText = text;
+        }
+
+        async function joinSelectedSubjects() {
+            let checked = document.querySelectorAll('#joinSubOptions input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            if (vals.length < 2) {
+                await customAlert("කරුණාකර විෂයයන් 2ක් හෝ වැඩි ගණනක් තෝරන්න.");
+                return;
+            }
+            let joinedName = vals.join(' + ');
+            if (!masterSubjects.includes(joinedName)) {
+                masterSubjects.push(joinedName);
+                saveData();
+                initDropdowns();
+                await customAlert("විෂයයන් සාර්ථකව Join කරන ලදී!");
+            } else {
+                await customAlert("මෙම විෂය සංයෝජනය දැනටමත් පවතී!");
+            }
+            document.querySelectorAll('#joinSubOptions input').forEach(cb => cb.checked = false);
+            updateMultiSubDisplay();
+        }
+
+        // Custom Alert/Confirm/Prompt replacements
+        function customAlert(msg, title="SmartSoft") {
+            return new Promise(resolve => {
+                document.getElementById('customMsgTitle').innerText = title;
+                document.getElementById('customMsgTitle').style.color = "#ef4444"; 
+                document.getElementById('customMsgText').innerText = msg;
+                document.getElementById('customMsgInput').style.display = 'none';
+                document.getElementById('customMsgButtons').innerHTML = `<button class="btn-primary" style="width: auto; padding: 6px 20px; margin:0;" onclick="closeCustomMsg(true)">OK</button>`;
+                document.getElementById('customMsgModal').style.display = 'flex';
+                window.customMsgResolve = resolve;
+            });
+        }
+
+        function customConfirm(msg, title="SmartSoft") {
+            return new Promise(resolve => {
+                document.getElementById('customMsgTitle').innerText = title;
+                document.getElementById('customMsgTitle').style.color = "#f59e0b"; 
+                document.getElementById('customMsgText').innerText = msg;
+                document.getElementById('customMsgInput').style.display = 'none';
+                document.getElementById('customMsgButtons').innerHTML = `
+                    <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #10b981; border-color: #059669; margin:0;" onclick="closeCustomMsg(true)">Yes</button>
+                    <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #ef4444; border-color: #dc2626; margin:0;" onclick="closeCustomMsg(false)">No</button>
+                `;
+                document.getElementById('customMsgModal').style.display = 'flex';
+                window.customMsgResolve = resolve;
+            });
+        }
+
+        function customPrompt(msg, def="", title="SmartSoft") {
+            return new Promise(resolve => {
+                document.getElementById('customMsgTitle').innerText = title;
+                document.getElementById('customMsgTitle').style.color = "#3b82f6"; 
+                document.getElementById('customMsgText').innerText = msg;
+                let inp = document.getElementById('customMsgInput');
+                inp.style.display = 'block';
+                inp.value = def;
+                document.getElementById('customMsgButtons').innerHTML = `
+                    <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #3b82f6; border-color: #2563eb; margin:0;" onclick="closeCustomMsg(true)">OK</button>
+                    <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #6b7280; border-color: #4b5563; margin:0;" onclick="closeCustomMsg(false)">Cancel</button>
+                `;
+                document.getElementById('customMsgModal').style.display = 'flex';
+                inp.focus();
+                window.customMsgResolve = resolve;
+            });
+        }
+
+        function closeCustomMsg(result) {
+            document.getElementById('customMsgModal').style.display = 'none';
+            if (window.customMsgResolve) {
+                if (document.getElementById('customMsgInput').style.display === 'block' && result) {
+                    window.customMsgResolve(document.getElementById('customMsgInput').value);
+                } else {
+                    window.customMsgResolve(result);
+                }
+                window.customMsgResolve = null;
+            }
+        }
+
+                function updateMultiSubDisplayCore() {
+            let checked = document.querySelectorAll('#rSubCoreOptions input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            document.getElementById('rSubCoreText').innerText = vals.length > 0 ? vals.join(' + ') : "-- විෂයයන් තෝරන්න --";
+        }
+        function updateMultiSubDisplayBasket() {
+            let checked = document.querySelectorAll('#rSubBasketOptions input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            document.getElementById('rSubBasketText').innerText = vals.length > 0 ? vals.join(' + ') : "-- විෂයයන් තෝරන්න --";
+        }
+        function obsolete_updateMultiSubDisplay() {
+            let checked = document.querySelectorAll('#joinSubOptions input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            let text = vals.join(' + ');
+            if(text === "") text = "-- විෂයයන් තෝරන්න --";
+            document.getElementById('joinSubText').innerText = text;
+        }
+
+        async function joinSelectedSubjects() {
+            let checked = document.querySelectorAll('#joinSubOptions input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            if (vals.length < 2) {
+                await customAlert("කරුණාකර විෂයයන් 2ක් හෝ වැඩි ගණනක් තෝරන්න.");
+                return;
+            }
+            let joinedName = vals.join(' + ');
+            if (!masterSubjects.includes(joinedName)) {
+                masterSubjects.push(joinedName);
+                saveData();
+                initDropdowns();
+                await customAlert("විෂයයන් සාර්ථකව Join කරන ලදී!");
+            } else {
+                await customAlert("මෙම විෂය සංයෝජනය දැනටමත් පවතී!");
+            }
+            document.querySelectorAll('#joinSubOptions input').forEach(cb => cb.checked = false);
+            updateMultiSubDisplay();
+        }
+
+        
+        // PWA Install Logic
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installAppBtn').style.display = 'block';
+        });
+
+        async function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    document.getElementById('installAppBtn').style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        }
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.log('SW Error', err));
+            });
+        }
 
         let currentLang = localStorage.getItem('smartSoftLang') || 'si';
 
@@ -688,6 +854,10 @@
             if(!e.target.closest('.custom-select-wrapper')) {
                 let opts = document.getElementById('rClassOptions');
                 if(opts) opts.style.display = 'none';
+                let opts3 = document.getElementById('rSubCoreOptions');
+                if(opts3) opts3.style.display = 'none';
+                let opts4 = document.getElementById('rSubBasketOptions');
+                if(opts4) opts4.style.display = 'none';
             }
         });
 
@@ -795,17 +965,17 @@
             changeLanguage(); 
         }
 
-        function clearAllData() {
-            showModernConfirm(t('btn_clear') + "?", function() {
+        async function clearAllData() {
+            if(await customConfirm(t('btn_clear') + "?")) {
                 localStorage.removeItem('smartSoftTimetableData');
                 location.reload();
-            });
+            }
         }
 
-        function exportData() {
+        async function exportData() {
             saveData(); 
             let dataStr = localStorage.getItem('smartSoftTimetableData');
-            if(!dataStr) return showModernAlert(t('alert_no_data'));
+            if(!dataStr) return await customAlert(t('alert_no_data'));
             let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             let exportFileDefaultName = 'SmartSoft_Timetable_Backup.json';
             let linkElement = document.createElement('a');
@@ -818,7 +988,7 @@
             let file = event.target.files[0];
             if(!file) return;
             let reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     let contents = e.target.result;
                     let json = JSON.parse(contents);
@@ -826,10 +996,10 @@
                         localStorage.setItem('smartSoftTimetableData', contents);
                         location.reload();
                     } else {
-                        showModernAlert("Invalid Backup!");
+                        await customAlert("Invalid Backup!");
                     }
                 } catch(err) {
-                    showModernAlert("Error reading file!");
+                    await customAlert("Error reading file!");
                 }
             };
             reader.readAsText(file);
@@ -866,14 +1036,14 @@
         function openDataModal() { document.getElementById('dataModal').style.display = 'flex'; renderDataModal(); }
         function openAttendanceModal() { document.getElementById('attendanceModal').style.display = 'flex'; renderAttendanceList(); }
 
-        function openReliefModal() { 
-            if(classes.length === 0) return showModernAlert(t('err_rule'));
+        async function openReliefModal() { 
+            if(classes.length === 0) return await customAlert(t('err_rule'));
             document.getElementById('reliefModal').style.display = 'flex'; 
             initDropdowns(); updateAbsenteeReliefList(); updateReliefUI(); renderReliefList();
         }
 
-        function openClassTeacherModal() {
-            if(classes.length === 0) return showModernAlert(t('err_rule'));
+        async function openClassTeacherModal() {
+            if(classes.length === 0) return await customAlert(t('err_rule'));
             document.getElementById('classTeacherModal').style.display = 'flex';
             renderClassTeacherList();
         }
@@ -977,7 +1147,7 @@
         }
 
         function sendWhatsApp(tName, dStr, pNum, cName) {
-            let msg = encodeURIComponent(`Notification: Date (${dStr}) Period ${pNum} Grade ${cName} assigned Relief. Teacher: ${tName}`);
+            let msg = encodeURIComponent(`SmartSoft Timetable\n\n📅 දිනය: ${dStr}\n⏰ කාලච්ඡේදය: ${pNum}\n🏫 පන්තිය: ${cName}\n\nගරු ${tName} ගුරුතුමනි/ගුරුතුමියනි, කරුණාකර ඉහත කාලච්ඡේදය සඳහා සහන (Relief) රාජකාරියේ නිරත වන්න.`);
             window.open(`https://wa.me/?text=${msg}`, '_blank');
         }
 
@@ -1086,6 +1256,7 @@
                             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                                 <div><b>${getDayName(r.day)} | ${t('period_short')} ${r.period} | ${r.grade} ${t('grd_txt')}</b><br>
                                 <span style="color:#7c3aed; font-weight:bold;">${r.reliefTeacher}</span></div>
+                                <button class="btn-wa" onclick="sendWhatsApp('${r.reliefTeacher}', '${r.day}', ${r.period}, '${r.grade}')">📱 WA</button>
                                 <button class="btn-delete" onclick="deleteRelief('${r.day}', ${r.period}, '${r.grade}')">X</button>
                             </div>
                          </div>`;
@@ -1093,8 +1264,8 @@
             document.getElementById('activeReliefsList').innerHTML = html || `<span style='font-size:11px;color:gray;'>${t('alert_no_data')}</span>`;
         }
 
-        function printReliefList() {
-            if(reliefAssignments.length === 0) return showModernAlert(t('alert_no_data'));
+        async function printReliefList() {
+            if(reliefAssignments.length === 0) return await customAlert(t('alert_no_data'));
             
             closeModals();
             let pArea = document.getElementById('printArea');
@@ -1156,46 +1327,44 @@
             document.getElementById('modalSubjects').innerHTML = sHtml || `<span style='font-size:11px;color:gray;'>${t('alert_no_data')}</span>`;
         }
 
-        function editItem(type, oldVal) {
-            showModernPrompt(`Enter new value for "${oldVal}":`, oldVal, function(newVal) {
-                if(!newVal || newVal.trim() === "" || newVal === oldVal) return;
-                newVal = newVal.trim();
+        async function editItem(type, oldVal) {
+            let newVal = await customPrompt(`Enter new value for "${oldVal}":`, oldVal);
+            if(!newVal || newVal.trim() === "" || newVal === oldVal) return;
+            newVal = newVal.trim();
 
-                if (type === 'class') {
-                    classes[classes.indexOf(oldVal)] = newVal;
-                    teachingRules.forEach(r => { r.grade = r.grade.replace(new RegExp(oldVal, 'g'), newVal); });
-                    if(classTeacherMap[oldVal]) { classTeacherMap[newVal] = classTeacherMap[oldVal]; delete classTeacherMap[oldVal]; }
-                } else if (type === 'teacher') {
-                    masterTeachers[masterTeachers.indexOf(oldVal)] = newVal;
-                    teachingRules.forEach(r => { r.teacher = r.teacher.replace(new RegExp(oldVal, 'g'), newVal); });
-                    for (let k in classTeacherMap) { if(classTeacherMap[k] === oldVal) classTeacherMap[k] = newVal; }
-                    if(absentTeachers.includes(oldVal)) { absentTeachers[absentTeachers.indexOf(oldVal)] = newVal; }
-                    teacherConstraints.forEach(tc => { if(tc.teacher === oldVal) tc.teacher = newVal; });
-                } else if (type === 'subject') {
-                    masterSubjects[masterSubjects.indexOf(oldVal)] = newVal;
-                    teachingRules.forEach(r => { r.subject = r.subject.replace(new RegExp(oldVal, 'g'), newVal); });
-                }
-                initEmptyTimetable(); 
-                saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
-            });
+            if (type === 'class') {
+                classes[classes.indexOf(oldVal)] = newVal;
+                teachingRules.forEach(r => { r.grade = r.grade.replace(new RegExp(oldVal, 'g'), newVal); });
+                if(classTeacherMap[oldVal]) { classTeacherMap[newVal] = classTeacherMap[oldVal]; delete classTeacherMap[oldVal]; }
+            } else if (type === 'teacher') {
+                masterTeachers[masterTeachers.indexOf(oldVal)] = newVal;
+                teachingRules.forEach(r => { r.teacher = r.teacher.replace(new RegExp(oldVal, 'g'), newVal); });
+                for (let k in classTeacherMap) { if(classTeacherMap[k] === oldVal) classTeacherMap[k] = newVal; }
+                if(absentTeachers.includes(oldVal)) { absentTeachers[absentTeachers.indexOf(oldVal)] = newVal; }
+                teacherConstraints.forEach(tc => { if(tc.teacher === oldVal) tc.teacher = newVal; });
+            } else if (type === 'subject') {
+                masterSubjects[masterSubjects.indexOf(oldVal)] = newVal;
+                teachingRules.forEach(r => { r.subject = r.subject.replace(new RegExp(oldVal, 'g'), newVal); });
+            }
+            initEmptyTimetable(); 
+            saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
         }
 
-        function deleteItem(type, val) {
-            showModernConfirm(`Delete "${val}"?`, function() {
-                if (type === 'class') {
-                    classes = classes.filter(c => c !== val);
-                    teachingRules = teachingRules.filter(r => !r.grade.includes(val));
-                    delete classTeacherMap[val];
-                } else if (type === 'teacher') {
-                    masterTeachers = masterTeachers.filter(t => t !== val);
-                    absentTeachers = absentTeachers.filter(t => t !== val);
-                    teacherConstraints = teacherConstraints.filter(tc => tc.teacher !== val);
-                } else if (type === 'subject') {
-                    masterSubjects = masterSubjects.filter(s => s !== val);
-                }
-                initEmptyTimetable(); 
-                saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
-            });
+        async function deleteItem(type, val) {
+            if(!await customConfirm(`Delete "${val}"?`)) return;
+            if (type === 'class') {
+                classes = classes.filter(c => c !== val);
+                teachingRules = teachingRules.filter(r => !r.grade.includes(val));
+                delete classTeacherMap[val];
+            } else if (type === 'teacher') {
+                masterTeachers = masterTeachers.filter(t => t !== val);
+                absentTeachers = absentTeachers.filter(t => t !== val);
+                teacherConstraints = teacherConstraints.filter(tc => tc.teacher !== val);
+            } else if (type === 'subject') {
+                masterSubjects = masterSubjects.filter(s => s !== val);
+            }
+            initEmptyTimetable(); 
+            saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
         }
 
         function toggleCTGrade() { document.getElementById('inTeacherClass').style.display = document.getElementById('isClassTeacher').checked ? 'block' : 'none'; }
@@ -1257,12 +1426,21 @@
             document.getElementById('rClassOptions').innerHTML = multiHtml;
             document.getElementById('rClassText').innerText = t('sel_classes');
 
+            let multiSubCoreHtml = "";
+            let multiSubBasketHtml = "";
+            masterSubjects.forEach(s => {
+                multiSubCoreHtml += `<label><input type="checkbox" value="${s}" onchange="updateMultiSubDisplayCore()"> ${s}</label>`;
+                multiSubBasketHtml += `<label><input type="checkbox" value="${s}" onchange="updateMultiSubDisplayBasket()"> ${s}</label>`;
+            });
+            let coreOpts = document.getElementById('rSubCoreOptions');
+            if(coreOpts) { coreOpts.innerHTML = multiSubCoreHtml; document.getElementById('rSubCoreText').innerText = "-- විෂයයන් තෝරන්න --"; }
+            
+            let basketOpts = document.getElementById('rSubBasketOptions');
+            if(basketOpts) { basketOpts.innerHTML = multiSubBasketHtml; document.getElementById('rSubBasketText').innerText = "-- විෂයයන් තෝරන්න --"; }
+
             document.getElementById('rTeacherCore').innerHTML = tHtml; 
             document.getElementById('rTeacherBasket').innerHTML = tHtml; 
             document.getElementById('cTeacher').innerHTML = tHtml; 
-            
-            document.getElementById('rSubjectCore').innerHTML = sHtml; 
-            document.getElementById('rSubjectBasket').innerHTML = sHtml; 
             
             document.getElementById('classSelector').innerHTML = cHtml; 
             document.getElementById('inTeacherClass').innerHTML = `<option value="">-- - --</option>` + cHtml;
@@ -1276,11 +1454,11 @@
             if(classes.length > 0 && !classes.includes(currentSelectedClass)) { currentSelectedClass = classes[0]; }
         }
 
-        function addConstraint() {
+        async function addConstraint() {
             const tea = document.getElementById('cTeacher').value;
             const d = document.getElementById('cDay').value;
             const p = document.getElementById('cPeriod').value;
-            if(!tea || !d || !p) return showModernAlert(t('err_fill'));
+            if(!tea || !d || !p) return await customAlert(t('err_fill'));
             
             let isExist = teacherConstraints.some(tc => tc.teacher === tea && tc.day === d && tc.period === p);
             if(isExist) return;
@@ -1313,23 +1491,27 @@
             document.getElementById('basketRuleDiv').style.display = type === 'basket' ? 'block' : 'none';
         }
 
-        function addCoreRule() {
+        async function addCoreRule() {
             const rClasses = getSelectedRuleClasses();
-            const rSubject = document.getElementById('rSubjectCore').value;
+            let checkedSubs = document.querySelectorAll('#rSubCoreOptions input:checked');
+            const rSubject = Array.from(checkedSubs).map(c => c.value).join(' + ');
             const rTeacher = document.getElementById('rTeacherCore').value;
             const rPeriods = parseInt(document.getElementById('rPeriodsCore').value);
-            if(!rClasses || !rSubject || !rTeacher || !rPeriods) return showModernAlert(t('err_fill'));
+            if(!rClasses || !rSubject || !rTeacher || !rPeriods) return await customAlert(t('err_fill'));
             teachingRules.push({ id: Date.now(), grade: rClasses, subject: rSubject, teacher: rTeacher, periods: rPeriods, type: 'core' });
             
             document.getElementById('rPeriodsCore').value = ""; 
             document.querySelectorAll('#rClassOptions input').forEach(cb => cb.checked = false);
             updateMultiClassDisplay();
+            document.querySelectorAll('#rSubCoreOptions input').forEach(cb => cb.checked = false);
+            updateMultiSubDisplayCore();
             
             saveData(); renderRules();
         }
 
         function addToTempBasket() {
-            const s = document.getElementById('rSubjectBasket').value;
+            let checkedSubs = document.querySelectorAll('#rSubBasketOptions input:checked');
+            const s = Array.from(checkedSubs).map(c => c.value).join(' + ');
             const tea = document.getElementById('rTeacherBasket').value;
             if(!s || !tea) return;
             tempBasketArr.push({ subject: s, tea: tea });
@@ -1337,11 +1519,11 @@
             saveData();
         }
 
-        function addBasketRule() {
-            if(tempBasketArr.length === 0) return showModernAlert(t('err_fill'));
+        async function addBasketRule() {
+            if(tempBasketArr.length === 0) return await customAlert(t('err_fill'));
             const rClasses = getSelectedRuleClasses();
             const rPeriods = parseInt(document.getElementById('rPeriodsBasket').value);
-            if(!rClasses || !rPeriods) return showModernAlert(t('err_fill'));
+            if(!rClasses || !rPeriods) return await customAlert(t('err_fill'));
             
             let combinedSubject = tempBasketArr.map(i => i.subject).join(' / ') + (currentLang==='si' ? " (කාණ්ඩ)" : " (Basket)");
             let combinedTeacher = tempBasketArr.map(i => i.tea).join(', ');
@@ -1349,6 +1531,7 @@
             
             tempBasketArr = []; document.getElementById('tempBasketItems').innerHTML = ""; document.getElementById('rPeriodsBasket').value = ""; 
             document.querySelectorAll('#rClassOptions input').forEach(cb => cb.checked = false); updateMultiClassDisplay();
+            document.querySelectorAll('#rSubBasketOptions input').forEach(cb => cb.checked = false); updateMultiSubDisplayBasket();
             
             saveData(); renderRules();
         }
@@ -1378,8 +1561,8 @@
         function selectClass(cls) { currentSelectedClass = cls; try { renderTable(); }catch(e){} }
         function selectDay(day) { currentDay = day; try { renderTable(); }catch(e){} }
 
-        function startGenerationAsync() {
-            if(teachingRules.length === 0) return showModernAlert(t('err_rule'));
+        async function startGenerationAsync() {
+            if(teachingRules.length === 0) return await customAlert(t('err_rule'));
 
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('loadingText').innerText = t('load_msg');
@@ -1387,12 +1570,13 @@
             setTimeout(runDeepSwapAlgorithm, 100);
         }
 
-        function runDeepSwapAlgorithm() {
+                function runDeepSwapAlgorithm() {
             let bestTimetable = null;
             let minUnassignedCount = 9999;
             let maxAttempts = 50; 
 
             function isTBusy(tt, tea, d, p, ignoreGradesArr) {
+                if(!tea) return false;
                 if (teacherConstraints.some(tc => tc.teacher === tea && tc.day === d && (tc.period === 'All' || parseInt(tc.period) === p))) return true;
                 for(let c of classes) {
                     if (ignoreGradesArr && ignoreGradesArr.includes(c)) continue;
@@ -1414,16 +1598,45 @@
                 let unassignedCount = 0;
                 let currentRules = JSON.parse(JSON.stringify(teachingRules));
 
+                // 1. Class Teacher Priority Placement (Periods 1 & 2)
                 classes.forEach(c => {
                     let ct = classTeacherMap[c];
                     if (ct) {
                         let ctRules = currentRules.filter(r => r.grade === c && r.teacher.includes(ct) && r.grade.split(',').length === 1);
-                        let availableDays = [...days].sort(() => Math.random() - 0.5);
+                        
                         for (let r of ctRules) {
+                            let availableDays = [...days].sort(() => Math.random() - 0.5);
+                            
+                            if (r.periods === 3 || r.periods === 6 || r.periods >= 7) {
+                                for(let i=0; i<availableDays.length; i++) {
+                                    let d = availableDays[i];
+                                    if(tempTimetable[d][1][c] === null && tempTimetable[d][2][c] === null) {
+                                        let isBusyT = false;
+                                        r.teacher.split(',').forEach(tea => { if(isTBusy(tempTimetable, tea.trim(), d, 1) || isTBusy(tempTimetable, tea.trim(), d, 2)) isBusyT = true; });
+                                        if(!isBusyT) {
+                                            tempTimetable[d][1][c] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: false };
+                                            tempTimetable[d][2][c] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: false };
+                                            r.periods -= 2;
+                                            availableDays.splice(i, 1);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            
                             while(r.periods > 0 && availableDays.length > 0) {
-                                let d = availableDays.shift(); 
-                                tempTimetable[d][1][c] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: false };
-                                r.periods--;
+                                let d = availableDays.shift();
+                                if(tempTimetable[d][1][c] === null) {
+                                    let isBusyT = false;
+                                    r.teacher.split(',').forEach(tea => { if(isTBusy(tempTimetable, tea.trim(), d, 1)) isBusyT = true; });
+                                    if(!isBusyT) {
+                                        tempTimetable[d][1][c] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: false };
+                                        r.periods--;
+                                    } else {
+                                        availableDays.push(d); // try later or skip
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -1439,37 +1652,61 @@
 
                 remainingRules.forEach(rule => {
                     let requiredPeriods = rule.periods;
-                    let daysAssignedCount = { 'Monday':0, 'Tuesday':0, 'Wednesday':0, 'Thursday':0, 'Friday':0 };
-                    let intv = parseInt(document.getElementById('intervalSetting').value) || 4;
                     let ruleClassesArr = rule.grade.split(',').map(c => c.trim());
                     let isJoinedRule = ruleClassesArr.length > 1;
                     
-                    let preAssigned = 0;
+                    let daysAssignedCount = { 'Monday':0, 'Tuesday':0, 'Wednesday':0, 'Thursday':0, 'Friday':0 };
+                    let originalPeriods = requiredPeriods;
+                    
                     for(let d of days) {
-                        if(tempTimetable[d][1][ruleClassesArr[0]] && tempTimetable[d][1][ruleClassesArr[0]].subject === rule.subject) {
-                            daysAssignedCount[d]++; preAssigned++;
+                        let countInDay = 0;
+                        for(let p=1; p<=8; p++) {
+                            if(tempTimetable[d][p][ruleClassesArr[0]] && tempTimetable[d][p][ruleClassesArr[0]].subject === rule.subject) {
+                                countInDay++;
+                            }
                         }
+                        daysAssignedCount[d] = countInDay;
+                        originalPeriods += countInDay;
                     }
 
-                    let totalP = requiredPeriods + preAssigned; 
-                    let doublesNeeded = 0; let singlesNeeded = requiredPeriods;
+                    let doublesNeeded = 0; 
+                    let singlesNeeded = requiredPeriods;
 
-                    if (totalP === 6) { doublesNeeded = 1; singlesNeeded = 4 - preAssigned; }
-                    else if (totalP === 3) { doublesNeeded = 1; singlesNeeded = 1 - preAssigned; }
-                    else if (totalP >= 7) { doublesNeeded = 2; singlesNeeded = requiredPeriods - 4; }
-                    if(singlesNeeded < 0) { doublesNeeded = 0; singlesNeeded = requiredPeriods; }
+                    if (originalPeriods === 10) {
+                        doublesNeeded = 5;
+                        singlesNeeded = 0;
+                    }
+                    else if (originalPeriods === 6) { 
+                        let hasDouble = Object.values(daysAssignedCount).some(v => v >= 2);
+                        if(!hasDouble && requiredPeriods >= 2) { doublesNeeded = 1; singlesNeeded -= 2; }
+                    }
+                    else if (originalPeriods === 5) { 
+                        doublesNeeded = 0; 
+                        singlesNeeded = requiredPeriods;
+                    }
+                    else if (originalPeriods === 3) { 
+                        let hasDouble = Object.values(daysAssignedCount).some(v => v >= 2);
+                        if(!hasDouble && requiredPeriods >= 2) { doublesNeeded = 1; singlesNeeded -= 2; }
+                    }
+                    else if (originalPeriods >= 7) { 
+                        let hasDoubleCount = Object.values(daysAssignedCount).filter(v => v >= 2).length;
+                        doublesNeeded = Math.max(0, 2 - hasDoubleCount);
+                        singlesNeeded = Math.max(0, requiredPeriods - (doublesNeeded * 2));
+                    }
 
                     let rTeachers = rule.teacher ? rule.teacher.split(',').map(tea => tea.trim()) : [];
+                    let intv = parseInt(document.getElementById('intervalSetting').value) || 4;
 
                     while (doublesNeeded > 0) {
                         let placed = false;
                         let dayOrder = [...days].sort(() => Math.random() - 0.5);
                         for (let d of dayOrder) {
                             if (daysAssignedCount[d] > 0) continue; 
-                            let periodOrder = [3, 5, 2, 6, 4];
+                            let periodOrder = [2, 3, 5, 6, 7]; 
                             for (let p of periodOrder) {
                                 let p1 = p, p2 = p + 1;
-                                if (p1 === intv) continue; 
+                                if (p1 === intv || p2 === intv+1) continue; 
+                                if (p2 > 8) continue;
 
                                 let classesFree = true;
                                 for(let c of ruleClassesArr) {
@@ -1491,7 +1728,7 @@
                             }
                             if(placed) break;
                         }
-                        if(!placed) break; 
+                        if(!placed) { singlesNeeded += 2; doublesNeeded--; }
                     }
 
                     while (singlesNeeded > 0) {
@@ -1499,12 +1736,11 @@
                         let dayOrder = [...days].sort((a,b) => daysAssignedCount[a] - daysAssignedCount[b]); 
 
                         for (let d of dayOrder) {
+                            if (originalPeriods === 5 && daysAssignedCount[d] >= 1) continue;
                             if (daysAssignedCount[d] >= 2) continue; 
-                            if (totalP <= 5 && daysAssignedCount[d] >= 1) continue; 
 
-                            let periodOrder = [2,3,4,5,6,7,8].sort(()=>Math.random() - 0.5);
+                            let periodOrder = [1,2,3,4,5,6,7,8].sort(()=>Math.random() - 0.5);
                             for (let p of periodOrder) {
-                                
                                 let classesFree = true;
                                 for(let c of ruleClassesArr) {
                                     if(tempTimetable[d][p][c] !== null) { classesFree = false; break; }
@@ -1529,15 +1765,16 @@
                             let emptySlotsInClass = [];
                             for(let d of days) {
                                 for(let p=1; p<=8; p++) {
-                                    if (tempTimetable[d][p][rGrade] === null && p !== intv) emptySlotsInClass.push({d:d, p:p});
+                                    if (tempTimetable[d][p][rGrade] === null) emptySlotsInClass.push({d:d, p:p});
                                 }
                             }
 
+                            swapLoop:
                             for(let d of days) {
+                                if (originalPeriods === 5 && daysAssignedCount[d] >= 1) continue;
                                 for(let p=1; p<=8; p++) {
-                                    if(placed) break;
                                     let existingCell = tempTimetable[d][p][rGrade];
-                                    if (existingCell && p !== intv && !existingCell.isJoined) {
+                                    if (existingCell && !existingCell.isJoined) {
                                         let ourBusy = false;
                                         for(let tea of rTeachers) if(isTBusy(tempTimetable, tea, d, p, ruleClassesArr)) ourBusy = true;
                                         
@@ -1550,7 +1787,7 @@
                                                 if(!exBusy) {
                                                     tempTimetable[eSlot.d][eSlot.p][rGrade] = existingCell;
                                                     tempTimetable[d][p][rGrade] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
-                                                    daysAssignedCount[d]++; singlesNeeded--; placed = true; break;
+                                                    daysAssignedCount[d]++; singlesNeeded--; placed = true; break swapLoop;
                                                 }
                                             }
                                         }
@@ -1560,16 +1797,13 @@
                         }
                         if(!placed) break; 
                     }
-
-                    let unalloc = (doublesNeeded * 2) + singlesNeeded;
-                    unassignedCount += unalloc;
+                    unassignedCount += (doublesNeeded * 2) + singlesNeeded;
                 });
 
                 if (unassignedCount < minUnassignedCount) {
                     minUnassignedCount = unassignedCount;
                     bestTimetable = JSON.parse(JSON.stringify(tempTimetable)); 
                 }
-
                 if (minUnassignedCount === 0) break; 
             }
 
@@ -1641,30 +1875,9 @@
                 
                 days.forEach(d => {
                     b += `<tr class="special-row"><td colspan="${colSpan}" class="day-header">${getDayName(d)}</td></tr>`;
-                    let skipMap = {};
                     for (let p = 1; p <= 8; p++) {
                         b += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
-                        classes.forEach(c => { 
-                            if(skipMap[`${p}_${c}`]) return;
-
-                            let cellData = generatedTimetable[d][p][c];
-                            let nextCellData = (p < 8 && p !== intervalPos) ? generatedTimetable[d][p+1][c] : null;
-                            let isDouble = false;
-                            
-                            // Check for vertical joining of double periods
-                            if(cellData && nextCellData && cellData.subject === nextCellData.subject && cellData.teacher === nextCellData.teacher) {
-                                let r1 = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
-                                let r2 = reliefAssignments.find(r => r.day === d && r.period === p+1 && r.grade === c);
-                                if((!r1 && !r2) || (r1 && r2 && r1.reliefTeacher === r2.reliefTeacher)) {
-                                    isDouble = true; 
-                                    skipMap[`${p+1}_${c}`] = true;
-                                }
-                            }
-
-                            let cellHTML = getCellHTML(cellData, d, p, c);
-                            if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
-                            b += cellHTML;
-                        });
+                        classes.forEach(c => { b += getCellHTML(generatedTimetable[d][p][c], d, p, c); });
                         b += `</tr>`;
                         if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
                         if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')}</td></tr>`;
@@ -1675,29 +1888,10 @@
                 title = `${getDayName(currentDay)} - ${t('tt_title')}`;
                 classes.forEach(c => h += `<th>${c}</th>`);
                 let colSpan = classes.length + 1;
-                let skipMap = {};
-
+                
                 for (let p = 1; p <= 8; p++) {
                     b += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
-                    classes.forEach(c => { 
-                        if(skipMap[`${p}_${c}`]) return;
-
-                        let cellData = generatedTimetable[currentDay][p][c];
-                        let nextCellData = (p < 8 && p !== intervalPos) ? generatedTimetable[currentDay][p+1][c] : null;
-                        let isDouble = false;
-
-                        if(cellData && nextCellData && cellData.subject === nextCellData.subject && cellData.teacher === nextCellData.teacher) {
-                            let r1 = reliefAssignments.find(r => r.day === currentDay && r.period === p && r.grade === c);
-                            let r2 = reliefAssignments.find(r => r.day === currentDay && r.period === p+1 && r.grade === c);
-                            if((!r1 && !r2) || (r1 && r2 && r1.reliefTeacher === r2.reliefTeacher)) {
-                                isDouble = true; skipMap[`${p+1}_${c}`] = true;
-                            }
-                        }
-
-                        let cellHTML = getCellHTML(cellData, currentDay, p, c);
-                        if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
-                        b += cellHTML;
-                    });
+                    classes.forEach(c => { b += getCellHTML(generatedTimetable[currentDay][p][c], currentDay, p, c); });
                     b += `</tr>`;
                     if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
                     if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')}</td></tr>`;
@@ -1707,29 +1901,10 @@
                 title = `${currentSelectedClass} ${t('cls_tt')}`;
                 days.forEach(d => h += `<th>${getDayName(d)}</th>`);
                 let colSpan = days.length + 1;
-                let skipMap = {};
-
+                
                 for (let p = 1; p <= 8; p++) {
                     b += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
-                    days.forEach(d => { 
-                        if(skipMap[`${p}_${d}`]) return;
-
-                        let cellData = generatedTimetable[d][p][currentSelectedClass];
-                        let nextCellData = (p < 8 && p !== intervalPos) ? generatedTimetable[d][p+1][currentSelectedClass] : null;
-                        let isDouble = false;
-
-                        if(cellData && nextCellData && cellData.subject === nextCellData.subject && cellData.teacher === nextCellData.teacher) {
-                            let r1 = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === currentSelectedClass);
-                            let r2 = reliefAssignments.find(r => r.day === d && r.period === p+1 && r.grade === currentSelectedClass);
-                            if((!r1 && !r2) || (r1 && r2 && r1.reliefTeacher === r2.reliefTeacher)) {
-                                isDouble = true; skipMap[`${p+1}_${d}`] = true;
-                            }
-                        }
-
-                        let cellHTML = getCellHTML(cellData, d, p, currentSelectedClass);
-                        if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
-                        b += cellHTML;
-                    });
+                    days.forEach(d => { b += getCellHTML(generatedTimetable[d][p][currentSelectedClass], d, p, currentSelectedClass); });
                     b += `</tr>`;
                     if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
                     if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')}</td></tr>`;
@@ -1741,8 +1916,8 @@
             document.getElementById('mainTitle').innerText = title;
         }
 
-        function triggerPrint(type) {
-            if(classes.length === 0) return showModernAlert(t('alert_no_data'));
+        async function triggerPrint(type) {
+            if(classes.length === 0) return await customAlert(t('alert_no_data'));
             
             let layoutSetting = parseInt(document.querySelector('input[name="printLayout"]:checked').value);
             let intervalPos = parseInt(document.getElementById('intervalSetting').value) || 4;
@@ -1778,28 +1953,9 @@
                         let termHtml = layoutSetting === 1 ? termHtml1 : (layoutSetting === 2 ? termHtml2 : termHtml4);
                         let tbl = `<div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${c} ${t('cls_tt')}</h3>`;
                         tbl += `<table><thead><tr><th>${t('per_txt')}</th>` + days.map(d=>`<th>${getDayName(d)}</th>`).join('') + `</tr></thead><tbody>`;
-                        
-                        let skipMap = {};
                         for(let p=1; p<=8; p++) {
                             tbl += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
-                            days.forEach(d => {
-                                if(skipMap[`${p}_${d}`]) return;
-                                let cellData = generatedTimetable[d][p][c];
-                                let nextCellData = (p < 8 && p !== intervalPos) ? generatedTimetable[d][p+1][c] : null;
-                                let isDouble = false;
-                                
-                                if(cellData && nextCellData && cellData.subject === nextCellData.subject && cellData.teacher === nextCellData.teacher) {
-                                    let r1 = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
-                                    let r2 = reliefAssignments.find(r => r.day === d && r.period === p+1 && r.grade === c);
-                                    if((!r1 && !r2) || (r1 && r2 && r1.reliefTeacher === r2.reliefTeacher)) {
-                                        isDouble = true; skipMap[`${p+1}_${d}`] = true;
-                                    }
-                                }
-
-                                let cellHTML = getCellHTML(cellData, d, p, c);
-                                if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
-                                tbl += cellHTML;
-                            });
+                            days.forEach(d => tbl += getCellHTML(generatedTimetable[d][p][c], d, p, c));
                             tbl += `</tr>`;
                             if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
                             if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')}</td></tr>`;
@@ -1814,56 +1970,36 @@
                         let termHtml = layoutSetting === 1 ? termHtml1 : (layoutSetting === 2 ? termHtml2 : termHtml4);
                         let tbl = `<div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${tea} ${t('tea_tt')}</h3>`;
                         tbl += `<table><thead><tr><th>${t('per_txt')}</th>` + days.map(d=>`<th>${getDayName(d)}</th>`).join('') + `</tr></thead><tbody>`;
-                        
-                        let skipMap = {};
                         for(let p=1; p<=8; p++) {
                             tbl += `<tr class="period-row"><td>${t('period_short')} ${p}</td>`;
                             days.forEach(d => {
-                                if(skipMap[`${p}_${d}`]) return;
+                                let assignedClasses = []; let assignedSubject = ""; let color = "#ffffff";
+                                let isRelief = false; let relGrade = "";
                                 
-                                let getTeacherCellInfo = function(per) {
-                                    let assignedClasses = []; let assignedSubject = ""; let color = "#ffffff";
-                                    let isRelief = false; let relGrade = "";
-                                    
-                                    classes.forEach(cls => {
-                                        let cell = generatedTimetable[d][per][cls];
-                                        if(cell && cell.teacher && cell.teacher.includes(tea)) { 
-                                            assignedClasses.push(cls); 
-                                            assignedSubject = cell.subject || ''; 
-                                            color = getSubjectColor(cell.subject || '');
-                                        }
-                                    });
-
-                                    let relief = reliefAssignments.find(r => r.day === d && r.period === per && r.reliefTeacher === tea);
-                                    if(relief) {
-                                        relGrade = relief.grade;
-                                        let baseCell = generatedTimetable[d][per][relief.grade];
-                                        assignedSubject = baseCell ? (baseCell.subject || '') : "";
-                                        isRelief = true;
+                                classes.forEach(c => {
+                                    let cell = generatedTimetable[d][p][c];
+                                    if(cell && cell.teacher && cell.teacher.includes(tea)) { 
+                                        assignedClasses.push(c); 
+                                        assignedSubject = cell.subject || ''; 
+                                        color = getSubjectColor(cell.subject || '');
                                     }
-                                    return { assignedClasses, assignedSubject, color, isRelief, relGrade };
-                                };
-                                
-                                let cInfo1 = getTeacherCellInfo(p);
-                                let cInfo2 = (p < 8 && p !== intervalPos) ? getTeacherCellInfo(p+1) : null;
-                                let isDouble = false;
-                                
-                                if(cInfo2 && cInfo1.assignedSubject !== "" && cInfo1.assignedSubject === cInfo2.assignedSubject && cInfo1.assignedClasses.join(',') === cInfo2.assignedClasses.join(',') && cInfo1.isRelief === cInfo2.isRelief && cInfo1.relGrade === cInfo2.relGrade) {
-                                    isDouble = true; 
-                                    skipMap[`${p+1}_${d}`] = true;
+                                });
+
+                                let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.reliefTeacher === tea);
+                                if(relief) {
+                                    relGrade = relief.grade;
+                                    let baseCell = generatedTimetable[d][p][relief.grade];
+                                    assignedSubject = baseCell ? (baseCell.subject || '') : "";
+                                    isRelief = true;
                                 }
 
-                                let cellHTML = "";
-                                if(cInfo1.isRelief) {
-                                    cellHTML = `<td><div class="card relief-card"><span class="card-subj">${cInfo1.assignedSubject}</span><span class="relief-text">(${cInfo1.relGrade})</span></div></td>`;
-                                } else if(cInfo1.assignedClasses.length > 0) {
-                                    cellHTML = `<td><div class="card" style="background:${cInfo1.color};"><span class="card-subj">${cInfo1.assignedSubject}</span><span>(${cInfo1.assignedClasses.join(', ')})</span></div></td>`;
+                                if(isRelief) {
+                                    tbl += `<td><div class="card relief-card"><span class="card-subj">${assignedSubject}</span><span class="relief-text">(${relGrade})</span></div></td>`;
+                                } else if(assignedClasses.length > 0) {
+                                    tbl += `<td><div class="card" style="background:${color};"><span class="card-subj">${assignedSubject}</span><span>(${assignedClasses.join(', ')})</span></div></td>`;
                                 } else {
-                                    cellHTML = `<td class="cell-empty"></td>`;
+                                    tbl += `<td class="cell-empty"></td>`;
                                 }
-
-                                if(isDouble) cellHTML = cellHTML.replace('<td', '<td rowspan="2"');
-                                tbl += cellHTML;
                             });
                             tbl += `</tr>`;
                             if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;

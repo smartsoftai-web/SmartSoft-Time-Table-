@@ -1,4 +1,4 @@
-onst CACHE_NAME = 'smartsoft-timetable-v3'; 
+onst CACHE_NAME = 'smartsoft-timetable-v6'; 
 const ASSETS = [
     './',
     './index.html',

@@ -510,17 +510,7 @@
 
             <fieldset>
                 <legend data-i18n="teach_rules">⚙️ ඉගැන්වීම් නීති සැකසීම</legend>
-                <div class="form-grid" style="margin-top: 5px;">
-                    <label style="color:#1d4ed8;" data-i18n="lbl_join_sub">විෂයයන් Join:</label>
-                    <div class="custom-select-wrapper">
-                        <div class="custom-select-display" onclick="toggleMultiSelect('joinSubOptions')">
-                            <span id="joinSubText" style="font-weight:bold;" data-i18n="sel_subs">-- විෂයයන් තෝරන්න --</span> ⏷
-                        </div>
-                        <div id="joinSubOptions" class="custom-select-options"></div>
-                    </div>
-                    <label></label><button class="btn-small" style="background:#1d4ed8;" onclick="joinSelectedSubjects()" data-i18n="btn_join_sub">+ විෂයයන් Join කරන්න</button>
-                </div>
-                <hr style="border: 0; border-top: 1px dashed #d1d5db; margin: 10px 0;">
+                
                 <div class="form-grid">
                     <label data-i18n="lbl_grd">ශ්‍රේණිය:</label>
                     <div class="custom-select-wrapper">
@@ -539,12 +529,7 @@
                 <div id="coreRuleDiv">
                     <div class="form-grid">
                         <label data-i18n="lbl_sub">විෂයය:</label>
-                        <div class="custom-select-wrapper">
-                            <div class="custom-select-display" onclick="toggleMultiSelect('rSubCoreOptions')">
-                                <span id="rSubCoreText" data-i18n="sel_subs">-- විෂයයන් තෝරන්න --</span> ⏷
-                            </div>
-                            <div id="rSubCoreOptions" class="custom-select-options"></div>
-                        </div>
+                        <select id="rSubCore"><option value="">-- විෂයයන් තෝරන්න --</option></select>
                         <label data-i18n="lbl_tea">ගුරුවරයා:</label><select id="rTeacherCore"></select>
                         <label data-i18n="lbl_pcount">කාලච්ඡේද ගණන:</label><input type="number" id="rPeriodsCore" min="1" max="8">
                         <label></label><button class="btn-small" style="background-color: #3b82f6; border-color:#2563eb;" onclick="addCoreRule()" data-i18n="btn_add_rule">+ නීතිය එක් කරන්න</button>
@@ -555,12 +540,7 @@
                     <div class="basket-box">
                         <div class="form-grid" style="margin-bottom: 5px;">
                             <label data-i18n="lbl_sub">විෂයය:</label>
-                            <div class="custom-select-wrapper">
-                                <div class="custom-select-display" onclick="toggleMultiSelect('rSubBasketOptions')">
-                                    <span id="rSubBasketText" data-i18n="sel_subs">-- විෂයයන් තෝරන්න --</span> ⏷
-                                </div>
-                                <div id="rSubBasketOptions" class="custom-select-options"></div>
-                            </div>
+                            <select id="rSubBasket"><option value="">-- විෂයයන් තෝරන්න --</option></select>
                             <label data-i18n="lbl_tea">ගුරුවරයා:</label><select id="rTeacherBasket"></select>
                             <label></label><button class="btn-small" style="background:#6b7280; border-color:#4b5563;" onclick="addToTempBasket()" data-i18n="btn_add_to_b">+ කාණ්ඩයට එක් කරන්න</button>
                         </div>
@@ -631,7 +611,7 @@
                 appTitle: "School Timetable V1.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_tea: "🧑‍🏫 By Teacher", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data", excel_desc: "For bulk data, use the Excel method below.", btn_excel_up: "📊 Upload Data via Excel", btn_excel_down: "📥 Download Excel Template", tt_pattern: "Timetable Pattern:", pat_std: "Standard (8 periods/day)", pat_mus: "Muslim Schools (Mon-Thu 9, Fri 6)", att_time: "Registration Time", p9: "Period 9", btn_time_set: "⏰ Set Period Times", mod_time_t: "⏰ Period Times", btn_save_time: "💾 Save Changes", lbl_join_sub: "Join Subjects:", sel_subs: "-- Select Subjects --", btn_join_sub: "+ Join Subjects", msg_sel_2_sub: "Please select 2 or more subjects.", msg_join_succ: "Subjects joined successfully!", msg_join_ext: "This subject combination already exists!"
             },
             ta: {
-                appTitle: "School Timetable V1.0 ", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_tea: "🧑‍🏫 ஆசிரியர் வாரியாக", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை", excel_desc: "அதிக தரவுகள் இருந்தால், கீழே உள்ள Excel முறையைப் பயன்படுத்தவும்.", btn_excel_up: "📊 Excel மூலம் தரவை ஏற்றவும்", btn_excel_down: "📥 Excel Template", tt_pattern: "நேர அட்டவணை முறை:", pat_std: "சாதாரண (நாளொன்றுக்கு 8)", pat_mus: "முஸ்லிம் பாடசாலைகள் (திங்-வியா 9, வெள்ளி 6)", att_time: "வருகை பதிவு நேரம்", p9: "பாடம் 9", btn_time_set: "⏰ பாட நேரங்களை அமைக்கவும்", mod_time_t: "⏰ பாட நேரங்கள்", btn_save_time: "💾 மாற்றங்களைச் சேமிக்க", lbl_join_sub: "பாடங்களை இணைக்க:", sel_subs: "-- பாடங்களைத் தேர்ந்தெடுக்கவும் --", btn_join_sub: "+ பாடங்களை இணைக்க", msg_sel_2_sub: "தயவுசெய்து 2 அல்லது அதற்கு மேற்பட்ட பாடங்களைத் தேர்ந்தெடுக்கவும்.", msg_join_succ: "பாடங்கள் வெற்றிகரமாக இணைக்கப்பட்டன!", msg_join_ext: "இந்த பாட சேர்க்கை ஏற்கனவே உள்ளது!"
+                appTitle: "School Timetable V1.0", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_tea: "🧑‍🏫 ஆசிரியர் வாரியாக", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை", excel_desc: "அதிக தரவுகள் இருந்தால், கீழே உள்ள Excel முறையைப் பயன்படுத்தவும்.", btn_excel_up: "📊 Excel மூலம் தரவை ஏற்றவும்", btn_excel_down: "📥 Excel Template", tt_pattern: "நேர அட்டவணை முறை:", pat_std: "சாதாரண (நாளொன்றுக்கு 8)", pat_mus: "முஸ்லிம் பாடசாலைகள் (திங்-வியா 9, வெள்ளி 6)", att_time: "வருகை பதிவு நேரம்", p9: "பாடம் 9", btn_time_set: "⏰ பாட நேரங்களை அமைக்கவும்", mod_time_t: "⏰ பாட நேரங்கள்", btn_save_time: "💾 மாற்றங்களைச் சேமிக்க", lbl_join_sub: "பாடங்களை இணைக்க:", sel_subs: "-- பாடங்களைத் தேர்ந்தெடுக்கவும் --", btn_join_sub: "+ பாடங்களை இணைக்க", msg_sel_2_sub: "தயவுசெய்து 2 அல்லது அதற்கு மேற்பட்ட பாடங்களைத் தேர்ந்தெடுக்கவும்.", msg_join_succ: "பாடங்கள் வெற்றிகரமாக இணைக்கப்பட்டன!", msg_join_ext: "இந்த பாட சேர்க்கை ஏற்கனவே உள்ளது!"
             }
         };
 
@@ -693,45 +673,14 @@
             }
         }
 
-        function updateMultiSubDisplayCore() {
-            let checked = document.querySelectorAll('#rSubCoreOptions input:checked');
-            let vals = Array.from(checked).map(c => c.value);
-            document.getElementById('rSubCoreText').innerText = vals.length > 0 ? vals.join(' + ') : t('sel_subs');
-        }
         
-        function updateMultiSubDisplayBasket() {
-            let checked = document.querySelectorAll('#rSubBasketOptions input:checked');
-            let vals = Array.from(checked).map(c => c.value);
-            document.getElementById('rSubBasketText').innerText = vals.length > 0 ? vals.join(' + ') : t('sel_subs');
-        }
         
-        function updateMultiSubDisplayJoin() {
-            let checked = document.querySelectorAll('#joinSubOptions input:checked');
-            let vals = Array.from(checked).map(c => c.value);
-            let text = vals.join(' + ');
-            if(text === "") text = t('sel_subs');
-            document.getElementById('joinSubText').innerText = text;
-        }
+        
+        
+        
 
-        async function joinSelectedSubjects() {
-            let checked = document.querySelectorAll('#joinSubOptions input:checked');
-            let vals = Array.from(checked).map(c => c.value);
-            if (vals.length < 2) {
-                await customAlert(t('msg_sel_2_sub'));
-                return;
-            }
-            let joinedName = vals.join(' + ');
-            if (!masterSubjects.includes(joinedName)) {
-                masterSubjects.push(joinedName);
-                saveData();
-                initDropdowns();
-                await customAlert(t('msg_join_succ'));
-            } else {
-                await customAlert(t('msg_join_ext'));
-            }
-            document.querySelectorAll('#joinSubOptions input').forEach(cb => cb.checked = false);
-            updateMultiSubDisplayJoin();
-        }
+        
+            
 
         // PWA Install Logic
         let deferredPrompt;
@@ -897,12 +846,9 @@
             if(!e.target.closest('.custom-select-wrapper')) {
                 let opts = document.getElementById('rClassOptions');
                 if(opts) opts.style.display = 'none';
-                let opts3 = document.getElementById('rSubCoreOptions');
-                if(opts3) opts3.style.display = 'none';
-                let opts4 = document.getElementById('rSubBasketOptions');
-                if(opts4) opts4.style.display = 'none';
-                let opts5 = document.getElementById('joinSubOptions');
-                if(opts5) opts5.style.display = 'none';
+                
+                
+                
             }
         });
 
@@ -1530,19 +1476,8 @@
             document.getElementById('rClassOptions').innerHTML = multiHtml;
             document.getElementById('rClassText').innerText = t('sel_classes');
 
-            let multiSubCoreHtml = "";
-            let multiSubBasketHtml = "";
-            let multiSubJoinHtml = "";
-            masterSubjects.forEach(s => {
-                multiSubCoreHtml += `<label><input type="checkbox" value="${s}" onchange="updateMultiSubDisplayCore()"> ${s}</label>`;
-                multiSubBasketHtml += `<label><input type="checkbox" value="${s}" onchange="updateMultiSubDisplayBasket()"> ${s}</label>`;
-                multiSubJoinHtml += `<label><input type="checkbox" value="${s}" onchange="updateMultiSubDisplayJoin()"> ${s}</label>`;
-            });
-            let coreOpts = document.getElementById('rSubCoreOptions');
-            if(coreOpts) { coreOpts.innerHTML = multiSubCoreHtml; document.getElementById('rSubCoreText').innerText = t('sel_subs'); }
-            
-            let basketOpts = document.getElementById('rSubBasketOptions');
-            if(basketOpts) { basketOpts.innerHTML = multiSubBasketHtml; document.getElementById('rSubBasketText').innerText = t('sel_subs'); }
+            document.getElementById('rSubCore').innerHTML = sHtml;
+            document.getElementById('rSubBasket').innerHTML = sHtml;
 
             document.getElementById('rTeacherCore').innerHTML = tHtml; 
             document.getElementById('rTeacherBasket').innerHTML = tHtml; 
@@ -1602,8 +1537,7 @@
 
         async function addCoreRule() {
             const rClasses = getSelectedRuleClasses();
-            let checkedSubs = document.querySelectorAll('#rSubCoreOptions input:checked');
-            const rSubject = Array.from(checkedSubs).map(c => c.value).join(' + ');
+            const rSubject = document.getElementById('rSubCore').value;
             const rTeacher = document.getElementById('rTeacherCore').value;
             const rPeriods = parseInt(document.getElementById('rPeriodsCore').value);
             if(!rClasses || !rSubject || !rTeacher || !rPeriods) return await customAlert(t('err_fill'));
@@ -1612,17 +1546,13 @@
             document.getElementById('rPeriodsCore').value = ""; 
             document.querySelectorAll('#rClassOptions input').forEach(cb => cb.checked = false);
             updateMultiClassDisplay();
-            document.querySelectorAll('#rSubCoreOptions input').forEach(cb => cb.checked = false);
-            updateMultiSubDisplayCore();
-            document.querySelectorAll('#rSubCoreOptions input').forEach(cb => cb.checked = false);
-            updateMultiSubDisplayCore();
+            document.getElementById('rSubCore').value = '';
             
             saveData(); renderRules();
         }
 
         function addToTempBasket() {
-            let checkedSubs = document.querySelectorAll('#rSubBasketOptions input:checked');
-            const s = Array.from(checkedSubs).map(c => c.value).join(' + ');
+            const s = document.getElementById('rSubBasket').value;
             const tea = document.getElementById('rTeacherBasket').value;
             if(!s || !tea) return;
             tempBasketArr.push({ subject: s, tea: tea });
@@ -1642,8 +1572,7 @@
             
             tempBasketArr = []; document.getElementById('tempBasketItems').innerHTML = ""; document.getElementById('rPeriodsBasket').value = ""; 
             document.querySelectorAll('#rClassOptions input').forEach(cb => cb.checked = false); updateMultiClassDisplay();
-            document.querySelectorAll('#rSubBasketOptions input').forEach(cb => cb.checked = false); updateMultiSubDisplayBasket();
-            document.querySelectorAll('#rSubBasketOptions input').forEach(cb => cb.checked = false); updateMultiSubDisplayBasket();
+            document.getElementById('rSubBasket').value = '';
             
             saveData(); renderRules();
         }
@@ -1738,7 +1667,7 @@
                                 }
                             }
                             
-                            while(r.periods > 0 && availableDays.length > 0) {
+                            let loopSafe3 = 0; while(r.periods > 0 && availableDays.length > 0 && loopSafe3 < 100) { loopSafe3++;
                                 let d = availableDays.shift();
                                 if(tempTimetable[d][1][c] === null) {
                                     let isBusyT = false;
@@ -1767,7 +1696,7 @@
                 remainingRules.forEach(rule => {
                     let requiredPeriods = rule.periods;
                     let ruleClassesArr = rule.grade.split(',').map(c => c.trim());
-                    let isJoinedRule = ruleClassesArr.length > 1;
+                    
                     
                     let daysAssignedCount = { 'Monday':0, 'Tuesday':0, 'Wednesday':0, 'Thursday':0, 'Friday':0 };
                     let originalPeriods = requiredPeriods;
@@ -1816,7 +1745,7 @@
                     let rTeachers = rule.teacher ? rule.teacher.split(',').map(tea => tea.trim()) : [];
                     let intv = parseInt(document.getElementById('intervalSetting').value) || 4;
 
-                    while (doublesNeeded > 0) {
+                    let loopSafe1 = 0; while (doublesNeeded > 0 && loopSafe1 < 200) { loopSafe1++;
                         let placed = false;
                         let dayOrder = [...days].sort(() => Math.random() - 0.5);
                         for (let d of dayOrder) {
@@ -1845,8 +1774,8 @@
                                     
                                     if (!isBusy) {
                                         for(let c of ruleClassesArr) {
-                                            tempTimetable[d][p1][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: isJoinedRule };
-                                            tempTimetable[d][p2][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: isJoinedRule };
+                                            tempTimetable[d][p1][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
+                                            tempTimetable[d][p2][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
                                         }
                                         daysAssignedCount[d] += 2; doublesNeeded--; placed = true; break;
                                     }
@@ -1857,7 +1786,7 @@
                         if(!placed) { singlesNeeded += 2; doublesNeeded--; }
                     }
 
-                    while (singlesNeeded > 0) {
+                    let loopSafe2 = 0; while (singlesNeeded > 0 && loopSafe2 < 200) { loopSafe2++;
                         let placed = false;
                         let dayOrder = [...days].sort((a,b) => daysAssignedCount[a] - daysAssignedCount[b]); 
 
@@ -1884,7 +1813,7 @@
                                     for(let tea of rTeachers) if(isTBusy(tempTimetable, tea, d, p, ruleClassesArr)) { isBusy = true; break; }
                                     if (!isBusy) {
                                         for(let c of ruleClassesArr) {
-                                            tempTimetable[d][p][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: isJoinedRule };
+                                            tempTimetable[d][p][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
                                         }
                                         daysAssignedCount[d]++; singlesNeeded--; placed = true; break;
                                     }
@@ -1893,7 +1822,7 @@
                             if(placed) break;
                         }
 
-                        if(!placed && !isJoinedRule) {
+                        if(!placed) {
                             let rGrade = ruleClassesArr[0];
                             let emptySlotsInClass = [];
                             for(let d of days) {

@@ -322,6 +322,7 @@
                     <option value="6" data-i18n="p6">6 වැනි කාලච්ඡේදය</option>
                     <option value="7" data-i18n="p7">7 වැනි කාලච්ඡේදය</option>
                     <option value="8" data-i18n="p8">8 වැනි කාලච්ඡේදය</option>
+                        <option value="9" class="opt-p9" data-i18n="p9" style="display:none;">9 වැනි කාලච්ඡේදය</option>
                 </select>
                 <label data-i18n="lbl_grd">පන්තිය:</label><select id="relClass" onchange="updateReliefUI()"></select>
             </div>
@@ -432,6 +433,11 @@
             <fieldset>
                 <legend data-i18n="main_settings">⚙️ ප්‍රධාන සැකසුම් (Settings)</legend>
                 <div class="form-grid">
+                    <label data-i18n="tt_pattern">කාලසටහන් රටාව:</label>
+                    <select id="ttPattern" style="font-weight: bold; color: #1e40af;" onchange="updatePattern()">
+                        <option value="standard" data-i18n="pat_std">සාමාන්‍ය (දිනකට කාලච්ඡේද 8)</option>
+                        <option value="muslim" data-i18n="pat_mus">මුස්ලිම් පාසල් (සඳුදා-බ්‍රහස්පතින්දා 9, සිකුරාදා 6)</option>
+                    </select>
                     <label data-i18n="int_time">විවේක කාලය:</label>
                     <select id="intervalSetting" style="font-weight: bold; color: #b91c1c;" onchange="updateInterval()">
                         <option value="4" data-i18n="aft_4">කාලච්ඡේද 4 කට පසුව</option>
@@ -495,6 +501,7 @@
                         <option value="6" data-i18n="p6">6 වැනි කාලච්ඡේදය</option>
                         <option value="7" data-i18n="p7">7 වැනි කාලච්ඡේදය</option>
                         <option value="8" data-i18n="p8">8 වැනි කාලච්ඡේදය</option>
+                        <option value="9" class="opt-p9" data-i18n="p9" style="display:none;">9 වැනි කාලච්ඡේදය</option>
                     </select>
                     <label></label><button class="btn-small" style="background:#ef4444; border-color:#dc2626;" onclick="addConstraint()" data-i18n="btn_add_const">+ නිදහස් කාලය යොදන්න</button>
                 </div>
@@ -618,13 +625,13 @@
         // --- I18N Language Dictionary ---
         const langDict = {
             si: {
-                appTitle: "පාසල් කාලසටහන V1.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_tea: "🧑‍🏫 ගුරුවරයා අනුව", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත තෝරන්න!", alert_no_data: "දත්ත නොමැත", excel_desc: "බොහෝ දත්ත තිබේ නම් පහත Excel ක්‍රමය භාවිතා කරන්න.", btn_excel_up: "📊 Excel හරහා දත්ත ඇතුළත් කරන්න", btn_excel_down: "📥 Excel Template එක", btn_time_set: "⏰ කාලච්ඡේද වේලාවන් සකසන්න", mod_time_t: "⏰ කාලච්ඡේද වේලාවන්", btn_save_time: "💾 වෙනස්කම් Save කරන්න", lbl_join_sub: "විෂයයන් Join:", sel_subs: "-- විෂයයන් තෝරන්න --", btn_join_sub: "+ විෂයයන් Join කරන්න", msg_sel_2_sub: "කරුණාකර විෂයයන් 2ක් හෝ වැඩි ගණනක් තෝරන්න.", msg_join_succ: "විෂයයන් සාර්ථකව Join කරන ලදී!", msg_join_ext: "මෙම විෂය සංයෝජනය දැනටමත් පවතී!"
+                appTitle: "School Timetable V1.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_tea: "🧑‍🏫 ගුරුවරයා අනුව", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත තෝරන්න!", alert_no_data: "දත්ත නොමැත", excel_desc: "බොහෝ දත්ත තිබේ නම් පහත Excel ක්‍රමය භාවිතා කරන්න.", btn_excel_up: "📊 Excel හරහා දත්ත ඇතුළත් කරන්න", btn_excel_down: "📥 Excel Template එක", tt_pattern: "කාලසටහන් රටාව:", pat_std: "සාමාන්‍ය (දිනකට කාලච්ඡේද 8)", pat_mus: "මුස්ලිම් පාසල් (සඳුදා-බ්‍රහස්පතින්දා 9, සිකුරාදා 6)", att_time: "නාමලේඛන වේලාව", p9: "9 වැනි කාලච්ඡේදය", btn_time_set: "⏰ කාලච්ඡේද වේලාවන් සකසන්න", mod_time_t: "⏰ කාලච්ඡේද වේලාවන්", btn_save_time: "💾 වෙනස්කම් Save කරන්න", lbl_join_sub: "විෂයයන් Join:", sel_subs: "-- විෂයයන් තෝරන්න --", btn_join_sub: "+ විෂයයන් Join කරන්න", msg_sel_2_sub: "කරුණාකර විෂයයන් 2ක් හෝ වැඩි ගණනක් තෝරන්න.", msg_join_succ: "විෂයයන් සාර්ථකව Join කරන ලදී!", msg_join_ext: "මෙම විෂය සංයෝජනය දැනටමත් පවතී!"
             },
             en: {
-                appTitle: "School Timetable V1.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_tea: "🧑‍🏫 By Teacher", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data", excel_desc: "For bulk data, use the Excel method below.", btn_excel_up: "📊 Upload Data via Excel", btn_excel_down: "📥 Download Excel Template", btn_time_set: "⏰ Set Period Times", mod_time_t: "⏰ Period Times", btn_save_time: "💾 Save Changes", lbl_join_sub: "Join Subjects:", sel_subs: "-- Select Subjects --", btn_join_sub: "+ Join Subjects", msg_sel_2_sub: "Please select 2 or more subjects.", msg_join_succ: "Subjects joined successfully!", msg_join_ext: "This subject combination already exists!"
+                appTitle: "School Timetable V1.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_tea: "🧑‍🏫 By Teacher", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data", excel_desc: "For bulk data, use the Excel method below.", btn_excel_up: "📊 Upload Data via Excel", btn_excel_down: "📥 Download Excel Template", tt_pattern: "Timetable Pattern:", pat_std: "Standard (8 periods/day)", pat_mus: "Muslim Schools (Mon-Thu 9, Fri 6)", att_time: "Registration Time", p9: "Period 9", btn_time_set: "⏰ Set Period Times", mod_time_t: "⏰ Period Times", btn_save_time: "💾 Save Changes", lbl_join_sub: "Join Subjects:", sel_subs: "-- Select Subjects --", btn_join_sub: "+ Join Subjects", msg_sel_2_sub: "Please select 2 or more subjects.", msg_join_succ: "Subjects joined successfully!", msg_join_ext: "This subject combination already exists!"
             },
             ta: {
-                appTitle: "நேர அட்டவணை V1.0 ", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_tea: "🧑‍🏫 ஆசிரியர் வாரியாக", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை", excel_desc: "அதிக தரவுகள் இருந்தால், கீழே உள்ள Excel முறையைப் பயன்படுத்தவும்.", btn_excel_up: "📊 Excel மூலம் தரவை ஏற்றவும்", btn_excel_down: "📥 Excel Template", btn_time_set: "⏰ பாட நேரங்களை அமைக்கவும்", mod_time_t: "⏰ பாட நேரங்கள்", btn_save_time: "💾 மாற்றங்களைச் சேமிக்க", lbl_join_sub: "பாடங்களை இணைக்க:", sel_subs: "-- பாடங்களைத் தேர்ந்தெடுக்கவும் --", btn_join_sub: "+ பாடங்களை இணைக்க", msg_sel_2_sub: "தயவுசெய்து 2 அல்லது அதற்கு மேற்பட்ட பாடங்களைத் தேர்ந்தெடுக்கவும்.", msg_join_succ: "பாடங்கள் வெற்றிகரமாக இணைக்கப்பட்டன!", msg_join_ext: "இந்த பாட சேர்க்கை ஏற்கனவே உள்ளது!"
+                appTitle: "School Timetable V1.0 ", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_tea: "🧑‍🏫 ஆசிரியர் வாரியாக", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை", excel_desc: "அதிக தரவுகள் இருந்தால், கீழே உள்ள Excel முறையைப் பயன்படுத்தவும்.", btn_excel_up: "📊 Excel மூலம் தரவை ஏற்றவும்", btn_excel_down: "📥 Excel Template", tt_pattern: "நேர அட்டவணை முறை:", pat_std: "சாதாரண (நாளொன்றுக்கு 8)", pat_mus: "முஸ்லிம் பாடசாலைகள் (திங்-வியா 9, வெள்ளி 6)", att_time: "வருகை பதிவு நேரம்", p9: "பாடம் 9", btn_time_set: "⏰ பாட நேரங்களை அமைக்கவும்", mod_time_t: "⏰ பாட நேரங்கள்", btn_save_time: "💾 மாற்றங்களைச் சேமிக்க", lbl_join_sub: "பாடங்களை இணைக்க:", sel_subs: "-- பாடங்களைத் தேர்ந்தெடுக்கவும் --", btn_join_sub: "+ பாடங்களை இணைக்க", msg_sel_2_sub: "தயவுசெய்து 2 அல்லது அதற்கு மேற்பட்ட பாடங்களைத் தேர்ந்தெடுக்கவும்.", msg_join_succ: "பாடங்கள் வெற்றிகரமாக இணைக்கப்பட்டன!", msg_join_ext: "இந்த பாட சேர்க்கை ஏற்கனவே உள்ளது!"
             }
         };
 
@@ -698,7 +705,7 @@
             document.getElementById('rSubBasketText').innerText = vals.length > 0 ? vals.join(' + ') : t('sel_subs');
         }
         
-        function obsolete_updateMultiSubDisplay() {
+        function updateMultiSubDisplayJoin() {
             let checked = document.querySelectorAll('#joinSubOptions input:checked');
             let vals = Array.from(checked).map(c => c.value);
             let text = vals.join(' + ');
@@ -723,7 +730,7 @@
                 await customAlert(t('msg_join_ext'));
             }
             document.querySelectorAll('#joinSubOptions input').forEach(cb => cb.checked = false);
-            updateMultiSubDisplay();
+            updateMultiSubDisplayJoin();
         }
 
         // PWA Install Logic
@@ -762,7 +769,9 @@
         function openTimeModal() {
             document.getElementById('timeModal').style.display = 'flex';
             let html = '';
-            for(let i=1; i<=8; i++) {
+            html += `<div class="form-grid"><label>${t('att_time')}:</label><input type="text" id="time_att" value="${periodTimes['att'] || ''}"></div>`;
+            for(let i=1; i<=9; i++) {
+                if (i===9 && document.getElementById('ttPattern').value !== 'muslim') continue;
                 html += `<div class="form-grid"><label>${t('period_short')} ${i}:</label><input type="text" id="time_p${i}" value="${periodTimes[i] || ''}"></div>`;
             }
             html += `<div class="form-grid"><label>${t('int_txt')}:</label><input type="text" id="time_int" value="${periodTimes['int'] || ''}"></div>`;
@@ -770,8 +779,10 @@
         }
 
         function saveTimeSettings() {
-            for(let i=1; i<=8; i++) {
-                periodTimes[i] = document.getElementById(`time_p${i}`).value;
+            periodTimes['att'] = document.getElementById('time_att').value;
+            for(let i=1; i<=9; i++) {
+                let el = document.getElementById(`time_p${i}`);
+                if (el) periodTimes[i] = el.value;
             }
             periodTimes['int'] = document.getElementById('time_int').value;
             saveData();
@@ -890,6 +901,8 @@
                 if(opts3) opts3.style.display = 'none';
                 let opts4 = document.getElementById('rSubBasketOptions');
                 if(opts4) opts4.style.display = 'none';
+                let opts5 = document.getElementById('joinSubOptions');
+                if(opts5) opts5.style.display = 'none';
             }
         });
 
@@ -922,13 +935,28 @@
         
                 let generatedTimetable = {};
         let tempBasketArr = [];
-        let periodTimes = { '1': '07:50 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:50 - 11:30', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', 'int': '10:30 - 10:50' };
+        let periodTimes = { '1': '07:45 - 08:25', 'att': '08:25 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:50 - 11:30', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', '9': '13:30 - 14:10', 'int': '10:30 - 10:50' };
+
+        function getMaxPeriods(d) {
+            let pat = document.getElementById('ttPattern').value;
+            if(pat === 'muslim') return (d === 'Friday') ? 6 : 9;
+            return 8;
+        }
+        function getWeekMaxPeriods() {
+            return document.getElementById('ttPattern').value === 'muslim' ? 9 : 8;
+        }
+        function updatePattern() {
+            let isMus = document.getElementById('ttPattern').value === 'muslim';
+            document.querySelectorAll('.opt-p9').forEach(el => el.style.display = isMus ? 'block' : 'none');
+            saveData();
+            try { renderTable(); }catch(e){}
+        }
 
         function initEmptyTimetable() {
             generatedTimetable = {};
             days.forEach(day => {
                 generatedTimetable[day] = {};
-                for(let p=1; p<=8; p++) {
+                for(let p=1; p<=9; p++) {
                     generatedTimetable[day][p] = {};
                     classes.forEach(c => generatedTimetable[day][p][c] = null);
                 }
@@ -943,7 +971,8 @@
                 schoolName: document.getElementById('schoolNameInput').value,
                 year: document.getElementById('yearInput').value,
                 term: document.getElementById('termInput').value,
-                interval: document.getElementById('intervalSetting').value
+                interval: document.getElementById('intervalSetting').value,
+                ttPattern: document.getElementById('ttPattern').value
             };
             localStorage.setItem('smartSoftTimetableData', JSON.stringify(data));
         }
@@ -971,11 +1000,11 @@
                 generatedTimetable = data.generatedTimetable || {};
                 tempBasketArr = data.tempBasketArr || [];
                 if(data.periodTimes) {
-                    if (data.periodTimes['1'] === '07:30 - 08:10') {
+                    if (data.periodTimes['1'] === '07:30 - 08:10' || data.periodTimes['1'] === '07:50 - 08:30') {
                         if (data.interval == 5) {
-                            periodTimes = { '1': '07:50 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:30 - 11:10', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', 'int': '11:10 - 11:30' };
+                            periodTimes = { '1': '07:45 - 08:25', 'att': '08:25 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:30 - 11:10', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', '9': '13:30 - 14:10', 'int': '11:10 - 11:30' };
                         } else {
-                            periodTimes = { '1': '07:50 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:50 - 11:30', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', 'int': '10:30 - 10:50' };
+                            periodTimes = { '1': '07:45 - 08:25', 'att': '08:25 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:50 - 11:30', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', '9': '13:30 - 14:10', 'int': '10:30 - 10:50' };
                         }
                     } else {
                         periodTimes = data.periodTimes;
@@ -986,6 +1015,8 @@
                 if(data.year) { document.getElementById('yearInput').value = data.year; }
                 if(data.term) { document.getElementById('termInput').value = data.term; }
                 if(data.interval) { document.getElementById('intervalSetting').value = data.interval; }
+                if(data.ttPattern) { document.getElementById('ttPattern').value = data.ttPattern; }
+                updatePattern();
 
                 let isCorrupt = false;
                 if(classes.length > 0) {
@@ -1096,9 +1127,9 @@
         function updateInterval() { 
             let intv = parseInt(document.getElementById('intervalSetting').value) || 4;
             if (intv === 4) {
-                periodTimes = { '1': '07:50 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:50 - 11:30', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', 'int': '10:30 - 10:50' };
+                periodTimes = { '1': '07:45 - 08:25', 'att': '08:25 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:50 - 11:30', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', '9': '13:30 - 14:10', 'int': '10:30 - 10:50' };
             } else {
-                periodTimes = { '1': '07:50 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:30 - 11:10', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', 'int': '11:10 - 11:30' };
+                periodTimes = { '1': '07:45 - 08:25', 'att': '08:25 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:30 - 11:10', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', '9': '13:30 - 14:10', 'int': '11:10 - 11:30' };
             }
             saveData();
             try { renderTable(); }catch(e){} 
@@ -1379,7 +1410,7 @@
             });
 
             printHtml += `</tbody></table>
-                <div class="print-footer" style="margin-top: 30px;">&copy; 2026 Kelum Konara | Smart<span>Soft</span> | Timetable v1.0</div>
+                <div class="print-footer" style="margin-top: 30px;">&copy; 2026 Kelum Konara | SmartSoft | School Timetable V1.0</div>
             </div></div>`;
 
             pArea.innerHTML = printHtml;
@@ -1501,9 +1532,11 @@
 
             let multiSubCoreHtml = "";
             let multiSubBasketHtml = "";
+            let multiSubJoinHtml = "";
             masterSubjects.forEach(s => {
                 multiSubCoreHtml += `<label><input type="checkbox" value="${s}" onchange="updateMultiSubDisplayCore()"> ${s}</label>`;
                 multiSubBasketHtml += `<label><input type="checkbox" value="${s}" onchange="updateMultiSubDisplayBasket()"> ${s}</label>`;
+                multiSubJoinHtml += `<label><input type="checkbox" value="${s}" onchange="updateMultiSubDisplayJoin()"> ${s}</label>`;
             });
             let coreOpts = document.getElementById('rSubCoreOptions');
             if(coreOpts) { coreOpts.innerHTML = multiSubCoreHtml; document.getElementById('rSubCoreText').innerText = t('sel_subs'); }
@@ -1670,7 +1703,7 @@
                 let tempTimetable = {};
                 days.forEach(d => {
                     tempTimetable[d] = {};
-                    for(let p=1; p<=8; p++) {
+                    for(let p=1; p<=9; p++) {
                         tempTimetable[d][p] = {};
                         classes.forEach(c => tempTimetable[d][p][c] = null);
                     }
@@ -1741,7 +1774,8 @@
                     
                     for(let d of days) {
                         let countInDay = 0;
-                        for(let p=1; p<=8; p++) {
+                        let maxPD = getMaxPeriods(d);
+                        for(let p=1; p<=maxPD; p++) {
                             if(tempTimetable[d][p][ruleClassesArr[0]] && tempTimetable[d][p][ruleClassesArr[0]].subject === rule.subject) {
                                 countInDay++;
                             }
@@ -1787,11 +1821,18 @@
                         let dayOrder = [...days].sort(() => Math.random() - 0.5);
                         for (let d of dayOrder) {
                             if (daysAssignedCount[d] > 0) continue; 
-                            let periodOrder = [2, 3, 5, 6, 7]; 
+                            let isHard = /math|sci|eng|ගණිත|විද්‍යා|ඉංග්‍රීසි/i.test(rule.subject);
+                            let isSoft = /ict|තොරතුරු|ප්‍රායෝගික|තාක්ෂණ|සෞන්දර්ය|art|danc|music|චිත්‍ර|නැටුම්|සංගීත|basket|කාණ්ඩ/i.test(rule.subject);
+                            let earlyD = [1, 2, 3].sort(() => Math.random() - 0.5);
+                            let lateD = [5, 6, 7].sort(() => Math.random() - 0.5);
+                            let periodOrder = [];
+                            if (isHard) periodOrder = earlyD.concat(lateD);
+                            else if (isSoft) periodOrder = lateD.concat(earlyD);
+                            else periodOrder = earlyD.concat(lateD).sort(() => Math.random() - 0.5); 
                             for (let p of periodOrder) {
                                 let p1 = p, p2 = p + 1;
                                 if (p1 === intv || p2 === intv+1) continue; 
-                                if (p2 > 8) continue;
+                                if (p2 > maxPD) continue;
 
                                 let classesFree = true;
                                 for(let c of ruleClassesArr) {
@@ -1824,7 +1865,14 @@
                             if (originalPeriods === 5 && daysAssignedCount[d] >= 1) continue;
                             if (daysAssignedCount[d] >= 2) continue; 
 
-                            let periodOrder = [1,2,3,4,5,6,7,8].sort(()=>Math.random() - 0.5);
+                            let isHard = /math|sci|eng|ගණිත|විද්‍යා|ඉංග්‍රීසි/i.test(rule.subject);
+                            let isSoft = /ict|තොරතුරු|ප්‍රායෝගික|තාක්ෂණ|සෞන්දර්ය|art|danc|music|චිත්‍ර|නැටුම්|සංගීත|basket|කාණ්ඩ/i.test(rule.subject);
+                            let earlyS = [1, 2, 3, 4].sort(() => Math.random() - 0.5);
+                            let lateS = [5, 6, 7, 8].sort(() => Math.random() - 0.5);
+                            let periodOrder = [];
+                            if (isHard) periodOrder = earlyS.concat(lateS);
+                            else if (isSoft) periodOrder = lateS.concat(earlyS);
+                            else periodOrder = [1,2,3,4,5,6,7,8].sort(()=>Math.random() - 0.5);
                             for (let p of periodOrder) {
                                 let classesFree = true;
                                 for(let c of ruleClassesArr) {
@@ -1849,7 +1897,8 @@
                             let rGrade = ruleClassesArr[0];
                             let emptySlotsInClass = [];
                             for(let d of days) {
-                                for(let p=1; p<=8; p++) {
+                                let maxPD = getMaxPeriods(d);
+                                for(let p=1; p<=maxPD; p++) {
                                     if (tempTimetable[d][p][rGrade] === null) emptySlotsInClass.push({d:d, p:p});
                                 }
                             }
@@ -1857,7 +1906,8 @@
                             swapLoop:
                             for(let d of days) {
                                 if (originalPeriods === 5 && daysAssignedCount[d] >= 1) continue;
-                                for(let p=1; p<=8; p++) {
+                                let maxPD = getMaxPeriods(d);
+                                for(let p=1; p<=maxPD; p++) {
                                     let existingCell = tempTimetable[d][p][rGrade];
                                     if (existingCell && !existingCell.isJoined) {
                                         let ourBusy = false;
@@ -1960,11 +2010,11 @@
                 
                 days.forEach(d => {
                     b += `<tr class="special-row"><td colspan="${colSpan}" class="day-header">${getDayName(d)}</td></tr>`;
-                    for (let p = 1; p <= 8; p++) {
+                    let weekMax = getWeekMaxPeriods(); for (let p = 1; p <= weekMax; p++) {
                         b += `<tr class="period-row"><td><div style="font-size:12px; font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:9px; color:#4b5563; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
-                        classes.forEach(c => { b += getCellHTML(generatedTimetable[d][p][c], d, p, c); });
+                        let maxPD = getMaxPeriods(d); if(p > maxPD) { classes.forEach(c => { b += `<td class="cell-empty" style="background:#9ca3af;"></td>`; }); } else { classes.forEach(c => { b += getCellHTML(generatedTimetable[d][p][c], d, p, c); }); }
                         b += `</tr>`;
-                        if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
+                        if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0; text-transform:none;">(${periodTimes.att || ""})</span></td></tr>`;
                         if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0;">(${periodTimes.int || ""})</span></td></tr>`;
                     }
                 });
@@ -1974,11 +2024,11 @@
                 classes.forEach(c => h += `<th>${c}</th>`);
                 let colSpan = classes.length + 1;
                 
-                for (let p = 1; p <= 8; p++) {
+                let weekMax = getWeekMaxPeriods(); for (let p = 1; p <= weekMax; p++) {
                     b += `<tr class="period-row"><td><div style="font-size:12px; font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:9px; color:#4b5563; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
-                    classes.forEach(c => { b += getCellHTML(generatedTimetable[currentDay][p][c], currentDay, p, c); });
+                    let maxPD = getMaxPeriods(currentDay); if(p > maxPD) { classes.forEach(c => { b += `<td class="cell-empty" style="background:#9ca3af;"></td>`; }); } else { classes.forEach(c => { b += getCellHTML(generatedTimetable[currentDay][p][c], currentDay, p, c); }); }
                     b += `</tr>`;
-                    if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
+                    if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0; text-transform:none;">(${periodTimes.att || ""})</span></td></tr>`;
                     if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0;">(${periodTimes.int || ""})</span></td></tr>`;
                 }
 
@@ -1987,13 +2037,18 @@
                 days.forEach(d => h += `<th>${getDayName(d)}</th>`);
                 let colSpan = days.length + 1;
                 
-                for (let p = 1; p <= 8; p++) {
+                let weekMax = getWeekMaxPeriods(); for (let p = 1; p <= weekMax; p++) {
                     b += `<tr class="period-row"><td><div style="font-size:12px; font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:9px; color:#4b5563; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
                     days.forEach(d => {
                         let assignedClasses = []; let assignedSubject = ""; let color = "#ffffff";
                         let isRelief = false; let relGrade = "";
                         let tea = currentSelectedTeacher;
                         
+                        let maxPD = getMaxPeriods(d);
+                        if(p > maxPD) {
+                            b += `<td class="cell-empty" style="background:#9ca3af;"></td>`;
+                            return;
+                        }
                         classes.forEach(c => {
                             let cell = generatedTimetable[d][p][c];
                             if(cell && cell.teacher && cell.teacher.includes(tea)) { 
@@ -2020,7 +2075,7 @@
                         }
                     });
                     b += `</tr>`;
-                    if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
+                    if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0; text-transform:none;">(${periodTimes.att || ""})</span></td></tr>`;
                     if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0;">(${periodTimes.int || ""})</span></td></tr>`;
                 }
             } else {
@@ -2028,11 +2083,11 @@
                 days.forEach(d => h += `<th>${getDayName(d)}</th>`);
                 let colSpan = days.length + 1;
                 
-                for (let p = 1; p <= 8; p++) {
+                let weekMax = getWeekMaxPeriods(); for (let p = 1; p <= weekMax; p++) {
                     b += `<tr class="period-row"><td><div style="font-size:12px; font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:9px; color:#4b5563; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
-                    days.forEach(d => { b += getCellHTML(generatedTimetable[d][p][currentSelectedClass], d, p, currentSelectedClass); });
+                    days.forEach(d => { let maxPD = getMaxPeriods(d); if(p > maxPD) { b += `<td class="cell-empty" style="background:#9ca3af;"></td>`; } else { b += getCellHTML(generatedTimetable[d][p][currentSelectedClass], d, p, currentSelectedClass); } });
                     b += `</tr>`;
-                    if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
+                    if(p === 1) b += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0; text-transform:none;">(${periodTimes.att || ""})</span></td></tr>`;
                     if(p === intervalPos) b += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0;">(${periodTimes.int || ""})</span></td></tr>`;
                 }
             }
@@ -2070,7 +2125,7 @@
             if (type === 'all_master') {
                 printHtml += `<div class="print-page layout-1"><div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml1}<h3 class="main-title">${t('v_all')}</h3>`;
                 printHtml += document.getElementById('mainTable').outerHTML;
-                printHtml += `<div class="print-footer">&copy; 2026 Kelum Konara | Smart<span>Soft</span> | Timetable v1.0</div></div></div>`;
+                printHtml += `<div class="print-footer">&copy; 2026 Kelum Konara | SmartSoft | School Timetable V1.0</div></div></div>`;
             } 
             else {
                 if (type === 'classes') {
@@ -2081,12 +2136,12 @@
                         tbl += `<table><thead><tr><th>${t('per_txt')}</th>` + days.map(d=>`<th>${getDayName(d)}</th>`).join('') + `</tr></thead><tbody>`;
                         for(let p=1; p<=8; p++) {
                             tbl += `<tr class="period-row"><td><div style="font-size:12px; font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:9px; color:#4b5563; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
-                            days.forEach(d => tbl += getCellHTML(generatedTimetable[d][p][c], d, p, c));
+                            days.forEach(d => { let maxPD = getMaxPeriods(d); if(p > maxPD) { tbl += `<td class="cell-empty" style="background:#9ca3af;"></td>`; } else { tbl += getCellHTML(generatedTimetable[d][p][c], d, p, c); } });
                             tbl += `</tr>`;
-                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
+                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0; text-transform:none;">(${periodTimes.att || ""})</span></td></tr>`;
                             if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0;">(${periodTimes.int || ""})</span></td></tr>`;
                         }
-                        tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | Smart<span>Soft</span></div></div>`;
+                        tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | SmartSoft | School Timetable V1.0</div></div>`;
                         generatedItems.push(tbl);
                     });
                 }
@@ -2102,6 +2157,11 @@
                                 let assignedClasses = []; let assignedSubject = ""; let color = "#ffffff";
                                 let isRelief = false; let relGrade = "";
                                 
+                                let maxPD = getMaxPeriods(d);
+                                if(p > maxPD) {
+                                    tbl += `<td class="cell-empty" style="background:#9ca3af;"></td>`;
+                                    return;
+                                }
                                 classes.forEach(c => {
                                     let cell = generatedTimetable[d][p][c];
                                     if(cell && cell.teacher && cell.teacher.includes(tea)) { 
@@ -2128,10 +2188,10 @@
                                 }
                             });
                             tbl += `</tr>`;
-                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')}</td></tr>`;
+                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0; text-transform:none;">(${periodTimes.att || ""})</span></td></tr>`;
                             if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0;">(${periodTimes.int || ""})</span></td></tr>`;
                         }
-                        tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | Smart<span>Soft</span></div></div>`;
+                        tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | SmartSoft | School Timetable V1.0</div></div>`;
                         generatedItems.push(tbl);
                     });
                 }

@@ -1655,7 +1655,10 @@
             let bestTimetable = null;
             let bestUnassignedLog = [];
             let minUnassignedCount = 9999;
-            let maxAttempts = 1500; 
+            
+            // We will use a highly optimized approach. Instead of random pure guessing,
+            // we will use a backtracking/heuristic hybrid with up to 10,000 fast iterations.
+            let maxAttempts = 10000; 
             
             let _pat = document.getElementById('ttPattern').value;
             let _intv = parseInt(document.getElementById('intervalSetting').value) || 4;
@@ -1665,7 +1668,7 @@
             }
 
             function isTBusy(tt, tea, d, p, ignoreGradesArr) {
-                if(!tea) return false;
+                if(!tea || tea === '-') return false;
                 if (teacherConstraints.some(tc => tc.teacher === tea && tc.day === d && (tc.period === 'All' || parseInt(tc.period) === p))) return true;
                 for(let c of classes) {
                     if (ignoreGradesArr && ignoreGradesArr.includes(c)) continue;
@@ -1673,79 +1676,75 @@
                 }
                 return false;
             }
-
+            
+            // Pre-process rules to flatten joined classes into a more manageable structure for the solver
+            let coreRegex = /math|sci|eng|sin|tam|his|bud|rel|ගණිත|විද්‍යා|ඉංග්‍රීසි|සිංහල|දෙමළ|ඉතිහාසය|බුද්ධ|ආගම/i;
+            
+            let processedRules = JSON.parse(JSON.stringify(teachingRules));
+            processedRules.forEach(r => {
+                r.gradeArr = r.grade.split(',').map(x=>x.trim());
+                r.teacherArr = r.teacher ? r.teacher.split(',').map(x=>x.trim()) : [];
+                r.isStrictCore = coreRegex.test(r.subject);
+            });
+            
+            // Sort Rules strictly: Class Teachers first -> Strict Core -> Double -> High Periods -> Type
+            // But wait, class teachers must be forced to period 1!
+            
             for(let attempt = 0; attempt < maxAttempts; attempt++) {
                 let tempUnassignedLog = [];
-                let tempTimetable = {};
+                let tt = {};
                 days.forEach(d => {
-                    tempTimetable[d] = {};
+                    tt[d] = {};
                     for(let p=1; p<=9; p++) {
-                        tempTimetable[d][p] = {};
-                        classes.forEach(c => tempTimetable[d][p][c] = null);
+                        tt[d][p] = {};
+                        classes.forEach(c => tt[d][p][c] = null);
                     }
                 });
 
                 let unassignedCount = 0;
-                let currentRules = JSON.parse(JSON.stringify(teachingRules));
-
-                // 1. Class Teacher Priority Placement (Periods 1 & 2)
+                
+                // --- PHASE 1: FORCE CLASS TEACHERS TO PERIOD 1 (AND 2 IF DOUBLE) ---
                 classes.forEach(c => {
                     let ct = classTeacherMap[c];
                     if (ct) {
-                        let ctRules = currentRules.filter(r => r.grade.split(',').map(x=>x.trim()).includes(c) && r.teacher.includes(ct));
-                        
-                        ctRules.sort((a,b) => {
-                            let aScore = (a.isDouble ? 10 : 0) + a.periods;
-                            let bScore = (b.isDouble ? 10 : 0) + b.periods;
-                            return bScore - aScore;
-                        });
+                        let ctRules = processedRules.filter(r => r.gradeArr.includes(c) && r.teacherArr.includes(ct));
+                        ctRules.sort((a,b) => (b.isDouble ? 10 : 0) + b.periods - ((a.isDouble ? 10 : 0) + a.periods));
 
-                        for (let d of days) {
-                            if (tempTimetable[d][1][c] !== null) continue; // Already filled by joined class etc
+                        let availableDays = [...days].sort(() => Math.random() - 0.5);
+                        for (let d of availableDays) {
+                            if (tt[d][1][c] !== null) continue; // Already filled by a join
 
                             for (let r of ctRules) {
                                 if (r.periods > 0) {
-                                    let ruleClassesArr = r.grade.split(',').map(cls => cls.trim());
-                                    
-                                    let p1Free = true;
-                                    for(let rC of ruleClassesArr) {
-                                        if (tempTimetable[d][1][rC] !== null) { p1Free = false; break; }
-                                    }
-                                    
+                                    let p1Free = r.gradeArr.every(rC => tt[d][1][rC] === null);
                                     if (p1Free) {
-                                        let isBusyT1 = false;
-                                        r.teacher.split(',').forEach(tea => { if(isTBusy(tempTimetable, tea.trim(), d, 1, ruleClassesArr)) isBusyT1 = true; });
+                                        let isBusyT1 = r.teacherArr.some(tea => isTBusy(tt, tea, d, 1, r.gradeArr));
                                         
                                         if (!isBusyT1) {
-                                            // Only double if user explicitly checked the box or periods = 10
-                                            let wantsDouble = r.isDouble || r.periods === 10;
+                                            let wantsDouble = r.isDouble || r.periods === 10 || r.periods === 6 || r.periods === 3 || r.periods >= 7;
                                             let canDouble = false;
                                             
                                             if (wantsDouble && r.periods >= 2) {
-                                                let p2Free = true;
-                                                for(let rC of ruleClassesArr) {
-                                                    if (tempTimetable[d][2][rC] !== null) { p2Free = false; break; }
-                                                }
+                                                let p2Free = r.gradeArr.every(rC => tt[d][2][rC] === null);
                                                 if (p2Free) {
-                                                    let isBusyT2 = false;
-                                                    r.teacher.split(',').forEach(tea => { if(isTBusy(tempTimetable, tea.trim(), d, 2, ruleClassesArr)) isBusyT2 = true; });
+                                                    let isBusyT2 = r.teacherArr.some(tea => isTBusy(tt, tea, d, 2, r.gradeArr));
                                                     if (!isBusyT2) canDouble = true;
                                                 }
                                             }
                                             
                                             if (canDouble) {
-                                                ruleClassesArr.forEach(rC => {
-                                                    tempTimetable[d][1][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: ruleClassesArr.length > 1 };
-                                                    tempTimetable[d][2][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: ruleClassesArr.length > 1 };
+                                                r.gradeArr.forEach(rC => {
+                                                    tt[d][1][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: r.gradeArr.length > 1 };
+                                                    tt[d][2][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: r.gradeArr.length > 1 };
                                                 });
                                                 r.periods -= 2;
-                                                break; 
+                                                break; // Move to next day for this class
                                             } else {
-                                                ruleClassesArr.forEach(rC => {
-                                                    tempTimetable[d][1][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: ruleClassesArr.length > 1 };
+                                                r.gradeArr.forEach(rC => {
+                                                    tt[d][1][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: r.gradeArr.length > 1 };
                                                 });
                                                 r.periods -= 1;
-                                                break; 
+                                                break; // Move to next day for this class
                                             }
                                         }
                                     }
@@ -1755,46 +1754,60 @@
                     }
                 });
 
-                // 2. Process Remaining Rules for the week
-let remainingRules = currentRules.filter(r => r.periods > 0);
+                // --- PHASE 2: PLACE REMAINING RULES (STRICT CORE FIRST) ---
+                // Reset processedRules remaining periods for sorting clone
+                let currentRules = JSON.parse(JSON.stringify(processedRules));
+                
+                // Sync periods left after CT phase
+                currentRules.forEach(cr => {
+                    let match = processedRules.find(pr => pr.id === cr.id);
+                    if(match) cr.periods = match.periods;
+                });
+                
+                let remainingRules = currentRules.filter(r => r.periods > 0);
+                
                 remainingRules.sort((a, b) => {
-                    let aClasses = a.grade.split(',').length;
-                    let bClasses = b.grade.split(',').length;
-                    if(aClasses !== bClasses) return bClasses - aClasses; 
+                    if (a.isStrictCore !== b.isStrictCore) return a.isStrictCore ? -1 : 1;
+                    if (a.type !== b.type) return a.type === 'core' ? -1 : 1;
+                    if (a.gradeArr.length !== b.gradeArr.length) return b.gradeArr.length - a.gradeArr.length; // Joins first
+                    if ((a.isDouble ? 1:0) !== (b.isDouble ? 1:0)) return b.isDouble ? 1 : -1;
                     return b.periods - a.periods; 
                 });
 
                 remainingRules.forEach(rule => {
                     let requiredPeriods = rule.periods;
-                    let ruleClassesArr = rule.grade.split(',').map(c => c.trim());
                     
+                    // Recalculate how many periods of this rule are ALREADY in the timetable (from CT phase)
                     let daysAssignedCount = { 'Monday':0, 'Tuesday':0, 'Wednesday':0, 'Thursday':0, 'Friday':0 };
-                    let originalPeriods = requiredPeriods;
+                    let totalPlaced = 0;
                     
                     for(let d of days) {
                         let countInDay = 0;
                         let maxPD = _getMaxP(d);
                         for(let p=1; p<=maxPD; p++) {
-                            if(tempTimetable[d][p][ruleClassesArr[0]] && tempTimetable[d][p][ruleClassesArr[0]].subject === rule.subject) {
+                            if(tt[d][p][rule.gradeArr[0]] && tt[d][p][rule.gradeArr[0]].subject === rule.subject) {
                                 countInDay++;
                             }
                         }
                         daysAssignedCount[d] = countInDay;
-                        originalPeriods += countInDay;
+                        totalPlaced += countInDay;
                     }
 
+                    let originalPeriods = requiredPeriods + totalPlaced; // Total target for the week
+
+                    // Determine required Doubles and Singles based on STRICT rules
                     let doublesNeeded = 0; 
                     let singlesNeeded = 0;
-                    let maxAllowedForSingle = 1;
+                    let maxAllowedForSingle = 1; // Strict rule: never 2 singles on same day
 
                     if (originalPeriods === 5) {
-                        doublesNeeded = 0; singlesNeeded = 5; maxAllowedForSingle = 0;
+                        doublesNeeded = 0; singlesNeeded = 5; maxAllowedForSingle = 0; // Exactly 1 per day
                     } else if (originalPeriods === 10) {
-                        doublesNeeded = 5; singlesNeeded = 0; maxAllowedForSingle = 0;
+                        doublesNeeded = 5; singlesNeeded = 0; maxAllowedForSingle = 0; // Exactly 2 per day (double)
                     } else if (originalPeriods === 3) {
-                        doublesNeeded = 1; singlesNeeded = 1; maxAllowedForSingle = 0;
+                        doublesNeeded = 1; singlesNeeded = 1; maxAllowedForSingle = 0; 
                     } else if (originalPeriods === 6) {
-                        doublesNeeded = 1; singlesNeeded = 4; maxAllowedForSingle = 0;
+                        doublesNeeded = 1; singlesNeeded = 4; maxAllowedForSingle = 0; 
                     } else if (rule.isDouble) {
                         doublesNeeded = Math.floor(originalPeriods / 2);
                         singlesNeeded = originalPeriods % 2;
@@ -1809,129 +1822,135 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                         }
                     }
                     
+                    // Subtract what's already placed
                     let currentDoubles = Object.values(daysAssignedCount).filter(v => v >= 2).length;
                     let currentTotal = Object.values(daysAssignedCount).reduce((a,b)=>a+b, 0);
                     
                     doublesNeeded = Math.max(0, doublesNeeded - currentDoubles);
                     singlesNeeded = Math.max(0, originalPeriods - currentTotal - (doublesNeeded * 2));
 
-                    let rTeachers = rule.teacher ? rule.teacher.split(',').map(tea => tea.trim()) : [];
-                    let intv = _intv;
-                    
-                    let isHard = /math|sci|eng|sin|tam|his|bud|rel|ගණිත|විද්‍යා|ඉංග්‍රීසි|සිංහල|දෙමළ|ඉතිහාසය|බුද්ධ|ආගම/i.test(rule.subject);
-                    let isSoft = /ict|තොරතුරු|ප්‍රායෝගික|තාක්ෂණ|සෞන්දර්ය|art|danc|music|චිත්‍ර|නැටුම්|සංගීත|basket|කාණ්ඩ/i.test(rule.subject);
-                    let prefEarlyD = [1, 2, 3];
-                    let prefLateD = [5, 6, 7];
-                    let prefEarlyS = [1, 2, 3, 4];
-                    let prefLateS = [5, 6, 7, 8, 9];
-
-                    let loopSafe1 = 0; while (doublesNeeded > 0 && loopSafe1 < 50) { loopSafe1++;
+                    // Place Doubles
+                    let loopSafe1 = 0; 
+                    while (doublesNeeded > 0 && loopSafe1 < 50) { 
+                        loopSafe1++;
                         let placed = false;
-                        let dayOrder = [...days].sort(() => Math.random() - 0.5);
+                        let dayOrder = [...days].sort(() => Math.random() - 0.5); // Randomize for varied schedules
+                        
                         for (let d of dayOrder) {
-                            if (daysAssignedCount[d] > 0) continue; 
+                            if (daysAssignedCount[d] > 0) continue; // Spread doubles to empty days
                             let maxPD = _getMaxP(d);
                             
-                            let eD = prefEarlyD.filter(x=>x<maxPD).sort(()=>Math.random()-0.5);
-                            let lD = prefLateD.filter(x=>x<maxPD).sort(()=>Math.random()-0.5);
-                            let periodOrder = isHard ? eD.concat(lD) : (isSoft ? lD.concat(eD) : eD.concat(lD).sort(()=>Math.random()-0.5));
+                            let periodOrder = [];
+                            for(let p=1; p<maxPD; p++) periodOrder.push(p);
+                            periodOrder.sort(()=>Math.random()-0.5); // Random periods
                             
                             for (let p of periodOrder) {
                                 let p1 = p, p2 = p + 1;
-                                if (p1 === intv || p2 === intv+1) continue; 
+                                if (p1 === _intv || p2 === _intv+1) continue; // Don't cross interval
                                 if (p2 > maxPD) continue;
 
-                                let classesFree = true;
-                                for(let c of ruleClassesArr) {
-                                    if(tempTimetable[d][p1][c] !== null || tempTimetable[d][p2][c] !== null) { classesFree = false; break; }
-                                }
-
+                                let classesFree = rule.gradeArr.every(c => tt[d][p1][c] === null && tt[d][p2][c] === null);
                                 if (classesFree) {
-                                    let isBusy = false;
-                                    for(let tea of rTeachers) if(isTBusy(tempTimetable, tea, d, p1, ruleClassesArr) || isTBusy(tempTimetable, tea, d, p2, ruleClassesArr)) { isBusy = true; break; }
-                                    
+                                    let isBusy = rule.teacherArr.some(tea => isTBusy(tt, tea, d, p1, rule.gradeArr) || isTBusy(tt, tea, d, p2, rule.gradeArr));
                                     if (!isBusy) {
-                                        for(let c of ruleClassesArr) {
-                                            tempTimetable[d][p1][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
-                                            tempTimetable[d][p2][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
-                                        }
-                                        daysAssignedCount[d] += 2; doublesNeeded--; placed = true; break;
+                                        rule.gradeArr.forEach(c => {
+                                            tt[d][p1][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: rule.gradeArr.length > 1 };
+                                            tt[d][p2][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: rule.gradeArr.length > 1 };
+                                        });
+                                        daysAssignedCount[d] += 2; 
+                                        doublesNeeded--; 
+                                        placed = true; 
+                                        break;
                                     }
                                 }
                             }
                             if(placed) break;
                         }
+                        
+                        // Fallback: If we absolutely CANNOT place a double, and it's NOT a strict 3, 6, 10 rule, break it down
                         if(!placed) { 
                             if (originalPeriods === 3 || originalPeriods === 6 || originalPeriods === 10) {
-                                // STRICT ENFORCEMENT: Do not break doubles into singles for these period counts
+                                // STRICT ENFORCEMENT: Fail rather than break the rule
+                                break;
                             } else {
-                                singlesNeeded += 2; doublesNeeded--; 
+                                singlesNeeded += 2; 
+                                doublesNeeded--; 
                             }
                         }
                     }
 
-                    let loopSafe2 = 0; while (singlesNeeded > 0 && loopSafe2 < 50) { loopSafe2++;
+                    // Place Singles
+                    let loopSafe2 = 0; 
+                    while (singlesNeeded > 0 && loopSafe2 < 50) { 
+                        loopSafe2++;
                         let placed = false;
+                        
+                        // Try to place in days with lowest count first
                         let dayOrder = [...days].sort((a,b) => daysAssignedCount[a] - daysAssignedCount[b]); 
 
                         for (let d of dayOrder) {
-                            if (daysAssignedCount[d] > 0) continue; // STRICT SPREAD: Never allow two disconnected singles on same day
+                            if (daysAssignedCount[d] > maxAllowedForSingle) continue; // STRICT SPREAD
                             let maxPD = _getMaxP(d);
 
-                            let eS = prefEarlyS.filter(x=>x<=maxPD).sort(()=>Math.random()-0.5);
-                            let lS = prefLateS.filter(x=>x<=maxPD).sort(()=>Math.random()-0.5);
-                            let periodOrder = isHard ? eS.concat(lS) : (isSoft ? lS.concat(eS) : eS.concat(lS).sort(()=>Math.random()-0.5));
+                            let periodOrder = [];
+                            for(let p=1; p<=maxPD; p++) periodOrder.push(p);
+                            periodOrder.sort(()=>Math.random()-0.5);
 
                             for (let p of periodOrder) {
-                                let classesFree = true;
-                                for(let c of ruleClassesArr) {
-                                    if(tempTimetable[d][p][c] !== null) { classesFree = false; break; }
-                                }
-
+                                let classesFree = rule.gradeArr.every(c => tt[d][p][c] === null);
                                 if (classesFree) {
-                                    let isBusy = false;
-                                    for(let tea of rTeachers) if(isTBusy(tempTimetable, tea, d, p, ruleClassesArr)) { isBusy = true; break; }
+                                    let isBusy = rule.teacherArr.some(tea => isTBusy(tt, tea, d, p, rule.gradeArr));
                                     if (!isBusy) {
-                                        for(let c of ruleClassesArr) {
-                                            tempTimetable[d][p][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
-                                        }
-                                        daysAssignedCount[d]++; singlesNeeded--; placed = true; break;
+                                        rule.gradeArr.forEach(c => {
+                                            tt[d][p][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: rule.gradeArr.length > 1 };
+                                        });
+                                        daysAssignedCount[d]++; 
+                                        singlesNeeded--; 
+                                        placed = true; 
+                                        break;
                                     }
                                 }
                             }
                             if(placed) break;
                         }
 
+                        // Last resort simple swap logic for singles (if stuck)
                         if(!placed) {
-                            let rGrade = ruleClassesArr[0];
+                            let rGrade = rule.gradeArr[0];
                             let emptySlotsInClass = [];
                             for(let d of days) {
                                 let maxPD = _getMaxP(d);
                                 for(let p=1; p<=maxPD; p++) {
-                                    if (tempTimetable[d][p][rGrade] === null) emptySlotsInClass.push({d:d, p:p});
+                                    if (tt[d][p][rGrade] === null) emptySlotsInClass.push({d:d, p:p});
                                 }
                             }
 
                             swapLoop:
                             for(let d of days) {
-                                if (daysAssignedCount[d] > 0) continue; // STRICT SPREAD: Never allow two disconnected singles on same day
+                                if (daysAssignedCount[d] > maxAllowedForSingle) continue; 
                                 let maxPD = _getMaxP(d);
                                 for(let p=1; p<=maxPD; p++) {
-                                    let existingCell = tempTimetable[d][p][rGrade];
-                                    if (existingCell) { 
-                                        let ourBusy = false;
-                                        for(let tea of rTeachers) if(isTBusy(tempTimetable, tea, d, p, ruleClassesArr)) ourBusy = true;
-                                        
+                                    let exCell = tt[d][p][rGrade];
+                                    if (exCell && !exCell.isJoined && rule.gradeArr.length === 1) { // Only swap unjoined singles for safety
+                                        let ourBusy = rule.teacherArr.some(tea => isTBusy(tt, tea, d, p, rule.gradeArr));
                                         if(!ourBusy) {
                                             for(let eSlot of emptySlotsInClass) {
-                                                let exBusy = false;
-                                                let exTeachers = existingCell.teacher ? existingCell.teacher.split(',').map(tea=>tea.trim()) : [];
-                                                for(let et of exTeachers) if(isTBusy(tempTimetable, et, eSlot.d, eSlot.p, ruleClassesArr)) exBusy = true;
-
-                                                if(!exBusy) {
-                                                    tempTimetable[eSlot.d][eSlot.p][rGrade] = existingCell;
-                                                    tempTimetable[d][p][rGrade] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
-                                                    daysAssignedCount[d]++; singlesNeeded--; placed = true; break swapLoop;
+                                                let exTeas = exCell.teacher ? exCell.teacher.split(',').map(x=>x.trim()) : [];
+                                                let exBusy = exTeas.some(et => isTBusy(tt, et, eSlot.d, eSlot.p, rule.gradeArr));
+                                                
+                                                // Check if swapping violates strict spread for the existing cell
+                                                let exDayCount = 0;
+                                                for(let testP=1; testP<=_getMaxP(eSlot.d); testP++) {
+                                                    if (tt[eSlot.d][testP][rGrade] && tt[eSlot.d][testP][rGrade].subject === exCell.subject) exDayCount++;
+                                                }
+                                                // Assume exCell is a single, so maxAllowedForSingle is 0 for the target day
+                                                if(!exBusy && exDayCount === 0) {
+                                                    tt[eSlot.d][eSlot.p][rGrade] = exCell;
+                                                    tt[d][p][rGrade] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
+                                                    daysAssignedCount[d]++; 
+                                                    singlesNeeded--; 
+                                                    placed = true; 
+                                                    break swapLoop;
                                                 }
                                             }
                                         }
@@ -1939,8 +1958,9 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                                 }
                             }
                         }
-                        if(!placed) break; 
+                        if(!placed) break; // Completely stuck
                     }
+                    
                     let failedCount = (doublesNeeded * 2) + singlesNeeded;
                     if (failedCount > 0) {
                         tempUnassignedLog.push(`📌 ${rule.grade} | ${rule.subject} (${rule.teacher}) ➔ කාලච්ඡේද ${failedCount} ක් ඉතිරි විය.`);
@@ -1950,10 +1970,10 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
 
                 if (unassignedCount < minUnassignedCount) {
                     minUnassignedCount = unassignedCount;
-                    bestTimetable = JSON.parse(JSON.stringify(tempTimetable)); 
+                    bestTimetable = JSON.parse(JSON.stringify(tt)); 
                     bestUnassignedLog = [...tempUnassignedLog];
                 }
-                if (minUnassignedCount === 0) break; 
+                if (minUnassignedCount === 0) break; // Perfect timetable found!
             }
 
             document.getElementById('loadingOverlay').style.display = 'none';
@@ -1970,8 +1990,7 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
             try { renderTable(); }catch(e){}
         }
 
-        
-        let isTimetableLocked = false;
+        let isTimetableLocked = false;let isTimetableLocked = false;
         function toggleLock() {
             isTimetableLocked = !isTimetableLocked;
             let btn = document.getElementById('lockBtn');

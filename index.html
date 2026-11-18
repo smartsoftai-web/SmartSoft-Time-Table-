@@ -9,6 +9,16 @@
 
     <style>
         /* Professional Colors & Grid System */
+        .tt-cell { transition: all 0.2s ease; cursor: pointer; }
+        .highlight-valid { background-color: #dcfce7 !important; border: 2px dashed #22c55e !important; box-shadow: inset 0 0 15px rgba(34,197,94,0.4); }
+        .highlight-invalid { background-color: #fee2e2 !important; border: 2px dashed #ef4444 !important; opacity: 0.6 !important; filter: grayscale(50%); }
+        .highlight-source { border: 3px solid #3b82f6 !important; box-shadow: 0 0 10px rgba(59,130,246,0.8) !important; transform: scale(1.05); z-index:10; }
+        
+        .unassigned-mini-card { width: 100%; max-width: 120px; height: auto; min-height: 40px; padding: 4px; transition: transform 0.2s; z-index: 10; position:relative; overflow:visible; cursor:pointer; border: 2px solid #ef4444; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.4); margin-bottom: 5px; border-radius:4px;}
+        .unassigned-mini-card:hover, .unassigned-mini-card:active { transform: scale(1.15); z-index: 100; box-shadow: 0 10px 15px rgba(239, 68, 68, 0.6); }
+        .hover-detail { display:none; position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#fff; border:2px solid #ef4444; padding:8px; z-index:1000; box-shadow:0 4px 12px rgba(0,0,0,0.3); width:180px; text-align:center; border-radius:6px; pointer-events:none; }
+        .unassigned-mini-card:hover .hover-detail { display:block; }
+
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #d1d5db; margin: 0; padding: 10px; font-size: 13px; color: #1f2937; height: 100vh; box-sizing: border-box;}
         
         .layout { display: flex; gap: 10px; height: calc(100vh - 20px); }
@@ -519,8 +529,11 @@
                 
                 <div class="form-grid">
                     <label data-i18n="lbl_grd">ශ්‍රේණිය:</label>
-                    <div id="rClassOptions" style="display: flex; flex-wrap: wrap; gap: 5px; max-height: 80px; overflow-y: auto; border: 1px solid #9ca3af; padding: 5px; background: #f9fafb; border-radius: 3px; grid-column: span 1;">
-                        <!-- populated dynamically -->
+                    <div class="custom-select-wrapper" style="grid-column: span 1;">
+                        <div class="custom-select-display" onclick="toggleMultiSelect('rClassOptionsDropdown')">
+                            <span id="rClassText" data-i18n="sel_classes">-- පන්ති තෝරන්න --</span> ⏷
+                        </div>
+                        <div id="rClassOptionsDropdown" class="custom-select-options"></div>
                     </div>
                     <label data-i18n="lbl_type">වර්ගය:</label>
                     <select id="rType" onchange="toggleRuleType()">
@@ -833,7 +846,7 @@
 
             updateSchoolInfo(); initDropdowns(); renderRules(); renderConstraints();
             
-            try { renderTable(); renderUnassignedCards(); } catch(e) { console.error(e); }
+            try { renderTable(); } catch(e) { console.error(e); }
             
             renderClassTeacherList();
             let lBtn = document.getElementById('lockBtn');
@@ -890,7 +903,7 @@
             let isMus = document.getElementById('ttPattern').value === 'muslim';
             document.querySelectorAll('.opt-p9').forEach(el => el.style.display = isMus ? 'block' : 'none');
             saveData();
-            try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); }
+            try { renderTable(); }catch(e){}
         }
 
         function initEmptyTimetable() {
@@ -1073,7 +1086,7 @@
                 periodTimes = { '1': '07:45 - 08:25', 'att': '08:25 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:30 - 11:10', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', '9': '13:30 - 14:10', 'int': '11:10 - 11:30' };
             }
             saveData();
-            try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } 
+            try { renderTable(); }catch(e){} 
         }
 
         function openPrintModal() { document.getElementById('printModal').style.display = 'flex'; }
@@ -1200,7 +1213,7 @@
         function toggleAttendance(tea) {
             if(absentTeachers.includes(tea)) { absentTeachers = absentTeachers.filter(x => x !== tea); } 
             else { absentTeachers.push(tea); }
-            renderAttendanceList(); saveData(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } 
+            renderAttendanceList(); saveData(); try { renderTable(); }catch(e){} 
         }
 
         function sendWhatsApp(tName, dStr, pNum, cName) {
@@ -1298,12 +1311,12 @@
             reliefAssignments = reliefAssignments.filter(r => !(r.day === d && r.period === p && r.grade === c));
             reliefAssignments.push({ day: d, period: p, grade: c, reliefTeacher: tea });
             
-            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } saveData();
+            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); try { renderTable(); }catch(e){} saveData();
         }
 
         function deleteRelief(d, p, c) {
             reliefAssignments = reliefAssignments.filter(r => !(r.day === d && r.period === p && r.grade === c));
-            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } saveData();
+            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); try { renderTable(); }catch(e){} saveData();
         }
 
         function renderReliefList() {
@@ -1410,7 +1423,7 @@
                 teachingRules.forEach(r => { r.subject = r.subject.replace(new RegExp(oldVal, 'g'), newVal); });
             }
             initEmptyTimetable(); 
-            saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } renderDataModal(); renderRules(); renderConstraints();
+            saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
         }
 
         async function deleteItem(type, val) {
@@ -1427,7 +1440,7 @@
                 masterSubjects = masterSubjects.filter(s => s !== val);
             }
             initEmptyTimetable(); 
-            saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } renderDataModal(); renderRules(); renderConstraints();
+            saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
         }
 
         function toggleCTGrade() { document.getElementById('inTeacherClass').style.display = document.getElementById('isClassTeacher').checked ? 'block' : 'none'; }
@@ -1435,7 +1448,7 @@
         function addMasterClassMain() {
             let c = document.getElementById('inClass').value.trim();
             if(c && !classes.includes(c)) { 
-                classes.push(c); initEmptyTimetable(); saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } 
+                classes.push(c); initEmptyTimetable(); saveData(); initDropdowns(); try { renderTable(); }catch(e){} 
             }
             document.getElementById('inClass').value = "";
         }
@@ -1471,8 +1484,13 @@
             el.style.display = el.style.display === 'block' ? 'none' : 'block';
         }
 
+        function updateMultiClassDisplay() {
+            let checked = document.querySelectorAll('#rClassOptionsDropdown input:checked');
+            let vals = Array.from(checked).map(c => c.value);
+            document.getElementById('rClassText').innerText = vals.length ? vals.join(', ') : t('sel_classes');
+        }
         function getSelectedRuleClasses() {
-            let checked = document.querySelectorAll('#rClassOptions input:checked');
+            let checked = document.querySelectorAll('#rClassOptionsDropdown input:checked');
             return Array.from(checked).map(c => c.value).join(', ');
         }
 
@@ -1484,9 +1502,12 @@
             
             let multiHtml = "";
             classes.forEach(c => {
-                multiHtml += `<label style="background: #e5e7eb; padding: 2px 6px; border-radius: 3px; font-size: 11px; cursor:pointer; display:flex; align-items:center; gap:3px;"><input type="checkbox" value="${c}"> ${c}</label>`;
+                multiHtml += `<label><input type="checkbox" value="${c}" onchange="updateMultiClassDisplay()"> ${c}</label>`;
             });
-            document.getElementById('rClassOptions').innerHTML = multiHtml;
+            let rClassDrop = document.getElementById('rClassOptionsDropdown');
+            if(rClassDrop) rClassDrop.innerHTML = multiHtml;
+            let rClassTxt = document.getElementById('rClassText');
+            if(rClassTxt) rClassTxt.innerText = t('sel_classes');
 
             document.getElementById('rSubCore').innerHTML = sHtml;
             document.getElementById('rSubBasket').innerHTML = sHtml;
@@ -1573,7 +1594,8 @@
             
             document.getElementById('rPeriodsCore').value = ""; 
             document.getElementById('rIsDoubleCore').checked = false;
-            document.querySelectorAll('#rClassOptions input').forEach(cb => cb.checked = false);
+            document.querySelectorAll('#rClassOptionsDropdown input').forEach(cb => cb.checked = false);
+            updateMultiClassDisplay();
             document.getElementById('rSubCore').value = '';
             
             saveData(); renderRules();
@@ -1603,7 +1625,8 @@
             tempBasketArr = []; document.getElementById('tempBasketItems').innerHTML = ""; 
             document.getElementById('rPeriodsBasket').value = ""; 
             document.getElementById('rIsDoubleBasket').checked = false;
-            document.querySelectorAll('#rClassOptions input').forEach(cb => cb.checked = false); 
+            document.querySelectorAll('#rClassOptionsDropdown input').forEach(cb => cb.checked = false);
+            updateMultiClassDisplay(); 
             document.getElementById('rSubBasket').value = '';
             
             saveData(); renderRules();
@@ -1631,11 +1654,11 @@
             document.getElementById('daySelector').style.display = currentViewMode === 'day_master' ? 'block' : 'none';
             document.getElementById('classSelector').style.display = currentViewMode === 'class_wise' ? 'block' : 'none';
             document.getElementById('teacherSelector').style.display = currentViewMode === 'teacher_wise' ? 'block' : 'none';
-            try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); }
+            try { renderTable(); }catch(e){}
         }
-        function selectClass(cls) { currentSelectedClass = cls; try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } }
-        function selectDay(day) { currentDay = day; try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } }
-        function selectTeacher(tea) { currentSelectedTeacher = tea; try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } }
+        function selectClass(cls) { currentSelectedClass = cls; try { renderTable(); }catch(e){} }
+        function selectDay(day) { currentDay = day; try { renderTable(); }catch(e){} }
+        function selectTeacher(tea) { currentSelectedTeacher = tea; try { renderTable(); }catch(e){} }
 
         async function startGenerationAsync() {
             if(teachingRules.length === 0) return await customAlert(t('err_rule'));
@@ -1963,7 +1986,7 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
             }
             
             saveData();
-            try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); }
+            try { renderTable(); }catch(e){}
         }
 
         
@@ -2005,6 +2028,9 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
         }
         
         
+        
+        let selectedSwapSource = null;
+
         function checkValidSwap(source, tDay, tPeriod, tCls) {
             let maxPD = parseInt(document.getElementById('ttPattern').value === 'muslim' && tDay === 'Friday' ? 4 : 8);
             if (tPeriod > maxPD) return false;
@@ -2048,10 +2074,10 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                 sCell = generatedTimetable[sDay][sPeriod][sCls];
                 tCell = generatedTimetable[tDay][tPeriod][tCls];
 
-                if (!sCell) return false;
+                if (!sCell && !tCell) return true; // both empty
 
                 sJoinedClasses = [sCls];
-                if (sCell.isJoined) {
+                if (sCell && sCell.isJoined) {
                     sJoinedClasses = classes.filter(c => generatedTimetable[sDay][sPeriod][c] && generatedTimetable[sDay][sPeriod][c].subject === sCell.subject && generatedTimetable[sDay][sPeriod][c].teacher === sCell.teacher);
                 }
                 tJoinedClasses = [tCls];
@@ -2059,12 +2085,14 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                     tJoinedClasses = classes.filter(c => generatedTimetable[tDay][tPeriod][c] && generatedTimetable[tDay][tPeriod][c].subject === tCell.subject && generatedTimetable[tDay][tPeriod][c].teacher === tCell.teacher);
                 }
 
-                if (sCell.teacher) {
+                // If moving source to target, check if source teacher is busy at target
+                if (sCell && sCell.teacher) {
                     let sTeas = sCell.teacher.split(',').map(t=>t.trim());
                     for(let tea of sTeas) {
                         if (isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod, sJoinedClasses)) return false;
                     }
                 }
+                // If moving target to source (swap), check if target teacher is busy at source
                 if (tCell && tCell.teacher) {
                     let tTeas = tCell.teacher.split(',').map(t=>t.trim());
                     for(let tea of tTeas) {
@@ -2072,7 +2100,8 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                     }
                 }
 
-                if (sDay !== tDay) {
+                // Check STRICT SPREAD for Source moving to Target Day
+                if (sCell && sDay !== tDay) {
                     for(let c of sJoinedClasses) {
                         let dayCount = 0;
                         let maxTPD = parseInt(document.getElementById('ttPattern').value === 'muslim' && tDay === 'Friday' ? 4 : 8);
@@ -2084,6 +2113,7 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                     }
                 }
 
+                // Check STRICT SPREAD for Target moving to Source Day
                 if (tCell && sDay !== tDay) {
                     for(let c of tJoinedClasses) {
                         let dayCount = 0;
@@ -2100,13 +2130,25 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
         }
 
         function applyHighlights(source) {
+            clearHighlights();
             if(isTimetableLocked) return;
+            
+            // Highlight the source cell itself
+            if(source.type === 'grid') {
+                let sId = `cell_${source.day}_${source.period}_${source.cls}`;
+                let el = document.getElementById(sId);
+                if(el) el.classList.add('highlight-source');
+            }
+
             document.querySelectorAll('.tt-cell').forEach(td => {
                 let tDay = td.dataset.day;
                 let tPeriod = parseInt(td.dataset.period);
                 let tCls = td.dataset.cls;
                 if (!tDay || !tPeriod || !tCls) return;
                 
+                // Don't red-highlight the source itself
+                if (source.type === 'grid' && source.day === tDay && source.period === tPeriod && source.cls === tCls) return;
+
                 let isValid = checkValidSwap(source, tDay, tPeriod, tCls);
                 if (isValid) {
                     td.classList.add('highlight-valid');
@@ -2118,104 +2160,168 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
 
         function clearHighlights() {
             document.querySelectorAll('.tt-cell').forEach(td => {
-                td.classList.remove('highlight-valid', 'highlight-invalid');
+                td.classList.remove('highlight-valid', 'highlight-invalid', 'highlight-source');
             });
+            document.querySelectorAll('.unassigned-mini-card').forEach(c => c.classList.remove('highlight-source'));
         }
 
-        function handlePointerDownGrid(d, p, c) {
+        function handleUnassignedClick(index) {
             if(isTimetableLocked) return;
-            dragSource = { type: 'grid', day: d, period: p, cls: c };
-            applyHighlights(dragSource);
-        }
-        
-        function handlePointerDownUnassigned(index) {
-            if(isTimetableLocked) return;
-            dragSource = { type: 'unassigned', index: index };
-            applyHighlights(dragSource);
-        }
-
-        document.addEventListener('mouseup', clearHighlights);
-        document.addEventListener('touchend', clearHighlights);
-
-        let dragSource = null;
-
-        function handleDragStart(e, d, p, c) {
-            if (isTimetableLocked) { e.preventDefault(); return; }
-            dragSource = {day: d, period: p, cls: c};
-            e.dataTransfer.effectAllowed = 'move';
-        }
-        async function handleDrop(e, tDay, tPeriod, tCls) {
-            e.preventDefault();
-            if (isTimetableLocked) { await customAlert(t("alert_locked_warn"), t("title_warn")); return; }
-            if (!dragSource) return;
-            let sDay = dragSource.day, sPeriod = dragSource.period, sCls = dragSource.cls;
-            if(sDay === tDay && sPeriod === tPeriod && sCls === tCls) { dragSource = null; return; }
-
-            let sCell = generatedTimetable[sDay][sPeriod][sCls];
-            let tCell = generatedTimetable[tDay][tPeriod][tCls];
-
-            let sJoinedClasses = [sCls];
-            if (sCell && sCell.isJoined) {
-                sJoinedClasses = classes.filter(c => generatedTimetable[sDay][sPeriod][c] && generatedTimetable[sDay][sPeriod][c].subject === sCell.subject && generatedTimetable[sDay][sPeriod][c].teacher === sCell.teacher);
-            }
-            
-            let tJoinedClasses = [tCls];
-            if (tCell && tCell.isJoined) {
-                tJoinedClasses = classes.filter(c => generatedTimetable[tDay][tPeriod][c] && generatedTimetable[tDay][tPeriod][c].subject === tCell.subject && generatedTimetable[tDay][tPeriod][c].teacher === tCell.teacher);
-            }
-
-            // --- VALIDATION ---
-            let sFail = false;
-            if (sCell && sCell.teacher) {
-                let sTeas = sCell.teacher.split(',').map(t=>t.trim());
-                for(let tea of sTeas) {
-                    if (isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod, sJoinedClasses)) { sFail = true; break; }
-                }
-            }
-            let tFail = false;
-            if (tCell && tCell.teacher) {
-                let tTeas = tCell.teacher.split(',').map(t=>t.trim());
-                for(let tea of tTeas) {
-                    if (isTeacherBusyGlobal(generatedTimetable, tea, sDay, sPeriod, tJoinedClasses)) { tFail = true; break; }
-                }
-            }
-
-            if (sFail || tFail) {
-                await customAlert(t("alert_drag_fail"), t("title_warn"));
-                dragSource = null;
+            if(selectedSwapSource && selectedSwapSource.type === 'unassigned' && selectedSwapSource.index === index) {
+                // Deselect
+                selectedSwapSource = null;
+                clearHighlights();
                 return;
             }
-            // ------------------
-
-            sJoinedClasses.forEach(c => {
-                generatedTimetable[sDay][sPeriod][c] = tCell ? JSON.parse(JSON.stringify(tCell)) : null;
-            });
-            tJoinedClasses.forEach(c => {
-                generatedTimetable[tDay][tPeriod][c] = sCell ? JSON.parse(JSON.stringify(sCell)) : null;
-            });
-
-            renderTable();
-            saveData();
-            dragSource = null;
+            selectedSwapSource = { type: 'unassigned', index: index };
+            applyHighlights(selectedSwapSource);
+            
+            // Add visual source class to clicked card
+            let cards = document.querySelectorAll('.unassigned-mini-card');
+            if(cards[index]) cards[index].classList.add('highlight-source');
         }
+
+        async function handleCellClick(d, p, c) {
+            if (isTimetableLocked) {
+                await customAlert(t("alert_locked_warn"), t("title_warn"));
+                return;
+            }
+
+            if (!selectedSwapSource) {
+                // Select this cell
+                let cellData = generatedTimetable[d][p][c];
+                if (!cellData) return; // Don't select empty cells
+                selectedSwapSource = { type: 'grid', day: d, period: p, cls: c };
+                applyHighlights(selectedSwapSource);
+            } else {
+                // Attempt Drop/Swap
+                let isValid = checkValidSwap(selectedSwapSource, d, p, c);
+                if (!isValid) {
+                    await customAlert("නීති උල්ලංඝනය වන බැවින් මෙතැනට මාරු කළ නොහැක! (ගුරු අවහිරතාවක් හෝ විෂය දින 5ට බෙදීමේ ගැටලුවක්)", "⚠️ අනතුරු ඇඟවීමයි");
+                    clearHighlights();
+                    selectedSwapSource = null;
+                    return;
+                }
+                
+                // EXECUTE SWAP
+                if (selectedSwapSource.type === 'unassigned') {
+                    let block = unassignedPool[selectedSwapSource.index];
+                    let existingBlocks = [];
+                    for (let bc of block.classes) {
+                         let exCell = generatedTimetable[d][p][bc];
+                         if (exCell) {
+                             let joined = classes.filter(jc => generatedTimetable[d][p][jc] && generatedTimetable[d][p][jc].subject === exCell.subject && generatedTimetable[d][p][jc].teacher === exCell.teacher);
+                             joined.forEach(jc => generatedTimetable[d][p][jc] = null);
+                             existingBlocks.push({ classes: joined, subject: exCell.subject, teacher: exCell.teacher, type: exCell.type, duration: 1 });
+                         }
+                         if (block.duration === 2) {
+                             let exCell2 = generatedTimetable[d][p+1][bc];
+                             if (exCell2) {
+                                 let joined2 = classes.filter(jc => generatedTimetable[d][p+1][jc] && generatedTimetable[d][p+1][jc].subject === exCell2.subject && generatedTimetable[d][p+1][jc].teacher === exCell2.teacher);
+                                 joined2.forEach(jc => generatedTimetable[d][p+1][jc] = null);
+                                 existingBlocks.push({ classes: joined2, subject: exCell2.subject, teacher: exCell2.teacher, type: exCell2.type, duration: 1 });
+                             }
+                         }
+                    }
+                    
+                    block.classes.forEach(bc => {
+                        generatedTimetable[d][p][bc] = { subject: block.subject, teacher: block.teacher, type: block.type, isJoined: block.classes.length > 1 };
+                        if (block.duration === 2) {
+                            generatedTimetable[d][p+1][bc] = { subject: block.subject, teacher: block.teacher, type: block.type, isJoined: block.classes.length > 1 };
+                        }
+                    });
+                    
+                    unassignedPool.splice(selectedSwapSource.index, 1);
+                    
+                    let uniqueEx = [];
+                    existingBlocks.forEach(eb => {
+                        if(!uniqueEx.some(ue => ue.subject === eb.subject && ue.teacher === eb.teacher && ue.classes.join(',') === eb.classes.join(','))) {
+                            uniqueEx.push(eb);
+                        }
+                    });
+                    unassignedPool.push(...uniqueEx);
+
+                } else {
+                    let sDay = selectedSwapSource.day, sPeriod = selectedSwapSource.period, sCls = selectedSwapSource.cls;
+                    if(sDay !== d || sPeriod !== p || sCls !== c) {
+                        let sCell = generatedTimetable[sDay][sPeriod][sCls];
+                        let tCell = generatedTimetable[d][p][c];
+
+                        let sJoinedClasses = [sCls];
+                        if (sCell && sCell.isJoined) {
+                            sJoinedClasses = classes.filter(jc => generatedTimetable[sDay][sPeriod][jc] && generatedTimetable[sDay][sPeriod][jc].subject === sCell.subject && generatedTimetable[sDay][sPeriod][jc].teacher === sCell.teacher);
+                        }
+                        
+                        let tJoinedClasses = [c];
+                        if (tCell && tCell.isJoined) {
+                            tJoinedClasses = classes.filter(jc => generatedTimetable[d][p][jc] && generatedTimetable[d][p][jc].subject === tCell.subject && generatedTimetable[d][p][jc].teacher === tCell.teacher);
+                        }
+
+                        sJoinedClasses.forEach(jc => {
+                            generatedTimetable[sDay][sPeriod][jc] = tCell ? JSON.parse(JSON.stringify(tCell)) : null;
+                        });
+                        tJoinedClasses.forEach(jc => {
+                            generatedTimetable[d][p][jc] = sCell ? JSON.parse(JSON.stringify(sCell)) : null;
+                        });
+                    }
+                }
+                
+                clearHighlights();
+                selectedSwapSource = null;
+                renderTable();
+                renderUnassignedCards();
+                saveData();
+            }
+        }
+
+        // We replace renderUnassignedCards to use click instead of native drag
+        function renderUnassignedCards() {
+            let container = document.getElementById('unassignedArea');
+            let cardsDiv = document.getElementById('unassignedCardsContainer');
+            if (!unassignedPool || unassignedPool.length === 0) {
+                container.style.display = 'none';
+                cardsDiv.innerHTML = '';
+                return;
+            }
+            container.style.display = 'block';
+            let html = '';
+            unassignedPool.forEach((block, index) => {
+                let subj = block.subject || '-';
+                let tea = block.teacher || '-';
+                let cls = block.classes ? block.classes.join(', ') : '-';
+                let color = getSubjectColor(subj);
+                let durText = block.duration === 2 ? ' [Double]' : '';
+                html += `<div onclick="handleUnassignedClick(${index})" 
+                              class="unassigned-mini-card" style="background-color: ${color};">
+                            <span style="font-size:12px; color:#b91c1c; font-weight:bold; text-align:center; width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${subj}${durText}</span>
+                            <div class="hover-detail">
+                                <strong style="color:#b91c1c; font-size:14px;">${subj}${durText}</strong><br>
+                                <span style="font-size:12px; color:#374151;">🧑‍🏫 ${tea}</span><br>
+                                <span style="font-size:12px; color:#1d4ed8;">📚 ${cls}</span>
+                            </div>
+                         </div>`;
+            });
+            cardsDiv.innerHTML = html;
+        }
+
 
         function getCellHTML(cellData, d, p, c, colspan=1) {
             let colStr = colspan > 1 ? ` colspan="${colspan}"` : "";
-            let dropAttrs = `data-day="${d}" data-period="${p}" data-cls="${c}" class="tt-cell" ondragover="event.preventDefault()" ondrop="handleDrop(event, '${d}', ${p}, '${c}')"`;
+            let cellId = `cell_${d}_${p}_${c}`;
+            let baseAttrs = `id="${cellId}" data-day="${d}" data-period="${p}" data-cls="${c}" class="tt-cell" onclick="handleCellClick('${d}', ${p}, '${c}')"`;
             
             if(!generatedTimetable || !generatedTimetable[d] || !generatedTimetable[d][p] || typeof generatedTimetable[d][p][c] === 'undefined') {
-                return `<td class="cell-empty"${colStr} ${dropAttrs}></td>`;
+                return `<td class="cell-empty"${colStr} ${baseAttrs}></td>`;
             }
 
             let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
-            let dragAttrs = `draggable="true" ondragstart="handleDragStart(event, '${d}', ${p}, '${c}')" ondragend="clearHighlights()" onmousedown="handlePointerDownGrid('${d}', ${p}, '${c}')" ontouchstart="handlePointerDownGrid('${d}', ${p}, '${c}')" style="cursor:grab;"`;
 
             if (cellData) {
                 let rBtnText = t('btn_rel').split(' ');
                 let rWord = rBtnText.length > 1 ? rBtnText[1] : rBtnText[0];
 
                 if (relief) {
-                    return `<td${colStr} ${dropAttrs}><div class="card relief-card" ${dragAttrs}><span class="card-subj">${cellData.subject || '-'}</span><span class="relief-text">(${rWord}: ${relief.reliefTeacher})</span></div></td>`;
+                    return `<td${colStr} ${baseAttrs}><div class="card relief-card"><span class="card-subj">${cellData.subject || '-'}</span><span class="relief-text">(${rWord}: ${relief.reliefTeacher})</span></div></td>`;
                 } else {
                     let color = getSubjectColor(cellData.subject || '');
                     let isTeacherAbsent = false;
@@ -2224,17 +2330,17 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                     }
                     
                     if(isTeacherAbsent) {
-                        return `<td${colStr} ${dropAttrs}><div class="card" style="background-color: #fef2f2; border: 2px dashed #ef4444;" ${dragAttrs}><span class="card-subj" style="color:#ef4444;">${cellData.subject || '-'}</span><span style="color:#b91c1c;">(⚠️ ${cellData.teacher || '-'})</span></div></td>`;
+                        return `<td${colStr} ${baseAttrs}><div class="card" style="background-color: #fef2f2; border: 2px dashed #ef4444;"><span class="card-subj" style="color:#ef4444;">${cellData.subject || '-'}</span><span style="color:#b91c1c;">(⚠️ ${cellData.teacher || '-'})</span></div></td>`;
                     }
-                    return `<td${colStr} ${dropAttrs}><div class="card" style="background-color: ${color};" ${dragAttrs}><span class="card-subj">${cellData.subject || '-'}</span><span>(${cellData.teacher || '-'})</span></div></td>`;
+                    return `<td${colStr} ${baseAttrs}><div class="card" style="background-color: ${color};"><span class="card-subj">${cellData.subject || '-'}</span><span>(${cellData.teacher || '-'})</span></div></td>`;
                 }
             } else {
                 if (relief) {
                     let rBtnText = t('btn_rel').split(' ');
                     let rWord = rBtnText.length > 1 ? rBtnText[1] : rBtnText[0];
-                    return `<td${colStr} ${dropAttrs}><div class="card relief-card" ${dragAttrs}><span class="card-subj" style="color:gray;">-</span><span class="relief-text">(${rWord}: ${relief.reliefTeacher})</span></div></td>`;
+                    return `<td${colStr} ${baseAttrs}><div class="card relief-card"><span class="card-subj" style="color:gray;">-</span><span class="relief-text">(${rWord}: ${relief.reliefTeacher})</span></div></td>`;
                 }
-                return `<td class="cell-empty"${colStr} ${dropAttrs}></td>`;
+                return `<td class="cell-empty"${colStr} ${baseAttrs}></td>`;
             }
         }
 

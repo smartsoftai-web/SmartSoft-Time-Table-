@@ -592,15 +592,6 @@
                 </table>
             </div>
 
-            <!-- UNASSIGNED CARDS AREA -->
-            <div id="unassignedArea" style="display:none; margin-top: 15px; border: 1px dashed #ef4444; background: #fef2f2; padding: 10px; border-radius: 4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);">
-                <h4 style="margin:0 0 5px 0; color:#b91c1c; display:flex; justify-content:space-between; align-items:center;">
-                    <span data-i18n="unassigned_title">ස්ථාපනය නොකළ කාලච්ඡේද (Unassigned)</span>
-                </h4>
-                <p style="font-size: 11px; color: #7f1d1d; margin-top: 0; font-weight:bold;" data-i18n="msg_unassigned_sugg">කාලසටහන පහළ ඇති මෙම කාඩ්පත් අතින් ඇද දමන්න (Drag & Drop). ගුරු අවහිරතා ඇත්නම් එයට ඉඩ නොදේ.</p>
-                <div id="unassignedCardsContainer" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 50px;"></div>
-            </div>
-
             <div class="footer">&copy; 2026 Kelum Konara | Smart<span style="color: #10b981;">Soft</span> | <span data-i18n="appTitle">Time Table Generator</span></div>
         </div>
     </div>
@@ -619,13 +610,13 @@
         // --- I18N Language Dictionary ---
         const langDict = {
             si: {
-                appTitle: "School Timetable V2.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_tea: "🧑‍🏫 ගුරුවරයා අනුව", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත තෝරන්න!", alert_no_data: "දත්ත නොමැත", unassigned_title: "ස්ථාපනය නොකළ කාලච්ඡේද (Unassigned)", msg_unassigned_sugg: "කාලසටහන පහළ ඇති මෙම කාඩ්පත් අතින් ඇද දමන්න (Drag & Drop). ගුරු අවහිරතා ඇත්නම් එයට ඉඩ නොදේ.", alert_conflict: "කාලසටහන සැකසීමේදී සමහර කාලච්ඡේද ස්ථාපනය කිරීමට අපහසු විය. කරුණාකර පහළින් ඇති කොටසින් ඒවා අතින් ඇද දමා (Drag & Drop) සකසා ගන්න.", excel_desc: "බොහෝ දත්ත තිබේ නම් පහත Excel ක්‍රමය භාවිතා කරන්න.", btn_excel_up: "📊 Excel හරහා දත්ත ඇතුළත් කරන්න", btn_excel_down: "📥 Excel Template එක", load_msg_title: "කාලසටහන සැකසෙමින් පවතී...", load_msg_sub: "කරුණාකර රැඳී සිටින්න.", tt_pattern: "කාලසටහන් රටාව:", pat_std: "සාමාන්‍ය (දිනකට කාලච්ඡේද 8)", pat_mus: "මුස්ලිම් පාසල් (සඳුදා-බ්‍රහස්පතින්දා 9, සිකුරාදා 4)", att_time: "නාමලේඛන වේලාව", p9: "9 වැනි කාලච්ඡේදය", btn_time_set: "⏰ කාලච්ඡේද වේලාවන් සකසන්න", mod_time_t: "⏰ කාලච්ඡේද වේලාවන්", btn_save_time: "💾 වෙනස්කම් Save කරන්න", lbl_join_sub: "විෂයයන් Join:", sel_subs: "-- විෂයයන් තෝරන්න --", btn_join_sub: "+ විෂයයන් Join කරන්න", msg_sel_2_sub: "කරුණාකර විෂයයන් 2ක් හෝ වැඩි ගණනක් තෝරන්න.", msg_join_succ: "විෂයයන් සාර්ථකව Join කරන ලදී!", msg_join_ext: "මෙම විෂය සංයෝජනය දැනටමත් පවතී!", alert_lock_success: "කාලසටහන සාර්ථකව Lock කරන ලදී. දැන් අතින් වෙනස්කම් සිදු කළ නොහැක.", alert_unlock_success: "කාලසටහන Unlock කරන ලදී. දැන් ඔබට කාඩ්පත් අතින් වෙනස් කළ හැක.", alert_locked_warn: "කාලසටහන Lock කර ඇත. කරුණාකර එය Unlock කරන්න.", alert_drag_fail: "ගුරුවරයා එම කාලච්ඡේදයේ වෙනත් පන්තියක කාර්යබහුල බැවින් හෝ අවහිර කර ඇති බැවින් මෙලෙස මාරු කළ නොහැක!", msg_backup_succ: "Backup එක සාර්ථකව Save කරන ලදී!", msg_save_err: "Save කිරීමේදී දෝෂයක් මතු විය!", msg_invalid_backup: "මෙය වලංගු Backup ගොනුවක් නොවේ!", msg_err_read: "ගොනුව කියවීමේදී දෝෂයක් මතු විය!", msg_excel_err: "SheetJS library නිවැරදිව load වී නොමැත.", msg_imp_succ: "සාර්ථකව දත්ත ඇතුළත් කරන ලදී!", msg_imp_fail: "දත්ත කිසිවක් ඇතුළත් නොවිණි.", prompt_edit: "නව අගය ඇතුළත් කරන්න", conf_del: "මෙය මකා දැමීමට අවශ්‍යද?", title_locked: "🔒 අගුළු දමා ඇත", title_unlocked: "🔓 විවෘත කර ඇත", title_warn: "⚠️ අනතුරු ඇඟවීමයි", btn_ok: "හරි", btn_cancel: "අවලංගු කරන්න", btn_yes: "ඔව්", btn_no: "නැත", btn_lock: "🔒 කාලසටහන Lock කරන්න", btn_unlock: "🔓 කාලසටහන Unlock කරන්න" 
+                appTitle: "School Timetable V2.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_tea: "🧑‍🏫 ගුරුවරයා අනුව", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත තෝරන්න!", alert_no_data: "දත්ත නොමැත", excel_desc: "බොහෝ දත්ත තිබේ නම් පහත Excel ක්‍රමය භාවිතා කරන්න.", btn_excel_up: "📊 Excel හරහා දත්ත ඇතුළත් කරන්න", btn_excel_down: "📥 Excel Template එක", load_msg_title: "කාලසටහන සැකසෙමින් පවතී...", load_msg_sub: "කරුණාකර රැඳී සිටින්න.", tt_pattern: "කාලසටහන් රටාව:", pat_std: "සාමාන්‍ය (දිනකට කාලච්ඡේද 8)", pat_mus: "මුස්ලිම් පාසල් (සඳුදා-බ්‍රහස්පතින්දා 9, සිකුරාදා 4)", att_time: "නාමලේඛන වේලාව", p9: "9 වැනි කාලච්ඡේදය", btn_time_set: "⏰ කාලච්ඡේද වේලාවන් සකසන්න", mod_time_t: "⏰ කාලච්ඡේද වේලාවන්", btn_save_time: "💾 වෙනස්කම් Save කරන්න", lbl_join_sub: "විෂයයන් Join:", sel_subs: "-- විෂයයන් තෝරන්න --", btn_join_sub: "+ විෂයයන් Join කරන්න", msg_sel_2_sub: "කරුණාකර විෂයයන් 2ක් හෝ වැඩි ගණනක් තෝරන්න.", msg_join_succ: "විෂයයන් සාර්ථකව Join කරන ලදී!", msg_join_ext: "මෙම විෂය සංයෝජනය දැනටමත් පවතී!", alert_lock_success: "කාලසටහන සාර්ථකව Lock කරන ලදී. දැන් අතින් වෙනස්කම් සිදු කළ නොහැක.", alert_unlock_success: "කාලසටහන Unlock කරන ලදී. දැන් ඔබට කාඩ්පත් අතින් වෙනස් කළ හැක.", alert_locked_warn: "කාලසටහන Lock කර ඇත. කරුණාකර එය Unlock කරන්න.", alert_drag_fail: "ගුරුවරයා එම කාලච්ඡේදයේ වෙනත් පන්තියක කාර්යබහුල බැවින් හෝ අවහිර කර ඇති බැවින් මෙලෙස මාරු කළ නොහැක!", msg_backup_succ: "Backup එක සාර්ථකව Save කරන ලදී!", msg_save_err: "Save කිරීමේදී දෝෂයක් මතු විය!", msg_invalid_backup: "මෙය වලංගු Backup ගොනුවක් නොවේ!", msg_err_read: "ගොනුව කියවීමේදී දෝෂයක් මතු විය!", msg_excel_err: "SheetJS library නිවැරදිව load වී නොමැත.", msg_imp_succ: "සාර්ථකව දත්ත ඇතුළත් කරන ලදී!", msg_imp_fail: "දත්ත කිසිවක් ඇතුළත් නොවිණි.", prompt_edit: "නව අගය ඇතුළත් කරන්න", conf_del: "මෙය මකා දැමීමට අවශ්‍යද?", title_locked: "🔒 අගුළු දමා ඇත", title_unlocked: "🔓 විවෘත කර ඇත", title_warn: "⚠️ අනතුරු ඇඟවීමයි", btn_ok: "හරි", btn_cancel: "අවලංගු කරන්න", btn_yes: "ඔව්", btn_no: "නැත", btn_lock: "🔒 කාලසටහන Lock කරන්න", btn_unlock: "🔓 කාලසටහන Unlock කරන්න" 
             },
             en: {
-                appTitle: "School Timetable V2.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_tea: "🧑‍🏫 By Teacher", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data", unassigned_title: "Unassigned Periods", msg_unassigned_sugg: "Drag & Drop these cards to the timetable. Teacher conflicts will be rejected.", alert_conflict: "Some periods could not be assigned automatically. Please manually drag and drop them from the section below.", excel_desc: "For bulk data, use the Excel method below.", btn_excel_up: "📊 Upload Data via Excel", btn_excel_down: "📥 Download Excel Template", load_msg_title: "Generating Timetable...", load_msg_sub: "Please wait while we process.", tt_pattern: "Timetable Pattern:", pat_std: "Standard (8 periods/day)", pat_mus: "Muslim Schools (Mon-Thu 9, Fri 4)", att_time: "Registration Time", p9: "Period 9", btn_time_set: "⏰ Set Period Times", mod_time_t: "⏰ Period Times", btn_save_time: "💾 Save Changes", lbl_join_sub: "Join Subjects:", sel_subs: "-- Select Subjects --", btn_join_sub: "+ Join Subjects", msg_sel_2_sub: "Please select 2 or more subjects.", msg_join_succ: "Subjects joined successfully!", msg_join_ext: "This subject combination already exists!", alert_lock_success: "Timetable successfully locked. Manual changes are disabled.", alert_unlock_success: "Timetable unlocked. You can now drag and drop cards.", alert_locked_warn: "Timetable is locked. Please unlock it first.", alert_drag_fail: "Cannot swap! The teacher is busy in another class or blocked during this period.", msg_backup_succ: "Backup saved successfully!", msg_save_err: "Error occurred while saving!", msg_invalid_backup: "Invalid Backup file!", msg_err_read: "Error reading file!", msg_excel_err: "SheetJS library is not loaded properly.", msg_imp_succ: "Data imported successfully!", msg_imp_fail: "No valid data found to import.", prompt_edit: "Enter new value for", conf_del: "Are you sure you want to delete", title_locked: "🔒 Locked", title_unlocked: "🔓 Unlocked", title_warn: "⚠️ Warning", btn_ok: "OK", btn_cancel: "Cancel", btn_yes: "Yes", btn_no: "No", btn_lock: "🔒 Lock Timetable", btn_unlock: "🔓 Unlock Timetable" 
+                appTitle: "School Timetable V2.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_tea: "🧑‍🏫 By Teacher", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data", excel_desc: "For bulk data, use the Excel method below.", btn_excel_up: "📊 Upload Data via Excel", btn_excel_down: "📥 Download Excel Template", load_msg_title: "Generating Timetable...", load_msg_sub: "Please wait while we process.", tt_pattern: "Timetable Pattern:", pat_std: "Standard (8 periods/day)", pat_mus: "Muslim Schools (Mon-Thu 9, Fri 4)", att_time: "Registration Time", p9: "Period 9", btn_time_set: "⏰ Set Period Times", mod_time_t: "⏰ Period Times", btn_save_time: "💾 Save Changes", lbl_join_sub: "Join Subjects:", sel_subs: "-- Select Subjects --", btn_join_sub: "+ Join Subjects", msg_sel_2_sub: "Please select 2 or more subjects.", msg_join_succ: "Subjects joined successfully!", msg_join_ext: "This subject combination already exists!", alert_lock_success: "Timetable successfully locked. Manual changes are disabled.", alert_unlock_success: "Timetable unlocked. You can now drag and drop cards.", alert_locked_warn: "Timetable is locked. Please unlock it first.", alert_drag_fail: "Cannot swap! The teacher is busy in another class or blocked during this period.", msg_backup_succ: "Backup saved successfully!", msg_save_err: "Error occurred while saving!", msg_invalid_backup: "Invalid Backup file!", msg_err_read: "Error reading file!", msg_excel_err: "SheetJS library is not loaded properly.", msg_imp_succ: "Data imported successfully!", msg_imp_fail: "No valid data found to import.", prompt_edit: "Enter new value for", conf_del: "Are you sure you want to delete", title_locked: "🔒 Locked", title_unlocked: "🔓 Unlocked", title_warn: "⚠️ Warning", btn_ok: "OK", btn_cancel: "Cancel", btn_yes: "Yes", btn_no: "No", btn_lock: "🔒 Lock Timetable", btn_unlock: "🔓 Unlock Timetable" 
             },
             ta: {
-                appTitle: "School Timetable V2.0", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_tea: "🧑‍🏫 ஆசிரியர் வாரியாக", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை", unassigned_title: "ஒதுக்கப்படாத பாடங்கள் (Unassigned)", msg_unassigned_sugg: "இந்த அட்டைகளை இழுத்து விடுங்கள் (Drag & Drop). முரண்பாடுகள் நிராகரிக்கப்படும்.", alert_conflict: "சில பாடங்களை ஒதுக்க முடியவில்லை. கீழே உள்ள பகுதியிலிருந்து கைமுறையாக இழுத்து விடவும்.", excel_desc: "அதிக தரவுகள் இருந்தால், கீழே உள்ள Excel முறையைப் பயன்படுத்தவும்.", btn_excel_up: "📊 Excel மூலம் தரவை ஏற்றவும்", btn_excel_down: "📥 Excel Template", load_msg_title: "நேர அட்டவணை உருவாக்கப்படுகிறது...", load_msg_sub: "தயவுசெய்து காத்திருக்கவும்.", tt_pattern: "நேர அட்டவணை முறை:", pat_std: "சாதாரண (நாளொன்றுக்கு 8)", pat_mus: "முஸ்லிம் பாடசாலைகள் (திங்-வியா 9, வெள்ளி 6)", att_time: "வருகை பதிவு நேரம்", p9: "பாடம் 9", btn_time_set: "⏰ பாட நேரங்களை அமைக்கவும்", mod_time_t: "⏰ பாட நேரங்கள்", btn_save_time: "💾 மாற்றங்களைச் சேமிக்க", lbl_join_sub: "பாடங்களை இணைக்க:", sel_subs: "-- பாடங்களைத் தேர்ந்தெடுக்கவும் --", btn_join_sub: "+ பாடங்களை இணைக்க", msg_sel_2_sub: "தயவுசெய்து 2 அல்லது அதற்கு மேற்பட்ட பாடங்களைத் தேர்ந்தெடுக்கவும்.", msg_join_succ: "பாடங்கள் வெற்றிகரமாக இணைக்கப்பட்டன!", msg_join_ext: "இந்த பாட சேர்க்கை ஏற்கனவே உள்ளது!", alert_lock_success: "நேர அட்டவணை பூட்டப்பட்டது. மாற்றங்கள் செய்ய முடியாது.", alert_unlock_success: "நேர அட்டவணை திறக்கப்பட்டது. நீங்கள் மாற்றலாம்.", alert_locked_warn: "நேர அட்டவணை பூட்டப்பட்டுள்ளது. தயவுசெய்து திறக்கவும்.", alert_drag_fail: "மாற்ற முடியாது! ஆசிரியர் வேறு வகுப்பில் உள்ளார் அல்லது தடை செய்யப்பட்டுள்ளார்.", msg_backup_succ: "காப்பு வெற்றிகரமாக சேமிக்கப்பட்டது!", msg_save_err: "சேமிப்பதில் பிழை!", msg_invalid_backup: "தவறான காப்பு கோப்பு!", msg_err_read: "கோப்பை படிப்பதில் பிழை!", msg_excel_err: "SheetJS சரியாக ஏற்றப்படவில்லை.", msg_imp_succ: "தரவு வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது!", msg_imp_fail: "இறக்குமதி செய்ய தரவு இல்லை.", prompt_edit: "புதிய மதிப்பை உள்ளிடவும்", conf_del: "இதை அழிக்க விரும்புகிறீர்களா", title_locked: "🔒 பூட்டப்பட்டது", title_unlocked: "🔓 திறக்கப்பட்டது", title_warn: "⚠️ எச்சரிக்கை", btn_ok: "சரி", btn_cancel: "ரத்துசெய்", btn_yes: "ஆம்", btn_no: "இல்லை", btn_lock: "🔒 அட்டவணையை பூட்டு", btn_unlock: "🔓 அட்டவணையை திற" 
+                appTitle: "School Timetable V2.0", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_tea: "🧑‍🏫 ஆசிரியர் வாரியாக", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை", excel_desc: "அதிக தரவுகள் இருந்தால், கீழே உள்ள Excel முறையைப் பயன்படுத்தவும்.", btn_excel_up: "📊 Excel மூலம் தரவை ஏற்றவும்", btn_excel_down: "📥 Excel Template", load_msg_title: "நேர அட்டவணை உருவாக்கப்படுகிறது...", load_msg_sub: "தயவுசெய்து காத்திருக்கவும்.", tt_pattern: "நேர அட்டவணை முறை:", pat_std: "சாதாரண (நாளொன்றுக்கு 8)", pat_mus: "முஸ்லிம் பாடசாலைகள் (திங்-வியா 9, வெள்ளி 6)", att_time: "வருகை பதிவு நேரம்", p9: "பாடம் 9", btn_time_set: "⏰ பாட நேரங்களை அமைக்கவும்", mod_time_t: "⏰ பாட நேரங்கள்", btn_save_time: "💾 மாற்றங்களைச் சேமிக்க", lbl_join_sub: "பாடங்களை இணைக்க:", sel_subs: "-- பாடங்களைத் தேர்ந்தெடுக்கவும் --", btn_join_sub: "+ பாடங்களை இணைக்க", msg_sel_2_sub: "தயவுசெய்து 2 அல்லது அதற்கு மேற்பட்ட பாடங்களைத் தேர்ந்தெடுக்கவும்.", msg_join_succ: "பாடங்கள் வெற்றிகரமாக இணைக்கப்பட்டன!", msg_join_ext: "இந்த பாட சேர்க்கை ஏற்கனவே உள்ளது!", alert_lock_success: "நேர அட்டவணை பூட்டப்பட்டது. மாற்றங்கள் செய்ய முடியாது.", alert_unlock_success: "நேர அட்டவணை திறக்கப்பட்டது. நீங்கள் மாற்றலாம்.", alert_locked_warn: "நேர அட்டவணை பூட்டப்பட்டுள்ளது. தயவுசெய்து திறக்கவும்.", alert_drag_fail: "மாற்ற முடியாது! ஆசிரியர் வேறு வகுப்பில் உள்ளார் அல்லது தடை செய்யப்பட்டுள்ளார்.", msg_backup_succ: "காப்பு வெற்றிகரமாக சேமிக்கப்பட்டது!", msg_save_err: "சேமிப்பதில் பிழை!", msg_invalid_backup: "தவறான காப்பு கோப்பு!", msg_err_read: "கோப்பை படிப்பதில் பிழை!", msg_excel_err: "SheetJS சரியாக ஏற்றப்படவில்லை.", msg_imp_succ: "தரவு வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது!", msg_imp_fail: "இறக்குமதி செய்ய தரவு இல்லை.", prompt_edit: "புதிய மதிப்பை உள்ளிடவும்", conf_del: "இதை அழிக்க விரும்புகிறீர்களா", title_locked: "🔒 பூட்டப்பட்டது", title_unlocked: "🔓 திறக்கப்பட்டது", title_warn: "⚠️ எச்சரிக்கை", btn_ok: "சரி", btn_cancel: "ரத்துசெய்", btn_yes: "ஆம்", btn_no: "இல்லை", btn_lock: "🔒 அட்டவணையை பூட்டு", btn_unlock: "🔓 அட்டவணையை திற" 
             }
         };
 
@@ -634,7 +625,7 @@
             return new Promise(resolve => {
                 document.getElementById('customMsgTitle').innerText = title;
                 document.getElementById('customMsgTitle').style.color = "#ef4444"; 
-                document.getElementById('customMsgText').innerText = msg;
+                document.getElementById('customMsgText').innerHTML = msg;
                 document.getElementById('customMsgInput').style.display = 'none';
                 document.getElementById('customMsgButtons').innerHTML = `<button class="btn-primary" style="width: auto; padding: 6px 20px; margin:0; background: #3b82f6; border-color: #2563eb; color: #fff; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);" onclick="closeCustomMsg(true)">${t('btn_ok')}</button>`;
                 document.getElementById('customMsgModal').style.display = 'flex';
@@ -646,7 +637,7 @@
             return new Promise(resolve => {
                 document.getElementById('customMsgTitle').innerText = title;
                 document.getElementById('customMsgTitle').style.color = "#f59e0b"; 
-                document.getElementById('customMsgText').innerText = msg;
+                document.getElementById('customMsgText').innerHTML = msg;
                 document.getElementById('customMsgInput').style.display = 'none';
                 document.getElementById('customMsgButtons').innerHTML = `
                     <button class="btn-primary" style="width: auto; padding: 6px 20px; background: #10b981; border-color: #059669; margin:0;" onclick="closeCustomMsg(true)">${t('btn_yes')}</button>
@@ -661,7 +652,7 @@
             return new Promise(resolve => {
                 document.getElementById('customMsgTitle').innerText = title;
                 document.getElementById('customMsgTitle').style.color = "#3b82f6"; 
-                document.getElementById('customMsgText').innerText = msg;
+                document.getElementById('customMsgText').innerHTML = msg;
                 let inp = document.getElementById('customMsgInput');
                 inp.style.display = 'block';
                 inp.value = def;
@@ -863,8 +854,7 @@
         let masterSubjects = [];
         let teachingRules = [];
         let teacherConstraints = []; 
-        let reliefAssignments = [];
-        let unassignedPool = []; 
+        let reliefAssignments = []; 
         
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         function getDayName(d) { const m = { 'Monday':'mon', 'Tuesday':'tue', 'Wednesday':'wed', 'Thursday':'thu', 'Friday':'fri' }; return t(m[d]); }
@@ -900,7 +890,7 @@
             let isMus = document.getElementById('ttPattern').value === 'muslim';
             document.querySelectorAll('.opt-p9').forEach(el => el.style.display = isMus ? 'block' : 'none');
             saveData();
-            try { renderTable(); renderUnassignedCards(); }catch(e){}
+            try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); }
         }
 
         function initEmptyTimetable() {
@@ -918,7 +908,7 @@
         function saveData() {
             const data = {
                 classes, masterTeachers, absentTeachers, classTeacherMap, masterSubjects,
-                teachingRules, teacherConstraints, reliefAssignments, generatedTimetable, unassignedPool, tempBasketArr, periodTimes,
+                teachingRules, teacherConstraints, reliefAssignments, generatedTimetable, tempBasketArr, periodTimes,
                 schoolName: document.getElementById('schoolNameInput').value,
                 year: document.getElementById('yearInput').value,
                 term: document.getElementById('termInput').value,
@@ -948,7 +938,6 @@
                 teachingRules = data.teachingRules || [];
                 teacherConstraints = data.teacherConstraints || [];
                 reliefAssignments = data.reliefAssignments || [];
-                unassignedPool = data.unassignedPool || [];
                 generatedTimetable = data.generatedTimetable || {};
                 tempBasketArr = data.tempBasketArr || [];
                 if(data.periodTimes) {
@@ -1084,7 +1073,7 @@
                 periodTimes = { '1': '07:45 - 08:25', 'att': '08:25 - 08:30', '2': '08:30 - 09:10', '3': '09:10 - 09:50', '4': '09:50 - 10:30', '5': '10:30 - 11:10', '6': '11:30 - 12:10', '7': '12:10 - 12:50', '8': '12:50 - 13:30', '9': '13:30 - 14:10', 'int': '11:10 - 11:30' };
             }
             saveData();
-            try { renderTable(); renderUnassignedCards(); }catch(e){} 
+            try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } 
         }
 
         function openPrintModal() { document.getElementById('printModal').style.display = 'flex'; }
@@ -1199,13 +1188,9 @@
                     let border = isAbsent ? '#f87171' : '#86efac';
                     let txtColor = isAbsent ? '#dc2626' : '#166534';
                     
-                    let subText = getTeacherSubjects(tea);
-                    html += `<div class="rule-item" style="cursor:pointer; background:${bg}; border-color:${border};" onclick="toggleAttendance('${tea}')">
-                                <div style="line-height: 1.2;">
-                                    <span style="color:${txtColor}; font-weight:bold;">${tea}</span><br>
-                                    <span style="font-size:10px; color:#4b5563; font-weight:bold;">විෂය: ${subText}</span>
-                                </div>
-                                <span style="font-weight:bold; font-size:10px;">${isAbsent ? '❌' : '✔️'}</span>
+                    html += `<div class="rule-item" style="cursor:pointer; background:${bg}; border-color:${border}; display:flex; justify-content:space-between; align-items:center;" onclick="toggleAttendance('${tea}')">
+                                <span style="color:${txtColor}; font-weight:bold; font-size:14px;">${tea}</span>
+                                <span style="font-weight:bold; font-size:14px;">${isAbsent ? '❌' : '✔️'}</span>
                              </div>`;
                 });
             }
@@ -1215,7 +1200,7 @@
         function toggleAttendance(tea) {
             if(absentTeachers.includes(tea)) { absentTeachers = absentTeachers.filter(x => x !== tea); } 
             else { absentTeachers.push(tea); }
-            renderAttendanceList(); saveData(); try { renderTable(); renderUnassignedCards(); }catch(e){} 
+            renderAttendanceList(); saveData(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } 
         }
 
         function sendWhatsApp(tName, dStr, pNum, cName) {
@@ -1313,12 +1298,12 @@
             reliefAssignments = reliefAssignments.filter(r => !(r.day === d && r.period === p && r.grade === c));
             reliefAssignments.push({ day: d, period: p, grade: c, reliefTeacher: tea });
             
-            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); try { renderTable(); renderUnassignedCards(); }catch(e){} saveData();
+            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } saveData();
         }
 
         function deleteRelief(d, p, c) {
             reliefAssignments = reliefAssignments.filter(r => !(r.day === d && r.period === p && r.grade === c));
-            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); try { renderTable(); renderUnassignedCards(); }catch(e){} saveData();
+            updateReliefUI(); updateAbsenteeReliefList(); renderReliefList(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } saveData();
         }
 
         function renderReliefList() {
@@ -1425,7 +1410,7 @@
                 teachingRules.forEach(r => { r.subject = r.subject.replace(new RegExp(oldVal, 'g'), newVal); });
             }
             initEmptyTimetable(); 
-            saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
+            saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } renderDataModal(); renderRules(); renderConstraints();
         }
 
         async function deleteItem(type, val) {
@@ -1442,7 +1427,7 @@
                 masterSubjects = masterSubjects.filter(s => s !== val);
             }
             initEmptyTimetable(); 
-            saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
+            saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } renderDataModal(); renderRules(); renderConstraints();
         }
 
         function toggleCTGrade() { document.getElementById('inTeacherClass').style.display = document.getElementById('isClassTeacher').checked ? 'block' : 'none'; }
@@ -1450,7 +1435,7 @@
         function addMasterClassMain() {
             let c = document.getElementById('inClass').value.trim();
             if(c && !classes.includes(c)) { 
-                classes.push(c); initEmptyTimetable(); saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){} 
+                classes.push(c); initEmptyTimetable(); saveData(); initDropdowns(); try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } 
             }
             document.getElementById('inClass').value = "";
         }
@@ -1646,11 +1631,11 @@
             document.getElementById('daySelector').style.display = currentViewMode === 'day_master' ? 'block' : 'none';
             document.getElementById('classSelector').style.display = currentViewMode === 'class_wise' ? 'block' : 'none';
             document.getElementById('teacherSelector').style.display = currentViewMode === 'teacher_wise' ? 'block' : 'none';
-            try { renderTable(); renderUnassignedCards(); }catch(e){}
+            try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); }
         }
-        function selectClass(cls) { currentSelectedClass = cls; try { renderTable(); renderUnassignedCards(); }catch(e){} }
-        function selectDay(day) { currentDay = day; try { renderTable(); renderUnassignedCards(); }catch(e){} }
-        function selectTeacher(tea) { currentSelectedTeacher = tea; try { renderTable(); renderUnassignedCards(); }catch(e){} }
+        function selectClass(cls) { currentSelectedClass = cls; try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } }
+        function selectDay(day) { currentDay = day; try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } }
+        function selectTeacher(tea) { currentSelectedTeacher = tea; try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); } }
 
         async function startGenerationAsync() {
             if(teachingRules.length === 0) return await customAlert(t('err_rule'));
@@ -1664,11 +1649,9 @@
 
         function runDeepSwapAlgorithm() {
             let bestTimetable = null;
-            let bestUnassignedBlocks = [];
+            let bestUnassignedLog = [];
             let minUnassignedCount = 9999;
-            
-            let maxAttempts = 2000; 
-            let startTime = performance.now(); 
+            let maxAttempts = 1500; 
             
             let _pat = document.getElementById('ttPattern').value;
             let _intv = parseInt(document.getElementById('intervalSetting').value) || 4;
@@ -1678,196 +1661,312 @@
             }
 
             function isTBusy(tt, tea, d, p, ignoreGradesArr) {
-                if(!tea || tea === '-') return false;
+                if(!tea) return false;
                 if (teacherConstraints.some(tc => tc.teacher === tea && tc.day === d && (tc.period === 'All' || parseInt(tc.period) === p))) return true;
                 for(let c of classes) {
                     if (ignoreGradesArr && ignoreGradesArr.includes(c)) continue;
-                    if(tt[d] && tt[d][p] && tt[d][p][c] && tt[d][p][c].teacher && tt[d][p][c].teacher.includes(tea)) return true;
+                    if(tt[d][p][c] && tt[d][p][c].teacher && tt[d][p][c].teacher.includes(tea)) return true;
                 }
                 return false;
             }
-            
-            // Pre-process rules
-            let coreRegex = /math|sci|eng|sin|tam|his|bud|rel|ගණිත|විද්‍යා|ඉංග්‍රීසි|සිංහල|දෙමළ|ඉතිහාසය|බුද්ධ|ආගම/i;
-            
-            let allBlocks = [];
-            teachingRules.forEach(r => {
-                let rClasses = r.grade.split(',').map(x=>x.trim());
-                let rTeachers = r.teacher ? r.teacher.split(',').map(x=>x.trim()) : [];
-                let isCore = coreRegex.test(r.subject);
-                
-                let p = parseInt(r.periods);
-                let dbls = 0; let sngls = 0;
-                
-                if (p === 5) { sngls = 5; }
-                else if (p === 10) { dbls = 5; }
-                else if (p === 3) { dbls = 1; sngls = 1; }
-                else if (p === 6) { dbls = 1; sngls = 4; }
-                else if (r.isDouble) {
-                    dbls = Math.floor(p / 2);
-                    sngls = p % 2;
-                } else {
-                    if (p >= 7) { dbls = 2; sngls = p - 4; }
-                    else { sngls = p; }
-                }
-
-                let isCTRule = false;
-                rClasses.forEach(c => {
-                    let ct = classTeacherMap[c];
-                    if (ct && rTeachers.includes(ct)) isCTRule = true;
-                });
-
-                for(let i=0; i<dbls; i++) {
-                    allBlocks.push({ rule: r, classes: rClasses, teachers: rTeachers, isCore: isCore, duration: 2, isCT: isCTRule, id: r.id });
-                }
-                for(let i=0; i<sngls; i++) {
-                    allBlocks.push({ rule: r, classes: rClasses, teachers: rTeachers, isCore: isCore, duration: 1, isCT: isCTRule, id: r.id });
-                }
-            });
 
             for(let attempt = 0; attempt < maxAttempts; attempt++) {
-                let tempUnassignedBlocks = [];
-                let tt = {};
+                let tempUnassignedLog = [];
+                let tempTimetable = {};
                 days.forEach(d => {
-                    tt[d] = {};
+                    tempTimetable[d] = {};
                     for(let p=1; p<=9; p++) {
-                        tt[d][p] = {};
-                        classes.forEach(c => tt[d][p][c] = null);
+                        tempTimetable[d][p] = {};
+                        classes.forEach(c => tempTimetable[d][p][c] = null);
                     }
                 });
 
                 let unassignedCount = 0;
-                
-                let dailySubjectCount = {};
-                days.forEach(d => {
-                    dailySubjectCount[d] = {};
-                    classes.forEach(c => dailySubjectCount[d][c] = {});
-                });
-                
-                let ctDaysUsed = {};
-                classes.forEach(c => ctDaysUsed[c] = new Set());
+                let currentRules = JSON.parse(JSON.stringify(teachingRules));
 
-                // Randomize blocks but maintain high-level priority
-                let blocksToPlace = [...allBlocks];
-                // Shuffle perfectly
-                for (let i = blocksToPlace.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [blocksToPlace[i], blocksToPlace[j]] = [blocksToPlace[j], blocksToPlace[i]];
-                }
-                // Re-apply strict stable sort
-                blocksToPlace.sort((a, b) => {
-                    if (a.isCT !== b.isCT) return a.isCT ? -1 : 1; // CT strictly first
-                    if (a.duration !== b.duration) return b.duration - a.duration; // Doubles strictly before singles
-                    if (a.isCore !== b.isCore) return a.isCore ? -1 : 1; // Core strictly before others
-                    if (a.classes.length !== b.classes.length) return b.classes.length - a.classes.length; // Joins before singles
-                    return 0; // The random shuffle provides variability for ties
+                // 1. Class Teacher Priority Placement (Periods 1 & 2)
+                classes.forEach(c => {
+                    let ct = classTeacherMap[c];
+                    if (ct) {
+                        let ctRules = currentRules.filter(r => r.grade.split(',').map(x=>x.trim()).includes(c) && r.teacher.includes(ct));
+                        
+                        ctRules.sort((a,b) => {
+                            let aScore = (a.isDouble ? 10 : 0) + a.periods;
+                            let bScore = (b.isDouble ? 10 : 0) + b.periods;
+                            return bScore - aScore;
+                        });
+
+                        for (let d of days) {
+                            if (tempTimetable[d][1][c] !== null) continue; // Already filled by joined class etc
+
+                            for (let r of ctRules) {
+                                if (r.periods > 0) {
+                                    let ruleClassesArr = r.grade.split(',').map(cls => cls.trim());
+                                    
+                                    let p1Free = true;
+                                    for(let rC of ruleClassesArr) {
+                                        if (tempTimetable[d][1][rC] !== null) { p1Free = false; break; }
+                                    }
+                                    
+                                    if (p1Free) {
+                                        let isBusyT1 = false;
+                                        r.teacher.split(',').forEach(tea => { if(isTBusy(tempTimetable, tea.trim(), d, 1, ruleClassesArr)) isBusyT1 = true; });
+                                        
+                                        if (!isBusyT1) {
+                                            // Only double if user explicitly checked the box or periods = 10
+                                            let wantsDouble = r.isDouble || r.periods === 10;
+                                            let canDouble = false;
+                                            
+                                            if (wantsDouble && r.periods >= 2) {
+                                                let p2Free = true;
+                                                for(let rC of ruleClassesArr) {
+                                                    if (tempTimetable[d][2][rC] !== null) { p2Free = false; break; }
+                                                }
+                                                if (p2Free) {
+                                                    let isBusyT2 = false;
+                                                    r.teacher.split(',').forEach(tea => { if(isTBusy(tempTimetable, tea.trim(), d, 2, ruleClassesArr)) isBusyT2 = true; });
+                                                    if (!isBusyT2) canDouble = true;
+                                                }
+                                            }
+                                            
+                                            if (canDouble) {
+                                                ruleClassesArr.forEach(rC => {
+                                                    tempTimetable[d][1][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: ruleClassesArr.length > 1 };
+                                                    tempTimetable[d][2][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: ruleClassesArr.length > 1 };
+                                                });
+                                                r.periods -= 2;
+                                                break; 
+                                            } else {
+                                                ruleClassesArr.forEach(rC => {
+                                                    tempTimetable[d][1][rC] = { subject: r.subject, teacher: r.teacher, type: r.type, isJoined: ruleClassesArr.length > 1 };
+                                                });
+                                                r.periods -= 1;
+                                                break; 
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 });
 
-                for (let block of blocksToPlace) {
-                    let placed = false;
-                    let rId = block.id;
+                // 2. Process Remaining Rules for the week
+let remainingRules = currentRules.filter(r => r.periods > 0);
+                remainingRules.sort((a, b) => {
+                    let aClasses = a.grade.split(',').length;
+                    let bClasses = b.grade.split(',').length;
+                    if(aClasses !== bClasses) return bClasses - aClasses; 
+                    return b.periods - a.periods; 
+                });
+
+                remainingRules.forEach(rule => {
+                    let requiredPeriods = rule.periods;
+                    let ruleClassesArr = rule.grade.split(',').map(c => c.trim());
                     
-                    let validSlots = [];
+                    let daysAssignedCount = { 'Monday':0, 'Tuesday':0, 'Wednesday':0, 'Thursday':0, 'Friday':0 };
+                    let originalPeriods = requiredPeriods;
+                    
                     for(let d of days) {
+                        let countInDay = 0;
                         let maxPD = _getMaxP(d);
-                        
-                        let overLimit = false;
-                        for(let c of block.classes) {
-                            if (dailySubjectCount[d][c][rId] >= 1) overLimit = true;
+                        for(let p=1; p<=maxPD; p++) {
+                            if(tempTimetable[d][p][ruleClassesArr[0]] && tempTimetable[d][p][ruleClassesArr[0]].subject === rule.subject) {
+                                countInDay++;
+                            }
                         }
-                        if(overLimit) continue; // STRICT SPREAD: No two blocks of same subject on same day
+                        daysAssignedCount[d] = countInDay;
+                        originalPeriods += countInDay;
+                    }
 
-                        let startP = 1;
-                        let endP = maxPD - block.duration + 1;
-                        
-                        let mustBeP1 = false;
-                        if (block.isCT) {
-                            let canBeP1 = true;
-                            for(let c of block.classes) {
-                                if (ctDaysUsed[c].has(d)) canBeP1 = false;
-                                if (tt[d][1][c] !== null) canBeP1 = false;
-                                if (block.duration === 2 && tt[d][2][c] !== null) canBeP1 = false;
-                            }
-                            if (canBeP1) mustBeP1 = true;
+                    let doublesNeeded = 0; 
+                    let singlesNeeded = 0;
+                    let maxAllowedForSingle = 1;
+
+                    if (originalPeriods === 5) {
+                        doublesNeeded = 0; singlesNeeded = 5; maxAllowedForSingle = 0;
+                    } else if (originalPeriods === 10) {
+                        doublesNeeded = 5; singlesNeeded = 0; maxAllowedForSingle = 0;
+                    } else if (originalPeriods === 3) {
+                        doublesNeeded = 1; singlesNeeded = 1; maxAllowedForSingle = 0;
+                    } else if (originalPeriods === 6) {
+                        doublesNeeded = 1; singlesNeeded = 4; maxAllowedForSingle = 0;
+                    } else if (rule.isDouble) {
+                        doublesNeeded = Math.floor(originalPeriods / 2);
+                        singlesNeeded = originalPeriods % 2;
+                        maxAllowedForSingle = 1; 
+                    } else {
+                        if (originalPeriods >= 7) {
+                            doublesNeeded = 2;
+                            singlesNeeded = originalPeriods - 4;
+                        } else {
+                            doublesNeeded = 0;
+                            singlesNeeded = originalPeriods;
                         }
+                    }
+                    
+                    let currentDoubles = Object.values(daysAssignedCount).filter(v => v >= 2).length;
+                    let currentTotal = Object.values(daysAssignedCount).reduce((a,b)=>a+b, 0);
+                    
+                    doublesNeeded = Math.max(0, doublesNeeded - currentDoubles);
+                    singlesNeeded = Math.max(0, originalPeriods - currentTotal - (doublesNeeded * 2));
 
-                        for(let p = 1; p <= endP; p++) {
-                            if (mustBeP1 && p !== 1) continue; 
-                            if (block.duration === 2 && (p === _intv)) continue;
+                    let rTeachers = rule.teacher ? rule.teacher.split(',').map(tea => tea.trim()) : [];
+                    let intv = _intv;
+                    
+                    let isHard = /math|sci|eng|sin|tam|his|bud|rel|ගණිත|විද්‍යා|ඉංග්‍රීසි|සිංහල|දෙමළ|ඉතිහාසය|බුද්ධ|ආගම/i.test(rule.subject);
+                    let isSoft = /ict|තොරතුරු|ප්‍රායෝගික|තාක්ෂණ|සෞන්දර්ය|art|danc|music|චිත්‍ර|නැටුම්|සංගීත|basket|කාණ්ඩ/i.test(rule.subject);
+                    let prefEarlyD = [1, 2, 3];
+                    let prefLateD = [5, 6, 7];
+                    let prefEarlyS = [1, 2, 3, 4];
+                    let prefLateS = [5, 6, 7, 8, 9];
 
-                            let slotFree = true;
-                            for(let c of block.classes) {
-                                if (tt[d][p][c] !== null) slotFree = false;
-                                if (block.duration === 2 && tt[d][p+1][c] !== null) slotFree = false;
+                    let loopSafe1 = 0; while (doublesNeeded > 0 && loopSafe1 < 50) { loopSafe1++;
+                        let placed = false;
+                        let dayOrder = [...days].sort(() => Math.random() - 0.5);
+                        for (let d of dayOrder) {
+                            if (daysAssignedCount[d] > 0) continue; 
+                            let maxPD = _getMaxP(d);
+                            
+                            let eD = prefEarlyD.filter(x=>x<maxPD).sort(()=>Math.random()-0.5);
+                            let lD = prefLateD.filter(x=>x<maxPD).sort(()=>Math.random()-0.5);
+                            let periodOrder = isHard ? eD.concat(lD) : (isSoft ? lD.concat(eD) : eD.concat(lD).sort(()=>Math.random()-0.5));
+                            
+                            for (let p of periodOrder) {
+                                let p1 = p, p2 = p + 1;
+                                if (p1 === intv || p2 === intv+1) continue; 
+                                if (p2 > maxPD) continue;
+
+                                let classesFree = true;
+                                for(let c of ruleClassesArr) {
+                                    if(tempTimetable[d][p1][c] !== null || tempTimetable[d][p2][c] !== null) { classesFree = false; break; }
+                                }
+
+                                if (classesFree) {
+                                    let isBusy = false;
+                                    for(let tea of rTeachers) if(isTBusy(tempTimetable, tea, d, p1, ruleClassesArr) || isTBusy(tempTimetable, tea, d, p2, ruleClassesArr)) { isBusy = true; break; }
+                                    
+                                    if (!isBusy) {
+                                        for(let c of ruleClassesArr) {
+                                            tempTimetable[d][p1][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
+                                            tempTimetable[d][p2][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
+                                        }
+                                        daysAssignedCount[d] += 2; doublesNeeded--; placed = true; break;
+                                    }
+                                }
                             }
-                            if(!slotFree) continue;
-
-                            let teacherFree = true;
-                            for(let tea of block.teachers) {
-                                if (isTBusy(tt, tea, d, p, block.classes)) teacherFree = false;
-                                if (block.duration === 2 && isTBusy(tt, tea, d, p+1, block.classes)) teacherFree = false;
+                            if(placed) break;
+                        }
+                        if(!placed) { 
+                            if (originalPeriods === 3 || originalPeriods === 6 || originalPeriods === 10) {
+                                // STRICT ENFORCEMENT: Do not break doubles into singles for these period counts
+                            } else {
+                                singlesNeeded += 2; doublesNeeded--; 
                             }
-                            if(!teacherFree) continue;
-
-                            validSlots.push({ d: d, p: p, score: mustBeP1 ? 100 : (block.isCore && p <= 4 ? 10 : 0) });
                         }
                     }
 
-                    if (validSlots.length > 0) {
-                        validSlots.sort((a,b) => b.score - a.score);
-                        let maxScore = validSlots[0].score;
-                        let bestSlots = validSlots.filter(s => s.score === maxScore);
-                        let chosenSlot = bestSlots[Math.floor(Math.random() * bestSlots.length)];
+                    let loopSafe2 = 0; while (singlesNeeded > 0 && loopSafe2 < 50) { loopSafe2++;
+                        let placed = false;
+                        let dayOrder = [...days].sort((a,b) => daysAssignedCount[a] - daysAssignedCount[b]); 
 
-                        let d = chosenSlot.d;
-                        let p = chosenSlot.p;
+                        for (let d of dayOrder) {
+                            if (daysAssignedCount[d] > 0) continue; // STRICT SPREAD: Never allow two disconnected singles on same day
+                            let maxPD = _getMaxP(d);
 
-                        block.classes.forEach(c => {
-                            tt[d][p][c] = { subject: block.rule.subject, teacher: block.rule.teacher, type: block.rule.type, isJoined: block.classes.length > 1 };
-                            if (block.duration === 2) {
-                                tt[d][p+1][c] = { subject: block.rule.subject, teacher: block.rule.teacher, type: block.rule.type, isJoined: block.classes.length > 1 };
+                            let eS = prefEarlyS.filter(x=>x<=maxPD).sort(()=>Math.random()-0.5);
+                            let lS = prefLateS.filter(x=>x<=maxPD).sort(()=>Math.random()-0.5);
+                            let periodOrder = isHard ? eS.concat(lS) : (isSoft ? lS.concat(eS) : eS.concat(lS).sort(()=>Math.random()-0.5));
+
+                            for (let p of periodOrder) {
+                                let classesFree = true;
+                                for(let c of ruleClassesArr) {
+                                    if(tempTimetable[d][p][c] !== null) { classesFree = false; break; }
+                                }
+
+                                if (classesFree) {
+                                    let isBusy = false;
+                                    for(let tea of rTeachers) if(isTBusy(tempTimetable, tea, d, p, ruleClassesArr)) { isBusy = true; break; }
+                                    if (!isBusy) {
+                                        for(let c of ruleClassesArr) {
+                                            tempTimetable[d][p][c] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
+                                        }
+                                        daysAssignedCount[d]++; singlesNeeded--; placed = true; break;
+                                    }
+                                }
                             }
-                            dailySubjectCount[d][c][rId] = (dailySubjectCount[d][c][rId] || 0) + 1;
-                            if (block.isCT && p === 1) ctDaysUsed[c].add(d);
-                        });
-                        placed = true;
-                    }
+                            if(placed) break;
+                        }
 
-                    if (!placed) {
-                        unassignedCount += block.duration;
-                        tempUnassignedBlocks.push({
-                            classes: block.classes,
-                            subject: block.rule.subject,
-                            teacher: block.rule.teacher,
-                            type: block.rule.type,
-                            duration: block.duration
-                        });
+                        if(!placed) {
+                            let rGrade = ruleClassesArr[0];
+                            let emptySlotsInClass = [];
+                            for(let d of days) {
+                                let maxPD = _getMaxP(d);
+                                for(let p=1; p<=maxPD; p++) {
+                                    if (tempTimetable[d][p][rGrade] === null) emptySlotsInClass.push({d:d, p:p});
+                                }
+                            }
+
+                            swapLoop:
+                            for(let d of days) {
+                                if (daysAssignedCount[d] > 0) continue; // STRICT SPREAD: Never allow two disconnected singles on same day
+                                let maxPD = _getMaxP(d);
+                                for(let p=1; p<=maxPD; p++) {
+                                    let existingCell = tempTimetable[d][p][rGrade];
+                                    if (existingCell) { 
+                                        let ourBusy = false;
+                                        for(let tea of rTeachers) if(isTBusy(tempTimetable, tea, d, p, ruleClassesArr)) ourBusy = true;
+                                        
+                                        if(!ourBusy) {
+                                            for(let eSlot of emptySlotsInClass) {
+                                                let exBusy = false;
+                                                let exTeachers = existingCell.teacher ? existingCell.teacher.split(',').map(tea=>tea.trim()) : [];
+                                                for(let et of exTeachers) if(isTBusy(tempTimetable, et, eSlot.d, eSlot.p, ruleClassesArr)) exBusy = true;
+
+                                                if(!exBusy) {
+                                                    tempTimetable[eSlot.d][eSlot.p][rGrade] = existingCell;
+                                                    tempTimetable[d][p][rGrade] = { subject: rule.subject, teacher: rule.teacher, type: rule.type, isJoined: false };
+                                                    daysAssignedCount[d]++; singlesNeeded--; placed = true; break swapLoop;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(!placed) break; 
                     }
-                }
+                    let failedCount = (doublesNeeded * 2) + singlesNeeded;
+                    if (failedCount > 0) {
+                        tempUnassignedLog.push(`📌 ${rule.grade} | ${rule.subject} (${rule.teacher}) ➔ කාලච්ඡේද ${failedCount} ක් ඉතිරි විය.`);
+                    }
+                    unassignedCount += failedCount;
+                });
 
                 if (unassignedCount < minUnassignedCount) {
                     minUnassignedCount = unassignedCount;
-                    bestTimetable = JSON.parse(JSON.stringify(tt)); 
-                    bestUnassignedBlocks = JSON.parse(JSON.stringify(tempUnassignedBlocks));
+                    bestTimetable = JSON.parse(JSON.stringify(tempTimetable)); 
+                    bestUnassignedLog = [...tempUnassignedLog];
                 }
-                if (minUnassignedCount === 0) break; // Perfect!
-                if (performance.now() - startTime > 3000) break; // MAX 3 SECONDS execution time
+                if (minUnassignedCount === 0) break; 
             }
 
             document.getElementById('loadingOverlay').style.display = 'none';
             generatedTimetable = bestTimetable;
-            unassignedPool = bestUnassignedBlocks || [];
             
             if (minUnassignedCount > 0) {
-                customAlert(t('alert_conflict'), t('title_warn'));
+                let conflictMsg = `පහත විෂයයන් අදාළ නීති වලට යටත්ව (ගුරු අවහිරතා හෝ කාලච්ඡේද ගැටීම් හේතුවෙන්) සම්පූර්ණයෙන්ම ස්ථාපනය කිරීමට අපහසු විය! කාලච්ඡේද ${minUnassignedCount} ක් අතහැරී ඇත.<br><br><div style="max-height:160px; overflow-y:auto; font-size:12px; text-align:left; background:#fef2f2; padding:10px; border:1px solid #fca5a5; border-radius:4px; margin-top:10px; font-weight:bold; color:#b91c1c; line-height:1.6;">${bestUnassignedLog.join('<br>')}</div><br>කරුණාකර ඉතිරි වූ ඒවා අතින් (Drag & Drop මගින් හිස් තැන් වලට) දමා සකසා ගන්න.`;
+                customAlert(conflictMsg, "⚠️ ගැටුම් වාර්තාව (Conflicts)");
             } else {
                 showSuccessAnimation();
             }
             
             saveData();
-            try { renderTable(); renderUnassignedCards(); }catch(e){}
+            try { renderTable(); renderUnassignedCards(); }catch(e){ console.error(e); }
         }
 
+        
         let isTimetableLocked = false;
         function toggleLock() {
             isTimetableLocked = !isTimetableLocked;
@@ -1905,178 +2004,211 @@
             return Array.from(subs).join(', ') || '-';
         }
         
-        let dragSource = null;
-
-        function handleDragStartUnassigned(e, index) {
-            if (isTimetableLocked) { e.preventDefault(); return; }
-            dragSource = { type: 'unassigned', index: index };
-            e.dataTransfer.effectAllowed = 'move';
-        }
-
-        function handleDragStart(e, d, p, c) {
-            if (isTimetableLocked) { e.preventDefault(); return; }
-            dragSource = { type: 'grid', day: d, period: p, cls: c };
-            e.dataTransfer.effectAllowed = 'move';
-        }
         
-        async function handleDrop(e, tDay, tPeriod, tCls) {
-            e.preventDefault();
-            if (isTimetableLocked) { await customAlert(t("alert_locked_warn"), t("title_warn")); return; }
-            if (!dragSource) return;
-            
-            if (dragSource.type === 'unassigned') {
-                let block = unassignedPool[dragSource.index];
-                let maxPD = parseInt(document.getElementById('ttPattern').value === 'muslim' && tDay === 'Friday' ? 4 : 8);
-                
-                // Block overlap checks for doubles
-                if (block.duration === 2 && tPeriod >= maxPD) {
-                    await customAlert(t("alert_drag_fail"), t("title_warn")); dragSource = null; return;
-                }
-                
-                let intv = parseInt(document.getElementById('intervalSetting').value) || 4;
-                if (block.duration === 2 && tPeriod === intv) {
-                    await customAlert(t("alert_drag_fail"), t("title_warn")); dragSource = null; return;
-                }
+        function checkValidSwap(source, tDay, tPeriod, tCls) {
+            let maxPD = parseInt(document.getElementById('ttPattern').value === 'muslim' && tDay === 'Friday' ? 4 : 8);
+            if (tPeriod > maxPD) return false;
+            let intv = parseInt(document.getElementById('intervalSetting').value) || 4;
+            if (tPeriod === intv) return false;
 
-                // Check teacher constraints for unassigned drop
-                let tFail = false;
-                if (block.teacher) {
-                    let tTeas = block.teacher.split(',').map(t=>t.trim());
-                    for(let tea of tTeas) {
-                        if (isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod, block.classes)) { tFail = true; break; }
-                        if (block.duration === 2 && isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod + 1, block.classes)) { tFail = true; break; }
-                    }
-                }
-                
-                if (tFail) {
-                    await customAlert(t("alert_drag_fail"), t("title_warn"));
-                    dragSource = null; return;
-                }
-                
-                // Clear target cells & backup to unassigned pool
-                let existingBlocks = [];
-                for (let c of block.classes) {
-                     let exCell = generatedTimetable[tDay][tPeriod][c];
-                     if (exCell) {
-                         let joined = classes.filter(jc => generatedTimetable[tDay][tPeriod][jc] && generatedTimetable[tDay][tPeriod][jc].subject === exCell.subject && generatedTimetable[tDay][tPeriod][jc].teacher === exCell.teacher);
-                         joined.forEach(jc => generatedTimetable[tDay][tPeriod][jc] = null);
-                         existingBlocks.push({ classes: joined, subject: exCell.subject, teacher: exCell.teacher, type: exCell.type, duration: 1 });
-                     }
-                     if (block.duration === 2) {
-                         let exCell2 = generatedTimetable[tDay][tPeriod+1][c];
-                         if (exCell2) {
-                             let joined2 = classes.filter(jc => generatedTimetable[tDay][tPeriod+1][jc] && generatedTimetable[tDay][tPeriod+1][jc].subject === exCell2.subject && generatedTimetable[tDay][tPeriod+1][jc].teacher === exCell2.teacher);
-                             joined2.forEach(jc => generatedTimetable[tDay][tPeriod+1][jc] = null);
-                             existingBlocks.push({ classes: joined2, subject: exCell2.subject, teacher: exCell2.teacher, type: exCell2.type, duration: 1 });
-                         }
-                     }
-                }
-                
-                // Assign new block
-                block.classes.forEach(c => {
-                    generatedTimetable[tDay][tPeriod][c] = { subject: block.subject, teacher: block.teacher, type: block.type, isJoined: block.classes.length > 1 };
-                    if (block.duration === 2) {
-                        generatedTimetable[tDay][tPeriod+1][c] = { subject: block.subject, teacher: block.teacher, type: block.type, isJoined: block.classes.length > 1 };
-                    }
-                });
-                
-                unassignedPool.splice(dragSource.index, 1);
-                
-                let uniqueEx = [];
-                existingBlocks.forEach(eb => {
-                    if(!uniqueEx.some(ue => ue.subject === eb.subject && ue.teacher === eb.teacher && ue.classes.join(',') === eb.classes.join(','))) {
-                        uniqueEx.push(eb);
-                    }
-                });
-                unassignedPool.push(...uniqueEx);
+            let sCell, tCell, sJoinedClasses, tJoinedClasses;
 
-            } else {
-                // Regular grid-to-grid swap
-                let sDay = dragSource.day, sPeriod = dragSource.period, sCls = dragSource.cls;
-                if(sDay === tDay && sPeriod === tPeriod && sCls === tCls) { dragSource = null; return; }
+            if (source.type === 'unassigned') {
+                let block = unassignedPool[source.index];
+                if (!block) return false;
+                if (block.duration === 2 && tPeriod >= maxPD) return false;
+                if (block.duration === 2 && tPeriod === intv) return false;
 
-                let sCell = generatedTimetable[sDay][sPeriod][sCls];
-                let tCell = generatedTimetable[tDay][tPeriod][tCls];
-
-                let sJoinedClasses = [sCls];
-                if (sCell && sCell.isJoined) {
-                    sJoinedClasses = classes.filter(c => generatedTimetable[sDay][sPeriod][c] && generatedTimetable[sDay][sPeriod][c].subject === sCell.subject && generatedTimetable[sDay][sPeriod][c].teacher === sCell.teacher);
-                }
-                
-                let tJoinedClasses = [tCls];
+                tCell = generatedTimetable[tDay][tPeriod][tCls];
+                tJoinedClasses = [tCls];
                 if (tCell && tCell.isJoined) {
                     tJoinedClasses = classes.filter(c => generatedTimetable[tDay][tPeriod][c] && generatedTimetable[tDay][tPeriod][c].subject === tCell.subject && generatedTimetable[tDay][tPeriod][c].teacher === tCell.teacher);
                 }
 
-                // --- VALIDATION ---
-                let sFail = false;
-                if (sCell && sCell.teacher) {
-                    let sTeas = sCell.teacher.split(',').map(t=>t.trim());
-                    for(let tea of sTeas) {
-                        if (isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod, sJoinedClasses)) { sFail = true; break; }
+                if (block.teacher) {
+                    let tTeas = block.teacher.split(',').map(t=>t.trim());
+                    for(let tea of tTeas) {
+                        if (isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod, block.classes)) return false;
+                        if (block.duration === 2 && isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod + 1, block.classes)) return false;
                     }
                 }
-                let tFail = false;
+                
+                for (let c of block.classes) {
+                    let dayCount = 0;
+                    for (let p=1; p<=maxPD; p++) {
+                        if (generatedTimetable[tDay][p][c] && generatedTimetable[tDay][p][c].subject === block.subject) dayCount++;
+                    }
+                    if (dayCount > 0) return false; // STRICT SPREAD
+                }
+                return true;
+            } else {
+                let sDay = source.day, sPeriod = source.period, sCls = source.cls;
+                if (sDay === tDay && sPeriod === tPeriod && sCls === tCls) return true; // Itself
+                
+                sCell = generatedTimetable[sDay][sPeriod][sCls];
+                tCell = generatedTimetable[tDay][tPeriod][tCls];
+
+                if (!sCell) return false;
+
+                sJoinedClasses = [sCls];
+                if (sCell.isJoined) {
+                    sJoinedClasses = classes.filter(c => generatedTimetable[sDay][sPeriod][c] && generatedTimetable[sDay][sPeriod][c].subject === sCell.subject && generatedTimetable[sDay][sPeriod][c].teacher === sCell.teacher);
+                }
+                tJoinedClasses = [tCls];
+                if (tCell && tCell.isJoined) {
+                    tJoinedClasses = classes.filter(c => generatedTimetable[tDay][tPeriod][c] && generatedTimetable[tDay][tPeriod][c].subject === tCell.subject && generatedTimetable[tDay][tPeriod][c].teacher === tCell.teacher);
+                }
+
+                if (sCell.teacher) {
+                    let sTeas = sCell.teacher.split(',').map(t=>t.trim());
+                    for(let tea of sTeas) {
+                        if (isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod, sJoinedClasses)) return false;
+                    }
+                }
                 if (tCell && tCell.teacher) {
                     let tTeas = tCell.teacher.split(',').map(t=>t.trim());
                     for(let tea of tTeas) {
-                        if (isTeacherBusyGlobal(generatedTimetable, tea, sDay, sPeriod, tJoinedClasses)) { tFail = true; break; }
+                        if (isTeacherBusyGlobal(generatedTimetable, tea, sDay, sPeriod, tJoinedClasses)) return false;
                     }
                 }
 
-                if (sFail || tFail) {
-                    await customAlert(t("alert_drag_fail"), t("title_warn"));
-                    dragSource = null;
-                    return;
+                if (sDay !== tDay) {
+                    for(let c of sJoinedClasses) {
+                        let dayCount = 0;
+                        let maxTPD = parseInt(document.getElementById('ttPattern').value === 'muslim' && tDay === 'Friday' ? 4 : 8);
+                        for(let p=1; p<=maxTPD; p++) {
+                            if (p === tPeriod) continue; 
+                            if (generatedTimetable[tDay][p][c] && generatedTimetable[tDay][p][c].subject === sCell.subject) dayCount++;
+                        }
+                        if (dayCount > 0) return false;
+                    }
                 }
 
-                sJoinedClasses.forEach(c => {
-                    generatedTimetable[sDay][sPeriod][c] = tCell ? JSON.parse(JSON.stringify(tCell)) : null;
-                });
-                tJoinedClasses.forEach(c => {
-                    generatedTimetable[tDay][tPeriod][c] = sCell ? JSON.parse(JSON.stringify(sCell)) : null;
-                });
+                if (tCell && sDay !== tDay) {
+                    for(let c of tJoinedClasses) {
+                        let dayCount = 0;
+                        let maxSPD = parseInt(document.getElementById('ttPattern').value === 'muslim' && sDay === 'Friday' ? 4 : 8);
+                        for(let p=1; p<=maxSPD; p++) {
+                            if (p === sPeriod) continue; 
+                            if (generatedTimetable[sDay][p][c] && generatedTimetable[sDay][p][c].subject === tCell.subject) dayCount++;
+                        }
+                        if (dayCount > 0) return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        function applyHighlights(source) {
+            if(isTimetableLocked) return;
+            document.querySelectorAll('.tt-cell').forEach(td => {
+                let tDay = td.dataset.day;
+                let tPeriod = parseInt(td.dataset.period);
+                let tCls = td.dataset.cls;
+                if (!tDay || !tPeriod || !tCls) return;
+                
+                let isValid = checkValidSwap(source, tDay, tPeriod, tCls);
+                if (isValid) {
+                    td.classList.add('highlight-valid');
+                } else {
+                    td.classList.add('highlight-invalid');
+                }
+            });
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.tt-cell').forEach(td => {
+                td.classList.remove('highlight-valid', 'highlight-invalid');
+            });
+        }
+
+        function handlePointerDownGrid(d, p, c) {
+            if(isTimetableLocked) return;
+            dragSource = { type: 'grid', day: d, period: p, cls: c };
+            applyHighlights(dragSource);
+        }
+        
+        function handlePointerDownUnassigned(index) {
+            if(isTimetableLocked) return;
+            dragSource = { type: 'unassigned', index: index };
+            applyHighlights(dragSource);
+        }
+
+        document.addEventListener('mouseup', clearHighlights);
+        document.addEventListener('touchend', clearHighlights);
+
+        let dragSource = null;
+
+        function handleDragStart(e, d, p, c) {
+            if (isTimetableLocked) { e.preventDefault(); return; }
+            dragSource = {day: d, period: p, cls: c};
+            e.dataTransfer.effectAllowed = 'move';
+        }
+        async function handleDrop(e, tDay, tPeriod, tCls) {
+            e.preventDefault();
+            if (isTimetableLocked) { await customAlert(t("alert_locked_warn"), t("title_warn")); return; }
+            if (!dragSource) return;
+            let sDay = dragSource.day, sPeriod = dragSource.period, sCls = dragSource.cls;
+            if(sDay === tDay && sPeriod === tPeriod && sCls === tCls) { dragSource = null; return; }
+
+            let sCell = generatedTimetable[sDay][sPeriod][sCls];
+            let tCell = generatedTimetable[tDay][tPeriod][tCls];
+
+            let sJoinedClasses = [sCls];
+            if (sCell && sCell.isJoined) {
+                sJoinedClasses = classes.filter(c => generatedTimetable[sDay][sPeriod][c] && generatedTimetable[sDay][sPeriod][c].subject === sCell.subject && generatedTimetable[sDay][sPeriod][c].teacher === sCell.teacher);
+            }
+            
+            let tJoinedClasses = [tCls];
+            if (tCell && tCell.isJoined) {
+                tJoinedClasses = classes.filter(c => generatedTimetable[tDay][tPeriod][c] && generatedTimetable[tDay][tPeriod][c].subject === tCell.subject && generatedTimetable[tDay][tPeriod][c].teacher === tCell.teacher);
             }
 
+            // --- VALIDATION ---
+            let sFail = false;
+            if (sCell && sCell.teacher) {
+                let sTeas = sCell.teacher.split(',').map(t=>t.trim());
+                for(let tea of sTeas) {
+                    if (isTeacherBusyGlobal(generatedTimetable, tea, tDay, tPeriod, sJoinedClasses)) { sFail = true; break; }
+                }
+            }
+            let tFail = false;
+            if (tCell && tCell.teacher) {
+                let tTeas = tCell.teacher.split(',').map(t=>t.trim());
+                for(let tea of tTeas) {
+                    if (isTeacherBusyGlobal(generatedTimetable, tea, sDay, sPeriod, tJoinedClasses)) { tFail = true; break; }
+                }
+            }
+
+            if (sFail || tFail) {
+                await customAlert(t("alert_drag_fail"), t("title_warn"));
+                dragSource = null;
+                return;
+            }
+            // ------------------
+
+            sJoinedClasses.forEach(c => {
+                generatedTimetable[sDay][sPeriod][c] = tCell ? JSON.parse(JSON.stringify(tCell)) : null;
+            });
+            tJoinedClasses.forEach(c => {
+                generatedTimetable[tDay][tPeriod][c] = sCell ? JSON.parse(JSON.stringify(sCell)) : null;
+            });
+
             renderTable();
-            renderUnassignedCards();
             saveData();
             dragSource = null;
         }
 
-        function renderUnassignedCards() {
-            let container = document.getElementById('unassignedArea');
-            let cardsDiv = document.getElementById('unassignedCardsContainer');
-            if (!unassignedPool || unassignedPool.length === 0) {
-                container.style.display = 'none';
-                cardsDiv.innerHTML = '';
-                return;
-            }
-            container.style.display = 'block';
-            let html = '';
-            unassignedPool.forEach((block, index) => {
-                let color = getSubjectColor(block.subject);
-                let durText = block.duration === 2 ? ' [Double]' : '';
-                html += `<div draggable="true" ondragstart="handleDragStartUnassigned(event, ${index})" 
-                              class="card" style="background-color: ${color}; width: 140px; height: 50px; cursor:grab; border: 1px solid #ef4444; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.4); margin-bottom: 5px;">
-                            <span class="card-subj" style="font-size:12px; color:#b91c1c;">${block.subject}${durText}</span>
-                            <span style="font-size:9px;">(${block.teacher})</span>
-                            <span style="font-size:9px; color: #1e3a8a;">${block.classes.join(', ')}</span>
-                         </div>`;
-            });
-            cardsDiv.innerHTML = html;
-        }
-
         function getCellHTML(cellData, d, p, c, colspan=1) {
             let colStr = colspan > 1 ? ` colspan="${colspan}"` : "";
-            let dropAttrs = `ondragover="event.preventDefault()" ondrop="handleDrop(event, '${d}', ${p}, '${c}')"`;
+            let dropAttrs = `data-day="${d}" data-period="${p}" data-cls="${c}" class="tt-cell" ondragover="event.preventDefault()" ondrop="handleDrop(event, '${d}', ${p}, '${c}')"`;
             
             if(!generatedTimetable || !generatedTimetable[d] || !generatedTimetable[d][p] || typeof generatedTimetable[d][p][c] === 'undefined') {
                 return `<td class="cell-empty"${colStr} ${dropAttrs}></td>`;
             }
 
             let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
-            let dragAttrs = `draggable="true" ondragstart="handleDragStart(event, '${d}', ${p}, '${c}')" style="cursor:grab;"`;
+            let dragAttrs = `draggable="true" ondragstart="handleDragStart(event, '${d}', ${p}, '${c}')" ondragend="clearHighlights()" onmousedown="handlePointerDownGrid('${d}', ${p}, '${c}')" ontouchstart="handlePointerDownGrid('${d}', ${p}, '${c}')" style="cursor:grab;"`;
 
             if (cellData) {
                 let rBtnText = t('btn_rel').split(' ');

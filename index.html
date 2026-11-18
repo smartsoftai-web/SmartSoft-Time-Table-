@@ -1816,7 +1816,7 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                     let rTeachers = rule.teacher ? rule.teacher.split(',').map(tea => tea.trim()) : [];
                     let intv = _intv;
                     
-                    let isHard = /math|sci|eng|ගණිත|විද්‍යා|ඉංග්‍රීසි/i.test(rule.subject);
+                    let isHard = /math|sci|eng|sin|tam|his|bud|rel|ගණිත|විද්‍යා|ඉංග්‍රීසි|සිංහල|දෙමළ|ඉතිහාසය|බුද්ධ|ආගම/i.test(rule.subject);
                     let isSoft = /ict|තොරතුරු|ප්‍රායෝගික|තාක්ෂණ|සෞන්දර්ය|art|danc|music|චිත්‍ර|නැටුම්|සංගීත|basket|කාණ්ඩ/i.test(rule.subject);
                     let prefEarlyD = [1, 2, 3];
                     let prefLateD = [5, 6, 7];
@@ -1859,7 +1859,13 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                             }
                             if(placed) break;
                         }
-                        if(!placed) { singlesNeeded += 2; doublesNeeded--; }
+                        if(!placed) { 
+                            if (originalPeriods === 3 || originalPeriods === 6 || originalPeriods === 10) {
+                                // STRICT ENFORCEMENT: Do not break doubles into singles for these period counts
+                            } else {
+                                singlesNeeded += 2; doublesNeeded--; 
+                            }
+                        }
                     }
 
                     let loopSafe2 = 0; while (singlesNeeded > 0 && loopSafe2 < 50) { loopSafe2++;

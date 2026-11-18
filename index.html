@@ -1653,8 +1653,9 @@
 
         function runDeepSwapAlgorithm() {
             let bestTimetable = null;
+            let bestUnassignedLog = [];
             let minUnassignedCount = 9999;
-            let maxAttempts = 50; 
+            let maxAttempts = 1500; 
             
             let _pat = document.getElementById('ttPattern').value;
             let _intv = parseInt(document.getElementById('intervalSetting').value) || 4;
@@ -1674,6 +1675,7 @@
             }
 
             for(let attempt = 0; attempt < maxAttempts; attempt++) {
+                let tempUnassignedLog = [];
                 let tempTimetable = {};
                 days.forEach(d => {
                     tempTimetable[d] = {};
@@ -1939,12 +1941,17 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                         }
                         if(!placed) break; 
                     }
-                    unassignedCount += (doublesNeeded * 2) + singlesNeeded;
+                    let failedCount = (doublesNeeded * 2) + singlesNeeded;
+                    if (failedCount > 0) {
+                        tempUnassignedLog.push(`📌 ${rule.grade} | ${rule.subject} (${rule.teacher}) ➔ කාලච්ඡේද ${failedCount} ක් ඉතිරි විය.`);
+                    }
+                    unassignedCount += failedCount;
                 });
 
                 if (unassignedCount < minUnassignedCount) {
                     minUnassignedCount = unassignedCount;
                     bestTimetable = JSON.parse(JSON.stringify(tempTimetable)); 
+                    bestUnassignedLog = [...tempUnassignedLog];
                 }
                 if (minUnassignedCount === 0) break; 
             }
@@ -1952,7 +1959,13 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
             document.getElementById('loadingOverlay').style.display = 'none';
             generatedTimetable = bestTimetable;
             
-            showSuccessAnimation();
+            if (minUnassignedCount > 0) {
+                let conflictMsg = `පහත විෂයයන් අදාළ නීති වලට යටත්ව (ගුරු අවහිරතා හෝ කාලච්ඡේද ගැටීම් හේතුවෙන්) සම්පූර්ණයෙන්ම ස්ථාපනය කිරීමට අපහසු විය! කාලච්ඡේද ${minUnassignedCount} ක් අතහැරී ඇත.<br><br><div style="max-height:160px; overflow-y:auto; font-size:12px; text-align:left; background:#fef2f2; padding:10px; border:1px solid #fca5a5; border-radius:4px; margin-top:10px; font-weight:bold; color:#b91c1c; line-height:1.6;">${bestUnassignedLog.join('<br>')}</div><br>කරුණාකර ඉතිරි වූ ඒවා අතින් (Drag & Drop මගින් හිස් තැන් වලට) දමා සකසා ගන්න.`;
+                customAlert(conflictMsg, "⚠️ ගැටුම් වාර්තාව (Conflicts)");
+            } else {
+                showSuccessAnimation();
+            }
+            
             saveData();
             try { renderTable(); }catch(e){}
         }

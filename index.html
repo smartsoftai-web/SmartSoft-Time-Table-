@@ -111,7 +111,7 @@
         .card { padding: 4px; border-radius: 4px; font-size: 11px; font-weight: 700; width: 100%; height: 100%; min-height: 38px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; line-height: 1.1; border: 1px solid rgba(0,0,0,0.3); box-shadow: 1px 1px 3px rgba(0,0,0,0.2); color: #111827; box-sizing: border-box; position: relative; overflow: hidden;}
         .card::before { content: ''; position: absolute; top:0; left:0; width:100%; height: 30%; background: linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0)); pointer-events: none;}
         .card-subj { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block; z-index: 2; text-align: center;}
-        .card span { font-weight: 600; font-size: 9px; color: #1f2937; display: block; margin-top: 2px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-align: center;}
+        .card span { font-weight: 600; font-size: 9px; color: #1f2937; display: block; margin-top: 2px; border-top: none; padding-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-align: center;}
 
         .footer { text-align: center; font-size: 12px; font-weight: bold; color: #4b5563; padding-top: 10px; margin-top: 10px; border-top: 1px solid #e5e7eb; }
 
@@ -167,58 +167,200 @@
 
         /* PERFECT PDF / PRINT SETTINGS */
         @media print {
-            @page { size: A4 landscape; margin: 10mm; } 
-            body { background-color: white !important; padding: 0 !important; margin: 0 !important; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+            @page { size: A4 landscape; margin: 8mm; }
+            html, body {
+                background-color: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                height: auto !important;
+                min-height: 0 !important;
+                overflow: visible !important;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
             .layout, .modal-overlay, .success-overlay, .loading-overlay { display: none !important; }
-            #printArea { display: block !important; width: 100% !important; }
-            .print-page { page-break-after: always; width: 100%; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column;}
-            .timetable-box { break-inside: avoid; flex: 1; display: flex; flex-direction: column; margin-bottom: 5mm; width: 100%;}
-            table { min-width: 100% !important; width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
-            
-            .layout-1 .timetable-box { width: 100%; height: 100%; }
-            .layout-1 h2.school-title { font-size: 22px; color: black; margin-bottom: 2px; text-align: center; }
-            .layout-1 .print-term-info { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: black; }
-            .layout-1 h3.main-title { font-size: 16px; color: black; margin-bottom: 10px; text-align: center; }
-            .layout-1 table th, .layout-1 table td { border: 1px solid #000 !important; color: black !important; padding: 4px !important; border-radius: 0; font-size: 11px !important;}
-            
-            .layout-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; align-items: start; height: 100vh;}
-            .layout-2 h2.school-title { font-size: 16px; margin-bottom: 2px; text-align: center; color: black;}
-            .layout-2 .print-term-info { text-align: center; font-weight: bold; font-size: 12px; margin-bottom: 3px; color: black; }
-            .layout-2 h3.main-title { font-size: 13px; margin-bottom: 5px; text-align: center; color: black;}
-            .layout-2 table th, .layout-2 table td { border: 1px solid #000 !important; color: black !important; padding: 2px !important; font-size: 9px !important; border-radius: 0;}
-            
-            .layout-4 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 6mm; height: 100vh;}
-            .layout-4 h2.school-title { font-size: 12px; margin-bottom: 1px; text-align: center; color: black;}
-            .layout-4 .print-term-info { text-align: center; font-weight: bold; font-size: 9px; margin-bottom: 2px; color: black; }
-            .layout-4 h3.main-title { font-size: 10px; margin-bottom: 3px; text-align: center; color: black;}
-            .layout-4 table th, .layout-4 table td { border: 1px solid #000 !important; color: black !important; padding: 1px !important; font-size: 7px !important; border-radius: 0;}
+            #printArea {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
 
-            tr.period-row { height: 11% !important; }
+            .print-page {
+                page-break-after: always;
+                break-after: page;
+                width: 100%;
+                box-sizing: border-box;
+                overflow: visible !important;
+            }
+            .print-page:last-child {
+                page-break-after: auto;
+                break-after: auto;
+            }
+
+            .timetable-box {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            /* 1 per A4 Landscape sheet */
+            .layout-1 {
+                display: flex;
+                flex-direction: column;
+                height: 190mm;
+            }
+            .layout-1 .timetable-box {
+                width: 100%;
+                height: 100%;
+            }
+            .layout-1 table { flex: 1; height: 100% !important; }
+            .layout-1 h2.school-title { font-size: 20px; color: #000; margin: 0 0 2px 0; text-align: center; }
+            .layout-1 .print-term-info { text-align: center; font-weight: bold; font-size: 13px; margin-bottom: 3px; color: #000; }
+            .layout-1 h3.main-title { font-size: 15px; color: #000; margin: 0 0 6px 0; text-align: center; }
+            .layout-1 table th, .layout-1 table td { border: 1px solid #000 !important; color: #000 !important; padding: 3px !important; border-radius: 0 !important; font-size: 11px !important; }
+
+            /* Master view (auto height across pages if needed) */
+            .layout-master {
+                display: block;
+                height: auto !important;
+            }
+            .layout-master .timetable-box {
+                height: auto !important;
+                break-inside: auto;
+                page-break-inside: auto;
+                margin-bottom: 6mm;
+            }
+            .layout-master table { height: auto !important; }
+            .layout-master h2.school-title { font-size: 18px; color: #000; margin: 0 0 2px 0; text-align: center; }
+            .layout-master .print-term-info { text-align: center; font-weight: bold; font-size: 12px; margin-bottom: 3px; color: #000; }
+            .layout-master h3.main-title { font-size: 14px; color: #000; margin: 0 0 6px 0; text-align: center; }
+            .layout-master table th, .layout-master table td { border: 1px solid #000 !important; color: #000 !important; padding: 3px 2px !important; border-radius: 0 !important; font-size: 10px !important; }
+
+            /* 2 per A4 Landscape sheet */
+            .layout-2 {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8mm;
+                align-items: stretch;
+                height: 190mm;
+            }
+            .layout-2 .timetable-box { height: 100%; }
+            .layout-2 table { flex: 1; height: 100% !important; }
+            .layout-2 h2.school-title { font-size: 14px; margin: 0 0 1px 0; text-align: center; color: #000; }
+            .layout-2 .print-term-info { text-align: center; font-weight: bold; font-size: 10px; margin-bottom: 2px; color: #000; }
+            .layout-2 h3.main-title { font-size: 12px; margin: 0 0 4px 0; text-align: center; color: #000; }
+            .layout-2 table th, .layout-2 table td { border: 1px solid #000 !important; color: #000 !important; padding: 2px !important; font-size: 9px !important; border-radius: 0 !important; }
+
+            /* 4 per A4 Landscape sheet */
+            .layout-4 {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                gap: 5mm;
+                height: 190mm;
+            }
+            .layout-4 .timetable-box { height: 100%; overflow: hidden; }
+            .layout-4 table { flex: 1; height: 100% !important; }
+            .layout-4 h2.school-title { font-size: 11px; margin: 0 0 1px 0; text-align: center; color: #000; }
+            .layout-4 .print-term-info { text-align: center; font-weight: bold; font-size: 8px; margin-bottom: 1px; color: #000; }
+            .layout-4 h3.main-title { font-size: 9.5px; margin: 0 0 2px 0; text-align: center; color: #000; }
+            .layout-4 table th, .layout-4 table td { border: 1px solid #000 !important; color: #000 !important; padding: 1px !important; font-size: 7.5px !important; border-radius: 0 !important; }
+
+            table {
+                min-width: 100% !important;
+                width: 100% !important;
+                border-collapse: collapse !important;
+                border-spacing: 0 !important;
+                table-layout: fixed !important;
+            }
+            thead { display: table-header-group; }
+            tr { break-inside: avoid; page-break-inside: avoid; }
+            tr.period-row { height: auto !important; }
             tr.special-row { height: auto !important; }
 
-            .card { padding: 2px !important; margin: 0 !important; box-shadow: none !important; border: 1px solid #444 !important; color: #000 !important; height: 100% !important; min-height: 0 !important; display: flex !important; flex-direction: column; justify-content: center; align-items: center; overflow: visible !important; white-space: normal !important; word-wrap: break-word !important; border-radius: 0 !important; }
-            .card::before { display: none !important; } 
-            .card-subj { white-space: normal !important; overflow: visible !important; display: block !important; font-weight: bold !important; text-align: center;}
-            .card span { color: #000 !important; border-top: 1px solid #999; margin-top: 1px; padding-top: 1px; white-space: normal !important; overflow: visible !important; text-align: center;}
-            
-            .layout-2 .card { font-size: 9px !important; line-height: 1.1 !important; }
-            .layout-2 .card span { font-size: 8px !important; }
-            .layout-4 .card { font-size: 7.5px !important; line-height: 1.0 !important; padding: 1px !important;}
-            .layout-4 .card span { font-size: 6px !important; border-top: none; }
+            /* Remove sticky positioning & shadows in print to prevent grey lines */
+            thead th, thead th:first-child, tr.period-row td:first-child {
+                position: static !important;
+                box-shadow: none !important;
+                background: #e5e7eb !important;
+                color: #000 !important;
+                border: 1px solid #000 !important;
+            }
+            thead th:first-child, tr.period-row td:first-child {
+                width: 48px !important;
+                min-width: 48px !important;
+                max-width: 48px !important;
+            }
+            .layout-4 thead th:first-child, .layout-4 tr.period-row td:first-child {
+                width: 34px !important;
+                min-width: 34px !important;
+                max-width: 34px !important;
+            }
 
-            th { background: #e5e7eb !important; color: black !important; border: 1px solid #000 !important;}
-            tr.period-row td:first-child { background: #e5e7eb !important; color: black !important; border: 1px solid #000 !important; width: 40px !important; min-width: 40px !important;}
-            td.cell-empty { background-color: white !important; border: 1px solid #000 !important;}
-            
-            .interval { background: #d1d5db !important; color: black !important; border: 1px solid #000 !important; letter-spacing: normal; text-transform: none; text-shadow: none !important; box-shadow: none !important;}
-            .attendance-row { background: #e2e8f0 !important; color: black !important; border: 1px solid #000 !important; text-shadow: none !important; box-shadow: none !important; padding: 1px !important;}
-            .day-header { background: #ccc !important; color: black !important; border: 1px solid #000 !important; text-shadow: none !important;}
-            
-            .print-footer { text-align: center; font-size: 10px; font-weight:bold; color: black; margin-top: 5px; border-top: 1px solid #000; padding-top: 3px; }
-            .print-footer span { color: #10b981 !important; }
-            
-            .relief-card { background-color: #fef2f2 !important; border: 1px solid #000 !important; }
+            /* Clean cells: NO inner card borders and NO grey separator lines inside cells! */
+            .card {
+                padding: 2px !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                outline: none !important;
+                color: #000 !important;
+                height: 100% !important;
+                min-height: 0 !important;
+                display: flex !important;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                overflow: visible !important;
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                border-radius: 0 !important;
+            }
+            .card::before { display: none !important; }
+            .card-subj {
+                white-space: normal !important;
+                overflow: visible !important;
+                display: block !important;
+                font-weight: bold !important;
+                text-align: center;
+                border: none !important;
+            }
+            .card span {
+                color: #000 !important;
+                border-top: none !important;
+                border: none !important;
+                margin-top: 1px;
+                padding-top: 0 !important;
+                white-space: normal !important;
+                overflow: visible !important;
+                text-align: center;
+            }
+
+            .layout-2 .card { font-size: 8.5px !important; line-height: 1.1 !important; }
+            .layout-2 .card span { font-size: 7.5px !important; }
+            .layout-4 .card { font-size: 7px !important; line-height: 1.05 !important; padding: 1px !important; }
+            .layout-4 .card span { font-size: 6px !important; }
+
+            td.cell-empty { background-color: #ffffff !important; border: 1px solid #000 !important; }
+
+            .interval { background: #d1d5db !important; color: #000 !important; border: 1px solid #000 !important; letter-spacing: normal; text-transform: none; padding: 2px !important; }
+            .attendance-row { background: #e2e8f0 !important; color: #000 !important; border: 1px solid #000 !important; padding: 2px !important; }
+            .day-header { background: #d1d5db !important; color: #000 !important; border: 1px solid #000 !important; padding: 3px !important; }
+
+            .print-footer { text-align: center; font-size: 9px; font-weight: bold; color: #000; margin-top: 3px; border-top: 1px solid #000; padding-top: 2px; }
+            .layout-4 .print-footer { font-size: 7px; margin-top: 2px; padding-top: 1px; }
+            .print-footer span { color: #059669 !important; }
+
+            .relief-card { background-color: #fef2f2 !important; border: none !important; }
             .relief-text { color: #000 !important; font-weight: bold; }
             .btn-wa { display: none !important; }
         }
@@ -281,6 +423,31 @@
             <h3 style="margin-top:0; color:#db2777; border-bottom: 2px solid #e5e7eb; padding-bottom:8px;" data-i18n="mod_ct_t">👑 පන්තිභාර ගුරුවරුන්</h3>
             <p style="font-size: 11px; color: gray;" data-i18n="mod_ct_d">ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.</p>
             <div id="classTeacherList" style="max-height: 350px; overflow-y: auto; padding-right: 5px; margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    
+    <!-- All Teaching Details Overview Modal -->
+    <div id="allDataOverviewModal" class="modal-overlay">
+        <div class="modal" style="max-width: 850px; width: 95%;">
+            <button class="close-btn" onclick="closeModals()">✖</button>
+            <h3 style="margin-top:0; color:#4f46e5; border-bottom: 2px solid #e5e7eb; padding-bottom:8px;" data-i18n="mod_all_t">📋 සියලුම ඉගැන්වීම් විස්තර (සංස්කරණය කළ හැක)</h3>
+            <p style="font-size: 11px; color: gray; margin-bottom: 10px;" data-i18n="mod_all_d">ගුරුවරුන්, පන්ති, විෂයයන් සහ කාලච්ඡේද ගණන සියල්ල මෙහි එකට දැක්වේ. ඕනෑම පේළියක් Edit (✏️) කර වෙනස් කළ හැක.</p>
+            <input type="text" id="searchAllOverview" data-i18n-ph="ph_search_all" placeholder="🔍 ගුරුවරයා, පන්තිය හෝ විෂය සොයන්න..." onkeyup="renderAllOverviewTable()" style="margin-bottom: 10px; border: 2px solid #6366f1; padding: 6px 10px;">
+            <div style="max-height: 400px; overflow: auto; border: 1px solid #d1d5db; border-radius: 4px;">
+                <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 12px; height: auto;">
+                    <thead>
+                        <tr>
+                            <th style="position: sticky; top: 0; background: #e0e7ff; color: #312e81; padding: 8px; border: 1px solid #c7d2fe; width: 15%; min-width: 80px;" data-i18n="lbl_grd">ශ්‍රේණිය</th>
+                            <th style="position: sticky; top: 0; background: #e0e7ff; color: #312e81; padding: 8px; border: 1px solid #c7d2fe; width: 25%;" data-i18n="lbl_sub">විෂයය</th>
+                            <th style="position: sticky; top: 0; background: #e0e7ff; color: #312e81; padding: 8px; border: 1px solid #c7d2fe; width: 28%;" data-i18n="lbl_tea">ගුරුවරයා</th>
+                            <th style="position: sticky; top: 0; background: #e0e7ff; color: #312e81; padding: 8px; border: 1px solid #c7d2fe; width: 14%;" data-i18n="per_txt">කාලච්ඡේද</th>
+                            <th style="position: sticky; top: 0; background: #e0e7ff; color: #312e81; padding: 8px; border: 1px solid #c7d2fe; width: 18%;" data-i18n="col_action">ක්‍රියාව</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allOverviewTableBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -370,6 +537,7 @@
             <button class="btn-primary" style="background: linear-gradient(to bottom, #3b82f6, #2563eb); border-color:#1d4ed8;" onclick="triggerPrint('all_master')" data-i18n="btn_prt_m">🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)</button>
             <button class="btn-primary" style="background: linear-gradient(to bottom, #10b981, #059669); border-color:#047857;" onclick="triggerPrint('classes')" data-i18n="btn_prt_c">📚 සියලුම පන්ති කාලසටහන්</button>
             <button class="btn-primary" style="background: linear-gradient(to bottom, #f59e0b, #d97706); border-color:#b45309;" onclick="triggerPrint('teachers')" data-i18n="btn_prt_t">🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්</button>
+            <div style="margin-top:10px; padding:8px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:4px; font-size:11px; color:#1e40af; line-height:1.4;" data-i18n="prt_tip">💡 මුද්‍රණ කවුළුව විවෘත වූ පසු Printer / Destination තුළින් ඔබගේ මුද්‍රණ යන්ත්‍රය හෝ <b>Save as PDF</b> තෝරාගත හැක. (වර්ණ ලබාගැනීමට Background graphics සක්‍රීය කරන්න.)</div>
         </div>
     </div>
 
@@ -463,6 +631,7 @@
             <button class="btn-primary btn-relief" onclick="openReliefModal()" data-i18n="btn_rel">👨‍🏫 සහන කාලච්ඡේද (Relief)</button>
             <button class="btn-primary" style="background: linear-gradient(to bottom, #ec4899, #db2777); border-color:#be185d;" onclick="openClassTeacherModal()" data-i18n="btn_ct">👑 පන්තිභාර ගුරුවරුන්</button>
             <button class="btn-primary btn-summary" onclick="openSummaryModal()" data-i18n="btn_sum">📊 කාලච්ඡේද සාරාංශය (Workload)</button>
+            <button class="btn-primary" style="background: linear-gradient(to bottom, #6366f1, #4f46e5); border-color:#4338ca;" onclick="openAllOverviewModal()" data-i18n="btn_all_overview">📋 සියලුම විස්තර (ගුරු / පන්ති / විෂය)</button>
             <button class="btn-primary btn-print-menu" onclick="openPrintModal()" data-i18n="btn_prt">🖨️ මුද්‍රණය කිරීම (Print)</button>
             <button class="btn-primary btn-data" onclick="openDataModal()" data-i18n="btn_data">⚙️ ඇතුළත් කළ දත්ත / Backup</button>
             
@@ -623,13 +792,13 @@
         // --- I18N Language Dictionary ---
         const langDict = {
             si: {
-                appTitle: "School Timetable V2.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_tea: "🧑‍🏫 ගුරුවරයා අනුව", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත තෝරන්න!", alert_no_data: "දත්ත නොමැත", excel_desc: "බොහෝ දත්ත තිබේ නම් පහත Excel ක්‍රමය භාවිතා කරන්න.", btn_excel_up: "📊 Excel හරහා දත්ත ඇතුළත් කරන්න", btn_excel_down: "📥 Excel Template එක", load_msg_title: "කාලසටහන සැකසෙමින් පවතී...", load_msg_sub: "කරුණාකර රැඳී සිටින්න.", tt_pattern: "කාලසටහන් රටාව:", pat_std: "සාමාන්‍ය (දිනකට කාලච්ඡේද 8)", pat_mus: "මුස්ලිම් පාසල් (සඳුදා-බ්‍රහස්පතින්දා 9, සිකුරාදා 4)", att_time: "නාමලේඛන වේලාව", p9: "9 වැනි කාලච්ඡේදය", btn_time_set: "⏰ කාලච්ඡේද වේලාවන් සකසන්න", mod_time_t: "⏰ කාලච්ඡේද වේලාවන්", btn_save_time: "💾 වෙනස්කම් Save කරන්න", lbl_join_sub: "විෂයයන් Join:", sel_subs: "-- විෂයයන් තෝරන්න --", btn_join_sub: "+ විෂයයන් Join කරන්න", msg_sel_2_sub: "කරුණාකර විෂයයන් 2ක් හෝ වැඩි ගණනක් තෝරන්න.", msg_join_succ: "විෂයයන් සාර්ථකව Join කරන ලදී!", msg_join_ext: "මෙම විෂය සංයෝජනය දැනටමත් පවතී!", alert_lock_success: "කාලසටහන සාර්ථකව Lock කරන ලදී. දැන් අතින් වෙනස්කම් සිදු කළ නොහැක.", alert_unlock_success: "කාලසටහන Unlock කරන ලදී. දැන් ඔබට කාඩ්පත් අතින් වෙනස් කළ හැක.", alert_locked_warn: "කාලසටහන Lock කර ඇත. කරුණාකර එය Unlock කරන්න.", alert_drag_fail: "ගුරුවරයා එම කාලච්ඡේදයේ වෙනත් පන්තියක කාර්යබහුල බැවින් හෝ අවහිර කර ඇති බැවින් මෙලෙස මාරු කළ නොහැක!", msg_backup_succ: "Backup එක සාර්ථකව Save කරන ලදී!", msg_save_err: "Save කිරීමේදී දෝෂයක් මතු විය!", msg_invalid_backup: "මෙය වලංගු Backup ගොනුවක් නොවේ!", msg_err_read: "ගොනුව කියවීමේදී දෝෂයක් මතු විය!", msg_excel_err: "SheetJS library නිවැරදිව load වී නොමැත.", msg_imp_succ: "සාර්ථකව දත්ත ඇතුළත් කරන ලදී!", msg_imp_fail: "දත්ත කිසිවක් ඇතුළත් නොවිණි.", prompt_edit: "නව අගය ඇතුළත් කරන්න", conf_del: "මෙය මකා දැමීමට අවශ්‍යද?", title_locked: "🔒 අගුළු දමා ඇත", title_unlocked: "🔓 විවෘත කර ඇත", title_warn: "⚠️ අනතුරු ඇඟවීමයි", btn_ok: "හරි", btn_cancel: "අවලංගු කරන්න", btn_yes: "ඔව්", btn_no: "නැත", btn_lock: "🔒 කාලසටහන Lock කරන්න", btn_unlock: "🔓 කාලසටහන Unlock කරන්න" 
+                appTitle: "School Timetable V2.0", sch_details: "🏢 පාසලේ විස්තර", sch_name_ph: "පාසලේ නම මෙහි ඇතුළත් කරන්න", yr_ph: "වර්ෂය (උදා: 2027)", trm_def: "-- වාරය --", t1: "1 වන වාරය", t2: "2 වන වාරය", t3: "3 වන වාරය", main_settings: "⚙️ ප්‍රධාන සැකසුම් (Settings)", int_time: "විවේක කාලය:", aft_4: "කාලච්ඡේද 4 කට පසුව", aft_5: "කාලච්ඡේද 5 කට පසුව", btn_gen: "⚡ ස්වයංක්‍රීයව කාලසටහන සකසන්න", btn_att: "📅 ගුරු පැමිණීම (Attendance)", btn_rel: "👨‍🏫 සහන කාලච්ඡේද (Relief)", btn_ct: "👑 පන්තිභාර ගුරුවරුන්", btn_sum: "📊 කාලච්ඡේද සාරාංශය (Workload)", btn_prt: "🖨️ මුද්‍රණය කිරීම (Print)", btn_data: "⚙️ ඇතුළත් කළ දත්ත / Backup", basic_data: "👨‍🏫 මූලික දත්ත එක් කරන්න", grd_ph: "උදා: 6, 7-A", sub_ph: "උදා: ගණිතය", tea_ph: "උදා: නිමල් සර්", lbl_grd: "ශ්‍රේණිය:", lbl_sub: "විෂයය:", lbl_tea: "ගුරුවරයා:", lbl_is_ct: "පන්තිභාරද?", btn_add_cls: "+ ශ්‍රේණිය එක් කරන්න", btn_add_sub: "+ විෂයය එක් කරන්න", btn_add_tea: "+ ගුරුවරයා එක් කරන්න", teach_const: "🛑 ගුරු නිදහස්/අවහිර කාල සීමාවන්", lbl_day: "දවස:", lbl_per: "කාලච්ඡේදය:", all_day: "සම්පූර්ණ දිනයම නිදහස්", p1: "1 වැනි කාලච්ඡේදය", p2: "2 වැනි කාලච්ඡේදය", p3: "3 වැනි කාලච්ඡේදය", p4: "4 වැනි කාලච්ඡේදය", p5: "5 වැනි කාලච්ඡේදය", p6: "6 වැනි කාලච්ඡේදය", p7: "7 වැනි කාලච්ඡේදය", p8: "8 වැනි කාලච්ඡේදය", btn_add_const: "+ නිදහස් කාලය යොදන්න", teach_rules: "⚙️ ඉගැන්වීම් නීති සැකසීම", lbl_type: "වර්ගය:", type_core: "සාමාන්‍ය විෂයය", type_basket: "කාණ්ඩ විෂයය (Basket)", lbl_pcount: "කාලච්ඡේද ගණන:", btn_add_rule: "+ නීතිය එක් කරන්න", btn_add_to_b: "+ කාණ්ඩයට එක් කරන්න", btn_add_b_rule: "+ කාණ්ඩ නීතිය එක් කරන්න", added_rules: "සකසන ලද නීති ලැයිස්තුව", def_sch: "ඔබේ පාසලේ නම", tt_title: "පාසල් කාලසටහන", v_tea: "🧑‍🏫 ගුරුවරයා අනුව", v_cls: "📚 පන්තිය අනුව", v_day: "🏫 දවස අනුව", v_all: "🌐 සම්පූර්ණ (Master)", mon: "සඳුදා", tue: "අඟහරුවාදා", wed: "බදාදා", thu: "බ්‍රහස්පතින්දා", fri: "සිකුරාදා", int_txt: "විවේක කාලය (Interval)", att_txt: "නාමලේඛන ලකුණු කිරීම", emp_txt: "- හිස් -", per_txt: "කාලච්ඡේද", grd_txt: "ශ්‍රේණිය", period_short: "කා:", yr_txt: "වර්ෂය", cls_tt: "ශ්‍රේණියේ කාලසටහන", tea_tt: "- ගුරු කාලසටහන", sel_classes: "-- පන්ති තෝරන්න --", mod_att_t: "📅 ගුරු පැමිණීම", mod_att_d: "අද දින නොපැමිණි ගුරුවරුන් ලකුණු කරන්න. මෙය සහන ලබාදීමේදී ප්‍රයෝජනවත් වේ.", mod_ct_t: "👑 පන්තිභාර ගුරුවරුන්", mod_ct_d: "ගුරුවරුන් මාරුවී යාමේදී හෝ පන්තිභාරකම් වෙනස් වීමේදී, පහත ලැයිස්තුවෙන් නව ගුරුවරයා තෝරන්න.", mod_sum_t: "📊 කාලච්ඡේද සාරාංශය", mod_sum_d: "ගුරුවරුන්ගේ සහ පන්තිවල සතියේ මුළු කාලච්ඡේද ප්‍රමාණය මෙහි දැක්වේ.", mod_sum_tea: "🧑‍🏫 ගුරු කාලච්ඡේද ප්‍රමාණය", mod_sum_cls: "📚 පන්ති කාලච්ඡේද ප්‍රමාණය", mod_rel_t: "👨‍🏫 සහන කාලච්ඡේද (Relief)", mod_rel_warn: "⚠️ සහන අවශ්‍ය පන්ති (නොපැමිණි ගුරුවරුන්ගේ)", mod_rel_man: "අතින් සහන යෙදීම (Manual Assignment):", mod_rel_stat: "දත්ත පරීක්ෂා කරමින්...", btn_add_rel: "+ සහනය එක් කරන්න", mod_rel_list: "ලබා දී ඇති සහන ලැයිස්තුව", btn_prt_rel: "🖨️ සහන ලැයිස්තුව මුද්‍රණය / PDF", mod_prt_t: "🖨️ මුද්‍රණ මෙනුව", mod_prt_leg: "පිටු සැකසුම (Print Layout)", mod_prt_1: "1ක් පෙන්වන්න (A4)", mod_prt_2: "2ක් පෙන්වන්න", mod_prt_4: "4ක් පෙන්වන්න", mod_prt_desc: "මුද්‍රණය කිරීමට අවශ්‍ය කාලසටහන් වර්ගය තෝරන්න:", btn_prt_m: "🏫 සම්පූර්ණ ප්‍රධාන කාලසටහන (Master View)", btn_prt_c: "📚 සියලුම පන්ති කාලසටහන්", btn_prt_t: "🧑‍🏫 සියලුම ගුරුවරුන්ගේ කාලසටහන්", mod_dat_t: "⚙️ දත්ත කළමනාකරණය", btn_backup: "💾 දත්ත Save කරන්න (Backup)", btn_restore: "📂 දත්ත Restore කරන්න", btn_clear: "⚠️ සියලුම දත්ත මකා දමන්න", success_msg: "කාලසටහන සාර්ථකව<br>සැකසී අවසන්!", load_msg: "පද්ධතිය සකසමින් පවතී. කරුණාකර රැඳී සිටින්න.", err_rule: "කරුණාකර පළමුව නීති ඇතුළත් කරන්න!", err_fill: "කරුණාකර සියලුම දත්ත තෝරන්න!", alert_no_data: "දත්ත නොමැත", excel_desc: "බොහෝ දත්ත තිබේ නම් පහත Excel ක්‍රමය භාවිතා කරන්න.", btn_excel_up: "📊 Excel හරහා දත්ත ඇතුළත් කරන්න", btn_excel_down: "📥 Excel Template එක", load_msg_title: "කාලසටහන සැකසෙමින් පවතී...", load_msg_sub: "කරුණාකර රැඳී සිටින්න.", tt_pattern: "කාලසටහන් රටාව:", pat_std: "සාමාන්‍ය (දිනකට කාලච්ඡේද 8)", pat_mus: "මුස්ලිම් පාසල් (සඳුදා-බ්‍රහස්පතින්දා 9, සිකුරාදා 4)", att_time: "නාමලේඛන වේලාව", p9: "9 වැනි කාලච්ඡේදය", btn_time_set: "⏰ කාලච්ඡේද වේලාවන් සකසන්න", mod_time_t: "⏰ කාලච්ඡේද වේලාවන්", btn_save_time: "💾 වෙනස්කම් Save කරන්න", lbl_join_sub: "විෂයයන් Join:", sel_subs: "-- විෂයයන් තෝරන්න --", btn_join_sub: "+ විෂයයන් Join කරන්න", msg_sel_2_sub: "කරුණාකර විෂයයන් 2ක් හෝ වැඩි ගණනක් තෝරන්න.", msg_join_succ: "විෂයයන් සාර්ථකව Join කරන ලදී!", msg_join_ext: "මෙම විෂය සංයෝජනය දැනටමත් පවතී!", alert_lock_success: "කාලසටහන සාර්ථකව Lock කරන ලදී. දැන් අතින් වෙනස්කම් සිදු කළ නොහැක.", alert_unlock_success: "කාලසටහන Unlock කරන ලදී. දැන් ඔබට කාඩ්පත් අතින් වෙනස් කළ හැක.", alert_locked_warn: "කාලසටහන Lock කර ඇත. කරුණාකර එය Unlock කරන්න.", alert_drag_fail: "ගුරුවරයා එම කාලච්ඡේදයේ වෙනත් පන්තියක කාර්යබහුල බැවින් හෝ අවහිර කර ඇති බැවින් මෙලෙස මාරු කළ නොහැක!", msg_backup_succ: "Backup එක සාර්ථකව Save කරන ලදී!", msg_save_err: "Save කිරීමේදී දෝෂයක් මතු විය!", msg_invalid_backup: "මෙය වලංගු Backup ගොනුවක් නොවේ!", msg_err_read: "ගොනුව කියවීමේදී දෝෂයක් මතු විය!", msg_excel_err: "SheetJS library නිවැරදිව load වී නොමැත.", msg_imp_succ: "සාර්ථකව දත්ත ඇතුළත් කරන ලදී!", msg_imp_fail: "දත්ත කිසිවක් ඇතුළත් නොවිණි.", prompt_edit: "නව අගය ඇතුළත් කරන්න", conf_del: "මෙය මකා දැමීමට අවශ්‍යද?", title_locked: "🔒 අගුළු දමා ඇත", title_unlocked: "🔓 විවෘත කර ඇත", title_warn: "⚠️ අනතුරු ඇඟවීමයි", btn_ok: "හරි", btn_cancel: "අවලංගු කරන්න", btn_yes: "ඔව්", btn_no: "නැත", btn_lock: "🔒 කාලසටහන Lock කරන්න", btn_unlock: "🔓 කාලසටහන Unlock කරන්න", alert_swap_fail: "නීති උල්ලංඝනය වන බැවින් මෙතැනට මාරු කළ නොහැක! (ගුරු අවහිරතාවක් හෝ විෂය දින 5ට බෙදීමේ ගැටලුවක්)", btn_all_overview: "📋 සියලුම විස්තර (ගුරු / පන්ති / විෂය)", mod_all_t: "📋 සියලුම ඉගැන්වීම් විස්තර (සංස්කරණය කළ හැක)", mod_all_d: "ගුරුවරුන්, පන්ති, විෂයයන් සහ කාලච්ඡේද ගණන සියල්ල මෙහි එකට දැක්වේ. ඕනෑම පේළියක් Edit (✏️) කර වෙනස් කළ හැක.", ph_search_all: "🔍 ගුරුවරයා, පන්තිය හෝ විෂය සොයන්න...", col_action: "ක්‍රියාව", lbl_subj_short: "විෂය:", prt_tip: "💡 මුද්‍රණ කවුළුව විවෘත වූ පසු Printer / Destination තුළින් ඔබගේ මුද්‍රණ යන්ත්‍රය හෝ <b>Save as PDF</b> තෝරාගත හැක. (වර්ණ ලබාගැනීමට Background graphics සක්‍රීය කරන්න.)" 
             },
             en: {
-                appTitle: "School Timetable V2.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_tea: "🧑‍🏫 By Teacher", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data", excel_desc: "For bulk data, use the Excel method below.", btn_excel_up: "📊 Upload Data via Excel", btn_excel_down: "📥 Download Excel Template", load_msg_title: "Generating Timetable...", load_msg_sub: "Please wait while we process.", tt_pattern: "Timetable Pattern:", pat_std: "Standard (8 periods/day)", pat_mus: "Muslim Schools (Mon-Thu 9, Fri 4)", att_time: "Registration Time", p9: "Period 9", btn_time_set: "⏰ Set Period Times", mod_time_t: "⏰ Period Times", btn_save_time: "💾 Save Changes", lbl_join_sub: "Join Subjects:", sel_subs: "-- Select Subjects --", btn_join_sub: "+ Join Subjects", msg_sel_2_sub: "Please select 2 or more subjects.", msg_join_succ: "Subjects joined successfully!", msg_join_ext: "This subject combination already exists!", alert_lock_success: "Timetable successfully locked. Manual changes are disabled.", alert_unlock_success: "Timetable unlocked. You can now drag and drop cards.", alert_locked_warn: "Timetable is locked. Please unlock it first.", alert_drag_fail: "Cannot swap! The teacher is busy in another class or blocked during this period.", msg_backup_succ: "Backup saved successfully!", msg_save_err: "Error occurred while saving!", msg_invalid_backup: "Invalid Backup file!", msg_err_read: "Error reading file!", msg_excel_err: "SheetJS library is not loaded properly.", msg_imp_succ: "Data imported successfully!", msg_imp_fail: "No valid data found to import.", prompt_edit: "Enter new value for", conf_del: "Are you sure you want to delete", title_locked: "🔒 Locked", title_unlocked: "🔓 Unlocked", title_warn: "⚠️ Warning", btn_ok: "OK", btn_cancel: "Cancel", btn_yes: "Yes", btn_no: "No", btn_lock: "🔒 Lock Timetable", btn_unlock: "🔓 Unlock Timetable" 
+                appTitle: "School Timetable V2.0", sch_details: "🏢 School Details", sch_name_ph: "Enter School Name Here", yr_ph: "Year (e.g. 2027)", trm_def: "-- Term --", t1: "Term 1", t2: "Term 2", t3: "Term 3", main_settings: "⚙️ Main Settings", int_time: "Interval After:", aft_4: "4 Periods", aft_5: "5 Periods", btn_gen: "⚡ Auto Generate Timetable", btn_att: "📅 Teacher Attendance", btn_rel: "👨‍🏫 Relief Assignment", btn_ct: "👑 Class Teachers", btn_sum: "📊 Workload Summary", btn_prt: "🖨️ Print Timetables", btn_data: "⚙️ Manage Data / Backup", basic_data: "👨‍🏫 Add Basic Data", grd_ph: "e.g., 6, 7-A", sub_ph: "e.g., Mathematics", tea_ph: "e.g., Mr. Nimal", lbl_grd: "Grade:", lbl_sub: "Subject:", lbl_tea: "Teacher:", lbl_is_ct: "Class Teacher?", btn_add_cls: "+ Add Grade", btn_add_sub: "+ Add Subject", btn_add_tea: "+ Add Teacher", teach_const: "🛑 Teacher Constraints", lbl_day: "Day:", lbl_per: "Period:", all_day: "Free All Day", p1: "Period 1", p2: "Period 2", p3: "Period 3", p4: "Period 4", p5: "Period 5", p6: "Period 6", p7: "Period 7", p8: "Period 8", btn_add_const: "+ Add Constraint", teach_rules: "⚙️ Teaching Rules", lbl_type: "Type:", type_core: "Core Subject", type_basket: "Basket Subject", lbl_pcount: "Periods Count:", btn_add_rule: "+ Add Rule", btn_add_to_b: "+ Add to Basket", btn_add_b_rule: "+ Add Basket Rule", added_rules: "Added Rules List", def_sch: "Your School Name", tt_title: "School Timetable", v_tea: "🧑‍🏫 By Teacher", v_cls: "📚 By Class", v_day: "🏫 By Day", v_all: "🌐 Master View", mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", int_txt: "Interval", att_txt: "Registration", emp_txt: "- Empty -", per_txt: "Periods", grd_txt: "Grade", period_short: "P", yr_txt: "Year", cls_tt: "Timetable", tea_tt: "- Timetable", sel_classes: "-- Select Classes --", mod_att_t: "📅 Teacher Attendance", mod_att_d: "Mark absent teachers today. Useful for assigning reliefs.", mod_ct_t: "👑 Class Teachers", mod_ct_d: "Assign or change class teachers easily from the list below.", mod_sum_t: "📊 Workload Summary", mod_sum_d: "Total period count for teachers and classes.", mod_sum_tea: "🧑‍🏫 Teacher Periods", mod_sum_cls: "📚 Class Periods", mod_rel_t: "👨‍🏫 Relief Assignment", mod_rel_warn: "⚠️ Relief Required (Absent Teachers)", mod_rel_man: "Manual Relief Assignment:", mod_rel_stat: "Checking data...", btn_add_rel: "+ Assign Relief", mod_rel_list: "Assigned Relief List", btn_prt_rel: "🖨️ Print Relief List / PDF", mod_prt_t: "🖨️ Print Menu", mod_prt_leg: "Print Layout", mod_prt_1: "Show 1 per page (A4)", mod_prt_2: "Show 2 per page", mod_prt_4: "Show 4 per page", mod_prt_desc: "Select the type of timetable to print:", btn_prt_m: "🏫 Full Master Timetable", btn_prt_c: "📚 All Class Timetables", btn_prt_t: "🧑‍🏫 All Teacher Timetables", mod_dat_t: "⚙️ Data Management", btn_backup: "💾 Backup Data", btn_restore: "📂 Restore Data", btn_clear: "⚠️ Clear All Data", success_msg: "Timetable Generated<br>Successfully!", load_msg: "Processing system. Please wait.", err_rule: "Please add rules first!", err_fill: "Please fill all details!", alert_no_data: "No Data", excel_desc: "For bulk data, use the Excel method below.", btn_excel_up: "📊 Upload Data via Excel", btn_excel_down: "📥 Download Excel Template", load_msg_title: "Generating Timetable...", load_msg_sub: "Please wait while we process.", tt_pattern: "Timetable Pattern:", pat_std: "Standard (8 periods/day)", pat_mus: "Muslim Schools (Mon-Thu 9, Fri 4)", att_time: "Registration Time", p9: "Period 9", btn_time_set: "⏰ Set Period Times", mod_time_t: "⏰ Period Times", btn_save_time: "💾 Save Changes", lbl_join_sub: "Join Subjects:", sel_subs: "-- Select Subjects --", btn_join_sub: "+ Join Subjects", msg_sel_2_sub: "Please select 2 or more subjects.", msg_join_succ: "Subjects joined successfully!", msg_join_ext: "This subject combination already exists!", alert_lock_success: "Timetable successfully locked. Manual changes are disabled.", alert_unlock_success: "Timetable unlocked. You can now drag and drop cards.", alert_locked_warn: "Timetable is locked. Please unlock it first.", alert_drag_fail: "Cannot swap! The teacher is busy in another class or blocked during this period.", msg_backup_succ: "Backup saved successfully!", msg_save_err: "Error occurred while saving!", msg_invalid_backup: "Invalid Backup file!", msg_err_read: "Error reading file!", msg_excel_err: "SheetJS library is not loaded properly.", msg_imp_succ: "Data imported successfully!", msg_imp_fail: "No valid data found to import.", prompt_edit: "Enter new value for", conf_del: "Are you sure you want to delete", title_locked: "🔒 Locked", title_unlocked: "🔓 Unlocked", title_warn: "⚠️ Warning", btn_ok: "OK", btn_cancel: "Cancel", btn_yes: "Yes", btn_no: "No", btn_lock: "🔒 Lock Timetable", btn_unlock: "🔓 Unlock Timetable", alert_swap_fail: "Cannot move here due to rule violation! (Teacher conflict or 5-day subject spread rule)", btn_all_overview: "📋 All Details (Teacher / Class / Subject)", mod_all_t: "📋 All Teaching Assignments (Editable)", mod_all_d: "View all teachers, classes, subjects, and period counts together. Click Edit (✏️) on any row to modify.", ph_search_all: "🔍 Search teacher, class, or subject...", col_action: "Action", lbl_subj_short: "Subject:", prt_tip: "💡 In the print dialog, choose your installed <b>Printer</b> or <b>Save as PDF</b> under Destination. (Enable Background graphics for colors.)" 
             },
             ta: {
-                appTitle: "School Timetable V2.0", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_tea: "🧑‍🏫 ஆசிரியர் வாரியாக", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை", excel_desc: "அதிக தரவுகள் இருந்தால், கீழே உள்ள Excel முறையைப் பயன்படுத்தவும்.", btn_excel_up: "📊 Excel மூலம் தரவை ஏற்றவும்", btn_excel_down: "📥 Excel Template", load_msg_title: "நேர அட்டவணை உருவாக்கப்படுகிறது...", load_msg_sub: "தயவுசெய்து காத்திருக்கவும்.", tt_pattern: "நேர அட்டவணை முறை:", pat_std: "சாதாரண (நாளொன்றுக்கு 8)", pat_mus: "முஸ்லிம் பாடசாலைகள் (திங்-வியா 9, வெள்ளி 6)", att_time: "வருகை பதிவு நேரம்", p9: "பாடம் 9", btn_time_set: "⏰ பாட நேரங்களை அமைக்கவும்", mod_time_t: "⏰ பாட நேரங்கள்", btn_save_time: "💾 மாற்றங்களைச் சேமிக்க", lbl_join_sub: "பாடங்களை இணைக்க:", sel_subs: "-- பாடங்களைத் தேர்ந்தெடுக்கவும் --", btn_join_sub: "+ பாடங்களை இணைக்க", msg_sel_2_sub: "தயவுசெய்து 2 அல்லது அதற்கு மேற்பட்ட பாடங்களைத் தேர்ந்தெடுக்கவும்.", msg_join_succ: "பாடங்கள் வெற்றிகரமாக இணைக்கப்பட்டன!", msg_join_ext: "இந்த பாட சேர்க்கை ஏற்கனவே உள்ளது!", alert_lock_success: "நேர அட்டவணை பூட்டப்பட்டது. மாற்றங்கள் செய்ய முடியாது.", alert_unlock_success: "நேர அட்டவணை திறக்கப்பட்டது. நீங்கள் மாற்றலாம்.", alert_locked_warn: "நேர அட்டவணை பூட்டப்பட்டுள்ளது. தயவுசெய்து திறக்கவும்.", alert_drag_fail: "மாற்ற முடியாது! ஆசிரியர் வேறு வகுப்பில் உள்ளார் அல்லது தடை செய்யப்பட்டுள்ளார்.", msg_backup_succ: "காப்பு வெற்றிகரமாக சேமிக்கப்பட்டது!", msg_save_err: "சேமிப்பதில் பிழை!", msg_invalid_backup: "தவறான காப்பு கோப்பு!", msg_err_read: "கோப்பை படிப்பதில் பிழை!", msg_excel_err: "SheetJS சரியாக ஏற்றப்படவில்லை.", msg_imp_succ: "தரவு வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது!", msg_imp_fail: "இறக்குமதி செய்ய தரவு இல்லை.", prompt_edit: "புதிய மதிப்பை உள்ளிடவும்", conf_del: "இதை அழிக்க விரும்புகிறீர்களா", title_locked: "🔒 பூட்டப்பட்டது", title_unlocked: "🔓 திறக்கப்பட்டது", title_warn: "⚠️ எச்சரிக்கை", btn_ok: "சரி", btn_cancel: "ரத்துசெய்", btn_yes: "ஆம்", btn_no: "இல்லை", btn_lock: "🔒 அட்டவணையை பூட்டு", btn_unlock: "🔓 அட்டவணையை திற" 
+                appTitle: "School Timetable V2.0", sch_details: "🏢 பாடசாலை விவரங்கள்", sch_name_ph: "பாடசாலை பெயரை உள்ளிடவும்", yr_ph: "ஆண்டு (உ-ம்: 2027)", trm_def: "-- தவணை --", t1: "1ஆம் தவணை", t2: "2ஆம் தவணை", t3: "3ஆம் தவணை", main_settings: "⚙️ பிரதான அமைப்புகள்", int_time: "இடைவேளை:", aft_4: "4 பாடங்களுக்குப் பிறகு", aft_5: "5 பாடங்களுக்குப் பிறகு", btn_gen: "⚡ அட்டவணையை உருவாக்கு", btn_att: "📅 ஆசிரியர் வரவு", btn_rel: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", btn_ct: "👑 வகுப்பு ஆசிரியர்கள்", btn_sum: "📊 பணிச்சுமை சுருக்கம்", btn_prt: "🖨️ அச்சிடு", btn_data: "⚙️ தரவு நிர்வகிப்பு / காப்பு", basic_data: "👨‍🏫 அடிப்படை தரவு", grd_ph: "உ-ம்: 6, 7-A", sub_ph: "உ-ம்: கணிதம்", tea_ph: "உ-ம்: நிமல்", lbl_grd: "தரம்:", lbl_sub: "பாடம்:", lbl_tea: "ஆசிரியர்:", lbl_is_ct: "வகுப்பு ஆசிரியரா?", btn_add_cls: "+ தரம் சேர்", btn_add_sub: "+ பாடம் சேர்", btn_add_tea: "+ ஆசிரியர் சேர்", teach_const: "🛑 ஆசிரியர் கட்டுப்பாடுகள்", lbl_day: "நாள்:", lbl_per: "பாடம்:", all_day: "முழு நாள் இலவசம்", p1: "பாடம் 1", p2: "பாடம் 2", p3: "பாடம் 3", p4: "பாடம் 4", p5: "பாடம் 5", p6: "பாடம் 6", p7: "பாடம் 7", p8: "பாடம் 8", btn_add_const: "+ கட்டுப்பாடு சேர்", teach_rules: "⚙️ கற்பித்தல் விதிகள்", lbl_type: "வகை:", type_core: "பிரதான பாடம்", type_basket: "தொகுதி பாடம்", lbl_pcount: "பாடங்களின் எண்ணிக்கை:", btn_add_rule: "+ விதி சேர்", btn_add_to_b: "+ தொகுதிக்கு சேர்", btn_add_b_rule: "+ தொகுதி விதி சேர்", added_rules: "சேர்க்கப்பட்ட விதிகள்", def_sch: "உங்கள் பாடசாலை பெயர்", tt_title: "நேர அட்டவணை", v_tea: "🧑‍🏫 ஆசிரியர் வாரியாக", v_cls: "📚 வகுப்பு வாரியாக", v_day: "🏫 நாள் வாரியாக", v_all: "🌐 பிரதான பார்வை", mon: "திங்கள்", tue: "செவ்வாய்", wed: "புதன்", thu: "வியாழன்", fri: "வெள்ளி", int_txt: "இடைவேளை", att_txt: "வருகை பதிவு", emp_txt: "- காலி -", per_txt: "பாடங்கள்", grd_txt: "தரம்", period_short: "பா:", yr_txt: "ஆண்டு", cls_tt: "நேர அட்டவணை", tea_tt: "- அட்டவணை", sel_classes: "-- வகுப்புகளைத் தேர்ந்தெடுக்கவும் --", mod_att_t: "📅 ஆசிரியர் வரவு", mod_att_d: "இன்று வராத ஆசிரியர்களைக் குறிக்கவும். மாற்று ஏற்பாட்டுக்கு இது உதவும்.", mod_ct_t: "👑 வகுப்பு ஆசிரியர்கள்", mod_ct_d: "வகுப்பு ஆசிரியர்களை மாற்ற அல்லது நியமிக்க கீழே உள்ள பட்டியலைப் பயன்படுத்தவும்.", mod_sum_t: "📊 பணிச்சுமை சுருக்கம்", mod_sum_d: "ஆசிரியர் மற்றும் வகுப்புகளுக்கான மொத்த பாடங்களின் எண்ணிக்கை.", mod_sum_tea: "🧑‍🏫 ஆசிரியர் பாடங்கள்", mod_sum_cls: "📚 வகுப்பு பாடங்கள்", mod_rel_t: "👨‍🏫 மாற்று ஏற்பாடு (Relief)", mod_rel_warn: "⚠️ மாற்று தேவைப்படும் வகுப்புகள்", mod_rel_man: "கையால் மாற்று ஏற்பாடு செய்தல்:", mod_rel_stat: "தரவை சரிபார்க்கிறது...", btn_add_rel: "+ மாற்று சேர்", mod_rel_list: "வழங்கப்பட்ட மாற்று பட்டியல்", btn_prt_rel: "🖨️ மாற்று பட்டியலை அச்சிடு / PDF", mod_prt_t: "🖨️ அச்சு மெனு", mod_prt_leg: "பக்க அமைப்பு (Print Layout)", mod_prt_1: "1 பக்கத்தில் காட்டவும்", mod_prt_2: "2 பக்கத்தில் காட்டவும்", mod_prt_4: "4 பக்கத்தில் காட்டவும்", mod_prt_desc: "அச்சிட வேண்டிய அட்டவணை வகையைத் தேர்ந்தெடுக்கவும்:", btn_prt_m: "🏫 பிரதான நேர அட்டவணை", btn_prt_c: "📚 அனைத்து வகுப்பு அட்டவணைகள்", btn_prt_t: "🧑‍🏫 அனைத்து ஆசிரியர் அட்டவணைகள்", mod_dat_t: "⚙️ தரவு நிர்வகிப்பு", btn_backup: "💾 தரவைச் சேமி (Backup)", btn_restore: "📂 தரவை மீட்டெடு (Restore)", btn_clear: "⚠️ அனைத்து தரவையும் அழி", success_msg: "நேர அட்டவணை வெற்றிகரமாக<br>உருவாக்கப்பட்டது!", load_msg: "முறைமை செயலாக்கப்படுகிறது. காத்திருக்கவும்.", err_rule: "தயவுசெய்து விதிகளை முதலில் சேர்க்கவும்!", err_fill: "அனைத்து தரவையும் உள்ளிடவும்!", alert_no_data: "தரவு இல்லை", excel_desc: "அதிக தரவுகள் இருந்தால், கீழே உள்ள Excel முறையைப் பயன்படுத்தவும்.", btn_excel_up: "📊 Excel மூலம் தரவை ஏற்றவும்", btn_excel_down: "📥 Excel Template", load_msg_title: "நேர அட்டவணை உருவாக்கப்படுகிறது...", load_msg_sub: "தயவுசெய்து காத்திருக்கவும்.", tt_pattern: "நேர அட்டவணை முறை:", pat_std: "சாதாரண (நாளொன்றுக்கு 8)", pat_mus: "முஸ்லிம் பாடசாலைகள் (திங்-வியா 9, வெள்ளி 6)", att_time: "வருகை பதிவு நேரம்", p9: "பாடம் 9", btn_time_set: "⏰ பாட நேரங்களை அமைக்கவும்", mod_time_t: "⏰ பாட நேரங்கள்", btn_save_time: "💾 மாற்றங்களைச் சேமிக்க", lbl_join_sub: "பாடங்களை இணைக்க:", sel_subs: "-- பாடங்களைத் தேர்ந்தெடுக்கவும் --", btn_join_sub: "+ பாடங்களை இணைக்க", msg_sel_2_sub: "தயவுசெய்து 2 அல்லது அதற்கு மேற்பட்ட பாடங்களைத் தேர்ந்தெடுக்கவும்.", msg_join_succ: "பாடங்கள் வெற்றிகரமாக இணைக்கப்பட்டன!", msg_join_ext: "இந்த பாட சேர்க்கை ஏற்கனவே உள்ளது!", alert_lock_success: "நேர அட்டவணை பூட்டப்பட்டது. மாற்றங்கள் செய்ய முடியாது.", alert_unlock_success: "நேர அட்டவணை திறக்கப்பட்டது. நீங்கள் மாற்றலாம்.", alert_locked_warn: "நேர அட்டவணை பூட்டப்பட்டுள்ளது. தயவுசெய்து திறக்கவும்.", alert_drag_fail: "மாற்ற முடியாது! ஆசிரியர் வேறு வகுப்பில் உள்ளார் அல்லது தடை செய்யப்பட்டுள்ளார்.", msg_backup_succ: "காப்பு வெற்றிகரமாக சேமிக்கப்பட்டது!", msg_save_err: "சேமிப்பதில் பிழை!", msg_invalid_backup: "தவறான காப்பு கோப்பு!", msg_err_read: "கோப்பை படிப்பதில் பிழை!", msg_excel_err: "SheetJS சரியாக ஏற்றப்படவில்லை.", msg_imp_succ: "தரவு வெற்றிகரமாக இறக்குமதி செய்யப்பட்டது!", msg_imp_fail: "இறக்குமதி செய்ய தரவு இல்லை.", prompt_edit: "புதிய மதிப்பை உள்ளிடவும்", conf_del: "இதை அழிக்க விரும்புகிறீர்களா", title_locked: "🔒 பூட்டப்பட்டது", title_unlocked: "🔓 திறக்கப்பட்டது", title_warn: "⚠️ எச்சரிக்கை", btn_ok: "சரி", btn_cancel: "ரத்துசெய்", btn_yes: "ஆம்", btn_no: "இல்லை", btn_lock: "🔒 அட்டவணையை பூட்டு", btn_unlock: "🔓 அட்டவணையை திற", alert_swap_fail: "விதி மீறல் காரணமாக இங்கு மாற்ற முடியாது! (ஆசிரியர் முரண்பாடு அல்லது 5-நாள் பாடம் பிரிப்பு விதி)", btn_all_overview: "📋 அனைத்து விவரங்கள் (ஆசிரியர் / வகுப்பு / பாடம்)", mod_all_t: "📋 அனைத்து கற்பித்தல் விவரங்கள் (திருத்தலாம்)", mod_all_d: "ஆசிரியர்கள், வகுப்புகள், பாடங்கள் மற்றும் பாட எண்ணிக்கையை ஒன்றாகப் பார்க்கலாம். திருத்த Edit (✏️) ஐ அழுத்தவும்.", ph_search_all: "🔍 ஆசிரியர், வகுப்பு அல்லது பாடத்தைத் தேடுங்கள்...", col_action: "செயல்", lbl_subj_short: "பாடம்:", prt_tip: "💡 அச்சு சாளரத்தில் உங்கள் <b>Printer</b> அல்லது <b>Save as PDF</b> ஐத் தேர்ந்தெடுக்கலாம். (வண்ணங்களுக்கு Background graphics ஐ இயக்கவும்.)" 
             }
         };
 
@@ -1105,32 +1274,43 @@
             renderClassTeacherList();
         }
 
+        function getTeacherSubjectsForClass(c, tea) {
+            if (!tea) return "-";
+            let subs = new Set();
+            teachingRules.forEach(r => {
+                let rClasses = r.grade.split(',').map(x => x.trim());
+                let rTeachers = r.teacher ? r.teacher.split(',').map(x => x.trim()) : [];
+                if (rClasses.includes(c) && rTeachers.includes(tea)) {
+                    subs.add(r.subject);
+                }
+            });
+            return subs.size > 0 ? Array.from(subs).join(', ') : "-";
+        }
+
         function renderClassTeacherList() {
             let html = '';
             classes.forEach(c => {
                 let currentCT = classTeacherMap[c] || "";
-                let ctSubject = "-";
-                if (currentCT) {
-                    let rule = teachingRules.find(r => r.grade.includes(c) && r.teacher.includes(currentCT));
-                    if (rule) ctSubject = rule.subject;
-                }
+                let ctSubject = getTeacherSubjectsForClass(c, currentCT);
 
-                let selectHtml = `<select style="width:auto; padding:4px; font-weight:bold; border-color:#db2777;" onchange="updateClassTeacher('${c}', this.value)">
+                let selectHtml = `<select style="width:auto; max-width:210px; padding:4px; font-weight:bold; border-color:#db2777;" onchange="updateClassTeacher('${c}', this.value)">
                     <option value="">-- - --</option>`;
                 masterTeachers.forEach(tea => {
                     let selected = (tea === currentCT) ? "selected" : "";
-                    selectHtml += `<option value="${tea}" ${selected}>${tea}</option>`;
+                    let tSubForClass = getTeacherSubjectsForClass(c, tea);
+                    let labelTxt = tSubForClass !== "-" ? `${tea} (${tSubForClass})` : tea;
+                    selectHtml += `<option value="${tea}" ${selected}>${labelTxt}</option>`;
                 });
                 selectHtml += `</select>`;
 
-                html += `<div class="rule-item" style="justify-content:space-between; padding:8px; border-color:#fbcfe8; background:#fdf2f8;">
+                html += `<div class="rule-item" style="justify-content:space-between; padding:8px; border-color:#fbcfe8; background:#fdf2f8; gap:8px;">
                             <div style="line-height:1.3;">
                                 <span style="font-weight:bold; color:#be185d; font-size:13px;">${c} ${t('grd_txt')}</span><br>
-                                <span style="font-size:10px; color:#6b7280; font-weight:bold;">විෂය: ${ctSubject}</span>
+                                <span style="font-size:10.5px; color:#374151; font-weight:bold;">${t('lbl_subj_short')} <span style="color:#1d4ed8;">${ctSubject}</span></span>
                             </div>
                             <div style="display:flex; gap:5px; align-items:center;">
                                 ${selectHtml}
-                                <button class="btn-delete" onclick="updateClassTeacher('${c}', '')" style="padding:4px 6px;" title="ඉවත් කරන්න">❌</button>
+                                <button class="btn-delete" onclick="updateClassTeacher('${c}', '')" style="padding:4px 6px;" title="Remove">❌</button>
                             </div>
                          </div>`;
             });
@@ -1142,6 +1322,113 @@
             else { delete classTeacherMap[c]; }
             saveData();
             initDropdowns();
+            renderClassTeacherList();
+            if(document.getElementById('dataModal').style.display === 'flex') renderDataModal();
+        }
+
+        
+        function openAllOverviewModal() {
+            document.getElementById('allDataOverviewModal').style.display = 'flex';
+            let searchInp = document.getElementById('searchAllOverview');
+            if (searchInp) searchInp.value = '';
+            renderAllOverviewTable();
+        }
+
+        function renderAllOverviewTable(editingId = null) {
+            let tbody = document.getElementById('allOverviewTableBody');
+            if (!tbody) return;
+            let q = (document.getElementById('searchAllOverview')?.value || '').toLowerCase().trim();
+            
+            let filtered = teachingRules.filter(r => {
+                if (!q) return true;
+                return (r.grade && r.grade.toLowerCase().includes(q)) ||
+                       (r.subject && r.subject.toLowerCase().includes(q)) ||
+                       (r.teacher && r.teacher.toLowerCase().includes(q));
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="padding:20px; color:gray; text-align:center;">${t('alert_no_data')}</td></tr>`;
+                return;
+            }
+
+            let rowsHtml = '';
+            filtered.forEach(r => {
+                if (editingId === r.id) {
+                    rowsHtml += `<tr style="background:#eef2ff;">
+                        <td style="border:1px solid #c7d2fe; padding:4px; position:static !important; width:auto !important; max-width:none !important; min-width:0 !important; background:#eef2ff !important;">
+                            <input type="text" id="ov_grade_${r.id}" value="${r.grade}" style="padding:4px; font-size:11px;">
+                        </td>
+                        <td style="border:1px solid #c7d2fe; padding:4px;">
+                            <input type="text" id="ov_subj_${r.id}" value="${r.subject}" style="padding:4px; font-size:11px;">
+                        </td>
+                        <td style="border:1px solid #c7d2fe; padding:4px;">
+                            <input type="text" id="ov_tea_${r.id}" value="${r.teacher}" style="padding:4px; font-size:11px;">
+                        </td>
+                        <td style="border:1px solid #c7d2fe; padding:4px;">
+                            <input type="number" id="ov_per_${r.id}" value="${r.periods}" min="1" max="10" style="padding:4px; font-size:11px; width:55px; margin-bottom:2px;"><br>
+                            <label style="font-size:10px; cursor:pointer;"><input type="checkbox" id="ov_dbl_${r.id}" ${r.isDouble ? 'checked' : ''}> Double</label>
+                        </td>
+                        <td style="border:1px solid #c7d2fe; padding:4px;">
+                            <div style="display:flex; gap:4px; justify-content:center;">
+                                <button class="btn-small" style="background:#10b981; border-color:#059669; width:auto; padding:4px 8px;" onclick="saveOverviewRow(${r.id})">💾</button>
+                                <button class="btn-small" style="background:#6b7280; border-color:#4b5563; width:auto; padding:4px 8px;" onclick="renderAllOverviewTable()">✖</button>
+                            </div>
+                        </td>
+                    </tr>`;
+                } else {
+                    let dblTag = r.isDouble ? ` <span style="background:#10b981; color:white; padding:1px 4px; border-radius:3px; font-size:9px;">D</span>` : '';
+                    rowsHtml += `<tr style="background:#ffffff;">
+                        <td style="border:1px solid #e5e7eb; padding:6px; font-weight:bold; color:#1e40af; position:static !important; width:auto !important; max-width:none !important; min-width:0 !important; background:#ffffff !important;">${r.grade}</td>
+                        <td style="border:1px solid #e5e7eb; padding:6px; font-weight:600;">${r.subject}</td>
+                        <td style="border:1px solid #e5e7eb; padding:6px;">${r.teacher}</td>
+                        <td style="border:1px solid #e5e7eb; padding:6px; font-weight:bold;">${r.periods}${dblTag}</td>
+                        <td style="border:1px solid #e5e7eb; padding:6px;">
+                            <div style="display:flex; gap:4px; justify-content:center;">
+                                <button class="btn-small" style="background:#f59e0b; border-color:#d97706; width:auto; padding:3px 7px;" onclick="renderAllOverviewTable(${r.id})" title="Edit">✏️</button>
+                                <button class="btn-delete" style="padding:3px 7px;" onclick="deleteOverviewRow(${r.id})" title="Delete">❌</button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }
+            });
+            tbody.innerHTML = rowsHtml;
+        }
+
+        function saveOverviewRow(id) {
+            let idx = teachingRules.findIndex(r => r.id === id);
+            if (idx === -1) return;
+            let g = document.getElementById('ov_grade_' + id).value.trim();
+            let s = document.getElementById('ov_subj_' + id).value.trim();
+            let tea = document.getElementById('ov_tea_' + id).value.trim();
+            let p = parseInt(document.getElementById('ov_per_' + id).value);
+            let dbl = document.getElementById('ov_dbl_' + id).checked;
+            if (!g || !s || !tea || !p) return;
+
+            teachingRules[idx].grade = g;
+            teachingRules[idx].subject = s;
+            teachingRules[idx].teacher = tea;
+            teachingRules[idx].periods = p;
+            teachingRules[idx].isDouble = dbl;
+
+            // Ensure any new class/teacher/subject is registered in master lists
+            g.split(',').forEach(x => { let v = x.trim(); if (v && !classes.includes(v)) classes.push(v); });
+            tea.split(',').forEach(x => { let v = x.trim(); if (v && !masterTeachers.includes(v)) masterTeachers.push(v); });
+            s.split('/').forEach(x => { let v = x.trim().replace(' (කාණ්ඩ)', '').replace(' (Basket)', ''); if (v && !masterSubjects.includes(v)) masterSubjects.push(v); });
+
+            saveData();
+            initDropdowns();
+            renderRules();
+            renderClassTeacherList();
+            renderAllOverviewTable();
+        }
+
+        async function deleteOverviewRow(id) {
+            if (!await customConfirm(t('conf_del') + "?")) return;
+            teachingRules = teachingRules.filter(r => r.id !== id);
+            saveData();
+            renderRules();
+            renderClassTeacherList();
+            renderAllOverviewTable();
         }
 
         function openSummaryModal() {
@@ -1179,6 +1466,7 @@
             document.getElementById('timeModal').style.display = 'none';
             document.getElementById('summaryModal').style.display = 'none';
             document.getElementById('classTeacherModal').style.display = 'none';
+            let ovModal = document.getElementById('allDataOverviewModal'); if(ovModal) ovModal.style.display = 'none';
         }
 
         function showSuccessAnimation() {
@@ -2197,7 +2485,7 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                 // Attempt Drop/Swap
                 let isValid = checkValidSwap(selectedSwapSource, d, p, c);
                 if (!isValid) {
-                    await customAlert("නීති උල්ලංඝනය වන බැවින් මෙතැනට මාරු කළ නොහැක! (ගුරු අවහිරතාවක් හෝ විෂය දින 5ට බෙදීමේ ගැටලුවක්)", "⚠️ අනතුරු ඇඟවීමයි");
+                    await customAlert(t("alert_swap_fail"), t("title_warn"));
                     clearHighlights();
                     selectedSwapSource = null;
                     return;
@@ -2500,11 +2788,59 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
             document.getElementById('mainTitle').innerText = title;
         }
 
+        function getPrintCellHTML(cellData, d, p, c, colspan=1) {
+            let colStr = colspan > 1 ? ` colspan="${colspan}"` : "";
+            if(!generatedTimetable || !generatedTimetable[d] || !generatedTimetable[d][p] || typeof generatedTimetable[d][p][c] === 'undefined') {
+                return `<td class="cell-empty"${colStr}></td>`;
+            }
+            let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.grade === c);
+            let rBtnText = t('btn_rel').split(' ');
+            let rWord = rBtnText.length > 1 ? rBtnText[1] : rBtnText[0];
+
+            if (cellData) {
+                if (relief) {
+                    return `<td${colStr} style="background-color:#fef2f2 !important;"><div class="card relief-card"><span class="card-subj">${cellData.subject || '-'}</span><span class="relief-text">(${rWord}: ${relief.reliefTeacher})</span></div></td>`;
+                } else {
+                    let color = getSubjectColor(cellData.subject || '');
+                    return `<td${colStr} style="background-color:${color} !important;"><div class="card" style="background-color:${color} !important;"><span class="card-subj">${cellData.subject || '-'}</span><span>(${cellData.teacher || '-'})</span></div></td>`;
+                }
+            } else {
+                if (relief) {
+                    return `<td${colStr} style="background-color:#fef2f2 !important;"><div class="card relief-card"><span class="card-subj">-</span><span class="relief-text">(${rWord}: ${relief.reliefTeacher})</span></div></td>`;
+                }
+                return `<td class="cell-empty"${colStr}></td>`;
+            }
+        }
+
+        function getAllTeachersForPrint() {
+            let teacherSet = new Set();
+            masterTeachers.forEach(tea => { if(tea && tea.trim()) teacherSet.add(tea.trim()); });
+            teachingRules.forEach(r => {
+                if(r.teacher) {
+                    r.teacher.split(',').forEach(tea => { if(tea && tea.trim()) teacherSet.add(tea.trim()); });
+                }
+            });
+            days.forEach(d => {
+                if(!generatedTimetable[d]) return;
+                for(let p=1; p<=9; p++) {
+                    if(!generatedTimetable[d][p]) continue;
+                    classes.forEach(c => {
+                        let cell = generatedTimetable[d][p][c];
+                        if(cell && cell.teacher) {
+                            cell.teacher.split(',').forEach(tea => { if(tea && tea.trim()) teacherSet.add(tea.trim()); });
+                        }
+                    });
+                }
+            });
+            return Array.from(teacherSet);
+        }
+
         async function triggerPrint(type) {
             if(classes.length === 0) return await customAlert(t('alert_no_data'));
             
-            let layoutSetting = parseInt(document.querySelector('input[name="printLayout"]:checked').value);
+            let layoutSetting = parseInt(document.querySelector('input[name="printLayout"]:checked').value) || 1;
             let intervalPos = parseInt(document.getElementById('intervalSetting').value) || 4;
+            let weekMax = getWeekMaxPeriods();
             closeModals();
             
             let pArea = document.getElementById('printArea');
@@ -2518,81 +2854,125 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
             else if(termVal === "2") termTextMapped = t('t2');
             else if(termVal === "3") termTextMapped = t('t3');
             
-            let termHtml1 = (yearStr || termTextMapped) ? `<div class="print-term-info">${yearStr ? yearStr + ' ' + t('yr_txt') : ''} ${yearStr && termTextMapped ? ' | ' : ''} ${termTextMapped ? termTextMapped : ''}</div>` : '';
-            let termHtml2 = (yearStr || termTextMapped) ? `<div class="print-term-info">${yearStr ? yearStr + ' ' + t('yr_txt') : ''} ${yearStr && termTextMapped ? ' | ' : ''} ${termTextMapped ? termTextMapped : ''}</div>` : '';
-            let termHtml4 = (yearStr || termTextMapped) ? `<div class="print-term-info">${yearStr ? yearStr + ' ' + t('yr_txt') : ''} ${yearStr && termTextMapped ? ' | ' : ''} ${termTextMapped ? termTextMapped : ''}</div>` : '';
+            let termHtml = (yearStr || termTextMapped) ? `<div class="print-term-info">${yearStr ? yearStr + ' ' + t('yr_txt') : ''} ${yearStr && termTextMapped ? ' | ' : ''} ${termTextMapped ? termTextMapped : ''}</div>` : '';
 
             let printHtml = "";
             let generatedItems = [];
 
             if (type === 'all_master') {
-                printHtml += `<div class="print-page layout-1"><div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml1}<h3 class="main-title">${t('v_all')}</h3>`;
-                printHtml += document.getElementById('mainTable').outerHTML;
-                printHtml += `<div class="print-footer">&copy; 2026 Kelum Konara | SmartSoft | School Timetable V2.0</div></div></div>`;
+                // Build complete Master Timetable cleanly (1 full day per A4 landscape page so every class and period is crisp and never cut off)
+                let colSpan = classes.length + 1;
+                days.forEach(d => {
+                    let maxPD = getMaxPeriods(d);
+                    let tbl = `<div class="print-page layout-1"><div class="timetable-box">`;
+                    tbl += `<h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${t('v_all')} - ${getDayName(d)}</h3>`;
+                    tbl += `<table><thead><tr><th>${t('per_txt')}</th>` + classes.map(c => `<th>${c}</th>`).join('') + `</tr></thead><tbody>`;
+                    for (let p = 1; p <= weekMax; p++) {
+                        tbl += `<tr class="period-row"><td><div style="font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:8px; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
+                        if (p > maxPD) {
+                            classes.forEach(() => { tbl += `<td class="cell-empty" style="background:#d1d5db !important;"></td>`; });
+                        } else {
+                            for (let i = 0; i < classes.length; i++) {
+                                let c = classes[i];
+                                let cell = generatedTimetable[d] && generatedTimetable[d][p] ? generatedTimetable[d][p][c] : null;
+                                let span = 1;
+                                if (cell && cell.subject) {
+                                    while (i + 1 < classes.length) {
+                                        let nCell = generatedTimetable[d][p][classes[i+1]];
+                                        if (nCell && nCell.subject === cell.subject && nCell.teacher === cell.teacher) {
+                                            span++;
+                                            i++;
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                }
+                                tbl += getPrintCellHTML(cell, d, p, c, span);
+                            }
+                        }
+                        tbl += `</tr>`;
+                        if (p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} (${periodTimes.att || ""})</td></tr>`;
+                        if (p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} (${periodTimes.int || ""})</td></tr>`;
+                    }
+                    tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | SmartSoft | School Timetable V2.0</div></div></div>`;
+                    printHtml += tbl;
+                });
             } 
             else {
                 if (type === 'classes') {
                     let colSpan = days.length + 1;
                     classes.forEach(c => {
-                        let termHtml = layoutSetting === 1 ? termHtml1 : (layoutSetting === 2 ? termHtml2 : termHtml4);
                         let tbl = `<div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${c} ${t('cls_tt')}</h3>`;
                         tbl += `<table><thead><tr><th>${t('per_txt')}</th>` + days.map(d=>`<th>${getDayName(d)}</th>`).join('') + `</tr></thead><tbody>`;
-                        for(let p=1; p<=8; p++) {
-                            tbl += `<tr class="period-row"><td><div style="font-size:12px; font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:9px; color:#4b5563; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
-                            days.forEach(d => { let maxPD = getMaxPeriods(d); if(p > maxPD) { tbl += `<td class="cell-empty" style="background:#9ca3af;"></td>`; } else { tbl += getCellHTML(generatedTimetable[d][p][c], d, p, c); } });
+                        for(let p=1; p<=weekMax; p++) {
+                            tbl += `<tr class="period-row"><td><div style="font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:8px; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
+                            days.forEach(d => {
+                                let maxPD = getMaxPeriods(d);
+                                if(p > maxPD) {
+                                    tbl += `<td class="cell-empty" style="background:#d1d5db !important;"></td>`;
+                                } else {
+                                    let cell = generatedTimetable[d] && generatedTimetable[d][p] ? generatedTimetable[d][p][c] : null;
+                                    tbl += getPrintCellHTML(cell, d, p, c);
+                                }
+                            });
                             tbl += `</tr>`;
-                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0; text-transform:none;">(${periodTimes.att || ""})</span></td></tr>`;
-                            if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0;">(${periodTimes.int || ""})</span></td></tr>`;
+                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} (${periodTimes.att || ""})</td></tr>`;
+                            if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} (${periodTimes.int || ""})</td></tr>`;
                         }
                         tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | SmartSoft | School Timetable V2.0</div></div>`;
                         generatedItems.push(tbl);
                     });
                 }
                 else if (type === 'teachers') {
+                    let allTeachers = getAllTeachersForPrint();
+                    if (allTeachers.length === 0) return await customAlert(t('alert_no_data'));
+
                     let colSpan = days.length + 1;
-                    masterTeachers.forEach(tea => {
-                        let termHtml = layoutSetting === 1 ? termHtml1 : (layoutSetting === 2 ? termHtml2 : termHtml4);
+                    allTeachers.forEach(tea => {
                         let tbl = `<div class="timetable-box"><h2 class="school-title">${schoolName}</h2>${termHtml}<h3 class="main-title">${tea} ${t('tea_tt')}</h3>`;
                         tbl += `<table><thead><tr><th>${t('per_txt')}</th>` + days.map(d=>`<th>${getDayName(d)}</th>`).join('') + `</tr></thead><tbody>`;
-                        for(let p=1; p<=8; p++) {
-                            tbl += `<tr class="period-row"><td><div style="font-size:12px; font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:9px; color:#4b5563; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
+                        for(let p=1; p<=weekMax; p++) {
+                            tbl += `<tr class="period-row"><td><div style="font-weight:bold;">${t('period_short')} ${p}</div><div style="font-size:8px; font-weight:normal;">${periodTimes[p] || ""}</div></td>`;
                             days.forEach(d => {
                                 let assignedClasses = []; let assignedSubject = ""; let color = "#ffffff";
                                 let isRelief = false; let relGrade = "";
                                 
                                 let maxPD = getMaxPeriods(d);
                                 if(p > maxPD) {
-                                    tbl += `<td class="cell-empty" style="background:#9ca3af;"></td>`;
+                                    tbl += `<td class="cell-empty" style="background:#d1d5db !important;"></td>`;
                                     return;
                                 }
                                 classes.forEach(c => {
-                                    let cell = generatedTimetable[d][p][c];
-                                    if(cell && cell.teacher && cell.teacher.includes(tea)) { 
-                                        assignedClasses.push(c); 
-                                        assignedSubject = cell.subject || ''; 
-                                        color = getSubjectColor(cell.subject || '');
+                                    let cell = generatedTimetable[d] && generatedTimetable[d][p] ? generatedTimetable[d][p][c] : null;
+                                    if(cell && cell.teacher) {
+                                        let cellTeachers = cell.teacher.split(',').map(x => x.trim());
+                                        if(cellTeachers.includes(tea)) {
+                                            assignedClasses.push(c); 
+                                            assignedSubject = cell.subject || ''; 
+                                            color = getSubjectColor(cell.subject || '');
+                                        }
                                     }
                                 });
 
                                 let relief = reliefAssignments.find(r => r.day === d && r.period === p && r.reliefTeacher === tea);
                                 if(relief) {
                                     relGrade = relief.grade;
-                                    let baseCell = generatedTimetable[d][p][relief.grade];
+                                    let baseCell = generatedTimetable[d] && generatedTimetable[d][p] ? generatedTimetable[d][p][relief.grade] : null;
                                     assignedSubject = baseCell ? (baseCell.subject || '') : "";
                                     isRelief = true;
                                 }
 
                                 if(isRelief) {
-                                    tbl += `<td><div class="card relief-card"><span class="card-subj">${assignedSubject}</span><span class="relief-text">(${relGrade})</span></div></td>`;
+                                    tbl += `<td style="background-color:#fef2f2 !important;"><div class="card relief-card"><span class="card-subj">${assignedSubject}</span><span class="relief-text">(${relGrade})</span></div></td>`;
                                 } else if(assignedClasses.length > 0) {
-                                    tbl += `<td><div class="card" style="background:${color};"><span class="card-subj">${assignedSubject}</span><span>(${assignedClasses.join(', ')})</span></div></td>`;
+                                    tbl += `<td style="background-color:${color} !important;"><div class="card" style="background-color:${color} !important;"><span class="card-subj">${assignedSubject}</span><span>(${assignedClasses.join(', ')})</span></div></td>`;
                                 } else {
                                     tbl += `<td class="cell-empty"></td>`;
                                 }
                             });
                             tbl += `</tr>`;
-                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0; text-transform:none;">(${periodTimes.att || ""})</span></td></tr>`;
-                            if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} <span style="font-size:9px; font-weight:normal; letter-spacing:0;">(${periodTimes.int || ""})</span></td></tr>`;
+                            if(p === 1) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="attendance-row">${t('att_txt')} (${periodTimes.att || ""})</td></tr>`;
+                            if(p === intervalPos) tbl += `<tr class="special-row"><td colspan="${colSpan}" class="interval">${t('int_txt')} (${periodTimes.int || ""})</td></tr>`;
                         }
                         tbl += `</tbody></table><div class="print-footer">&copy; 2026 Kelum Konara | SmartSoft | School Timetable V2.0</div></div>`;
                         generatedItems.push(tbl);
@@ -2602,14 +2982,20 @@ let remainingRules = currentRules.filter(r => r.periods > 0);
                 for (let i = 0; i < generatedItems.length; i += layoutSetting) {
                     printHtml += `<div class="print-page layout-${layoutSetting}">`;
                     for (let j = 0; j < layoutSetting; j++) {
-                        if (generatedItems[i + j]) printHtml += generatedItems[i + j];
+                        if (generatedItems[i + j]) {
+                            printHtml += generatedItems[i + j];
+                        } else if (layoutSetting > 1) {
+                            printHtml += `<div class="timetable-box" style="visibility:hidden;"></div>`;
+                        }
                     }
                     printHtml += `</div>`;
                 }
             }
 
             pArea.innerHTML = printHtml;
-            window.print();
+            setTimeout(() => {
+                window.print();
+            }, 250);
         }
 
     </script>

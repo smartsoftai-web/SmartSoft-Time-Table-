@@ -638,19 +638,23 @@
             <fieldset>
                 <legend data-i18n="basic_data">👨‍🏫 මූලික දත්ත එක් කරන්න</legend>
                 <div class="form-grid">
-                    <label data-i18n="lbl_grd">ශ්‍රේණිය:</label><input type="text" id="inClass" data-i18n-ph="grd_ph" placeholder="උදා: 6, 7-A">
+                    <label data-i18n="lbl_grd">ශ්‍රේණිය:</label><input type="text" id="inClass" data-i18n-ph="grd_ph" placeholder="උදා: 6, 7-A" onkeydown="if(event.key==='Enter') addMasterClassMain()">
                     <label></label><button class="btn-small" onclick="addMasterClassMain()" data-i18n="btn_add_cls">+ ශ්‍රේණිය එක් කරන්න</button>
                 </div>
+                <div class="rules-list" id="basicClassesList" style="max-height: 95px; margin-bottom: 8px;"></div>
+
                 <hr style="border: 0; border-top: 1px dashed #d1d5db; margin: 10px 0;">
                 <div class="form-grid">
-                    <label data-i18n="lbl_sub">විෂයය (තනි):</label><input type="text" id="inSubject" data-i18n-ph="sub_ph" placeholder="උදා: ගණිතය">
+                    <label data-i18n="lbl_sub">විෂයය (තනි):</label><input type="text" id="inSubject" data-i18n-ph="sub_ph" placeholder="උදා: ගණිතය" onkeydown="if(event.key==='Enter') addMasterSubject()">
                     <label></label><button class="btn-small" onclick="addMasterSubject()" data-i18n="btn_add_sub">+ විෂයය එක් කරන්න</button>
                 </div>
+                <div class="rules-list" id="basicSubjectsList" style="max-height: 95px; margin-bottom: 8px;"></div>
+
                 <hr style="border: 0; border-top: 1px dashed #d1d5db; margin: 10px 0;">
                 <div class="form-grid">
                     <label data-i18n="lbl_tea">ගුරුවරයා:</label>
                     <div style="display:flex; gap:4px; width:100%;">
-                        <input type="text" id="inTeacher" data-i18n-ph="tea_ph" placeholder="උදා: නිමල්" style="flex:1;">
+                        <input type="text" id="inTeacher" data-i18n-ph="tea_ph" placeholder="උදා: නිමල්" style="flex:1;" onkeydown="if(event.key==='Enter') addMasterTeacher()">
                         <select id="inTeacherHonorific" style="width:92px; padding:6px 4px; font-weight:bold; color:#1e40af;">
                             <option value="මහතා" data-i18n="hon_mr">මහතා</option>
                             <option value="මහත්මිය" data-i18n="hon_mrs">මහත්මිය</option>
@@ -663,6 +667,8 @@
                     </div>
                     <label></label><button class="btn-small" onclick="addMasterTeacher()" data-i18n="btn_add_tea">+ ගුරුවරයා එක් කරන්න</button>
                 </div>
+                <div class="rules-list" id="basicTeachersList" style="max-height: 120px; margin-bottom: 8px;"></div>
+
                 <hr style="border: 0; border-top: 1px dashed #d1d5db; margin: 15px 0 10px 0;">
                 <p style="font-size: 11px; color: #4b5563; text-align: center; margin-bottom: 5px;" data-i18n="excel_desc">බොහෝ දත්ත තිබේ නම් පහත Excel ක්‍රමය භාවිතා කරන්න.</p>
                 <div style="display: flex; gap: 5px;">
@@ -988,6 +994,7 @@
                     if(importedCount > 0) {
                         saveData();
                         initDropdowns();
+                        renderBasicDataLists();
                         renderRules();
                         initEmptyTimetable();
                         customAlert(`${t("msg_imp_succ")} (${importedCount})`);
@@ -1020,7 +1027,7 @@
                 if(langDict[currentLang][key]) el.placeholder = langDict[currentLang][key];
             });
 
-            updateSchoolInfo(); initDropdowns(); renderRules(); renderConstraints();
+            updateSchoolInfo(); initDropdowns(); renderBasicDataLists(); renderRules(); renderConstraints();
             
             try { renderTable(); } catch(e) { console.error(e); }
             
@@ -1331,6 +1338,7 @@
             else { delete classTeacherMap[c]; }
             saveData();
             initDropdowns();
+            renderBasicDataLists();
             renderClassTeacherList();
             if(document.getElementById('dataModal').style.display === 'flex') renderDataModal();
         }
@@ -1426,6 +1434,7 @@
 
             saveData();
             initDropdowns();
+            renderBasicDataLists();
             renderRules();
             renderClassTeacherList();
             renderAllOverviewTable();
@@ -1684,6 +1693,69 @@
             window.print();
         }
 
+        function renderBasicDataLists() {
+            // Classes list
+            let cEl = document.getElementById('basicClassesList');
+            if (cEl) {
+                let cHtml = '';
+                classes.forEach((c) => {
+                    let ctName = classTeacherMap[c] ? ` <span style="font-size:9px; color:#be185d;">(👑 ${classTeacherMap[c]})</span>` : '';
+                    let safeC = JSON.stringify(c).replace(/"/g, '&quot;');
+                    cHtml += `<div class="rule-item" style="padding:4px 6px;">
+                        <span><b style="color:#1e40af;">${c}</b> ${t('grd_txt')}${ctName}</span>
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn-small" style="background:#f59e0b; border-color:#d97706; width:auto; padding:2px 6px; font-size:10px;" onclick="editItem('class', ${safeC})" title="Edit">✏️</button>
+                            <button class="btn-delete" style="padding:2px 6px;" onclick="deleteItem('class', ${safeC})" title="Delete">❌</button>
+                        </div>
+                    </div>`;
+                });
+                cEl.innerHTML = cHtml || `<span style='font-size:11px;color:gray;'>${t('alert_no_data')}</span>`;
+            }
+
+            // Subjects list
+            let sEl = document.getElementById('basicSubjectsList');
+            if (sEl) {
+                let sHtml = '';
+                masterSubjects.forEach((s) => {
+                    let safeS = JSON.stringify(s).replace(/"/g, '&quot;');
+                    sHtml += `<div class="rule-item" style="padding:4px 6px;">
+                        <span style="font-weight:bold; color:#047857;">${s}</span>
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn-small" style="background:#f59e0b; border-color:#d97706; width:auto; padding:2px 6px; font-size:10px;" onclick="editItem('subject', ${safeS})" title="Edit">✏️</button>
+                            <button class="btn-delete" style="padding:2px 6px;" onclick="deleteItem('subject', ${safeS})" title="Delete">❌</button>
+                        </div>
+                    </div>`;
+                });
+                sEl.innerHTML = sHtml || `<span style='font-size:11px;color:gray;'>${t('alert_no_data')}</span>`;
+            }
+
+            // Teachers list
+            let tEl = document.getElementById('basicTeachersList');
+            if (tEl) {
+                let tHtml = '';
+                masterTeachers.forEach((tea) => {
+                    let curHon = teacherHonorificMap[tea] || 'මහතා';
+                    let ctClasses = Object.keys(classTeacherMap).filter(k => classTeacherMap[k] === tea);
+                    let ctBadge = ctClasses.length > 0 ? ` <span style="font-size:9px; color:#be185d; font-weight:bold;">(👑 ${ctClasses.join(', ')})</span>` : '';
+                    let safeTea = JSON.stringify(tea).replace(/"/g, '&quot;');
+                    tHtml += `<div class="rule-item" style="padding:4px 6px;">
+                        <div style="line-height:1.2;">
+                            <span style="font-weight:bold; color:#1e40af;">${tea}</span> <span style="font-size:10px; color:#4b5563;">(${curHon})</span>${ctBadge}
+                        </div>
+                        <div style="display:flex; gap:3px; align-items:center;">
+                            <select style="padding:1px 3px; font-size:10px; width:auto;" onchange="teacherHonorificMap[${safeTea}]=this.value; saveData(); renderBasicDataLists(); if(document.getElementById('dataModal').style.display==='flex') renderDataModal();">
+                                <option value="මහතා" ${curHon==='මහතා'?'selected':''}>මහතා</option>
+                                <option value="මහත්මිය" ${curHon==='මහත්මිය'?'selected':''}>මහත්මිය</option>
+                            </select>
+                            <button class="btn-small" style="background:#f59e0b; border-color:#d97706; width:auto; padding:2px 6px; font-size:10px;" onclick="editItem('teacher', ${safeTea})" title="Edit">✏️</button>
+                            <button class="btn-delete" style="padding:2px 6px;" onclick="deleteItem('teacher', ${safeTea})" title="Delete">❌</button>
+                        </div>
+                    </div>`;
+                });
+                tEl.innerHTML = tHtml || `<span style='font-size:11px;color:gray;'>${t('alert_no_data')}</span>`;
+            }
+        }
+
         function renderDataModal() {
             let cHtml = '';
             classes.forEach(c => cHtml += `<div class="rule-item"><span>${c} ${t('grd_txt')}</span><div><button class="btn-small" style="background:#f59e0b;" onclick="editItem('class', '${c}')">✏️</button> <button class="btn-delete" onclick="deleteItem('class', '${c}')">❌</button></div></div>`);
@@ -1719,21 +1791,35 @@
 
             if (type === 'class') {
                 classes[classes.indexOf(oldVal)] = newVal;
-                teachingRules.forEach(r => { r.grade = r.grade.replace(new RegExp(oldVal, 'g'), newVal); });
+                teachingRules.forEach(r => {
+                    r.grade = r.grade.split(',').map(x => x.trim() === oldVal ? newVal : x.trim()).join(', ');
+                });
                 if(classTeacherMap[oldVal]) { classTeacherMap[newVal] = classTeacherMap[oldVal]; delete classTeacherMap[oldVal]; }
             } else if (type === 'teacher') {
                 masterTeachers[masterTeachers.indexOf(oldVal)] = newVal;
                 if (teacherHonorificMap[oldVal]) { teacherHonorificMap[newVal] = teacherHonorificMap[oldVal]; delete teacherHonorificMap[oldVal]; }
-                teachingRules.forEach(r => { r.teacher = r.teacher.replace(new RegExp(oldVal, 'g'), newVal); });
+                teachingRules.forEach(r => {
+                    r.teacher = r.teacher.split(',').map(x => x.trim() === oldVal ? newVal : x.trim()).join(', ');
+                });
                 for (let k in classTeacherMap) { if(classTeacherMap[k] === oldVal) classTeacherMap[k] = newVal; }
                 if(absentTeachers.includes(oldVal)) { absentTeachers[absentTeachers.indexOf(oldVal)] = newVal; }
                 teacherConstraints.forEach(tc => { if(tc.teacher === oldVal) tc.teacher = newVal; });
             } else if (type === 'subject') {
                 masterSubjects[masterSubjects.indexOf(oldVal)] = newVal;
-                teachingRules.forEach(r => { r.subject = r.subject.replace(new RegExp(oldVal, 'g'), newVal); });
+                teachingRules.forEach(r => {
+                    if (r.type === 'basket') {
+                        r.subject = r.subject.split(' / ').map(part => {
+                            let clean = part.replace(' (කාණ්ඩ)', '').replace(' (Basket)', '').trim();
+                            let suffix = part.includes('(කාණ්ඩ)') ? ' (කාණ්ඩ)' : (part.includes('(Basket)') ? ' (Basket)' : '');
+                            return (clean === oldVal ? newVal : clean) + suffix;
+                        }).join(' / ');
+                    } else if (r.subject.trim() === oldVal) {
+                        r.subject = newVal;
+                    }
+                });
             }
             initEmptyTimetable(); 
-            saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
+            saveData(); initDropdowns(); renderBasicDataLists(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
         }
 
         async function deleteItem(type, val) {
@@ -1751,7 +1837,7 @@
                 masterSubjects = masterSubjects.filter(s => s !== val);
             }
             initEmptyTimetable(); 
-            saveData(); initDropdowns(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
+            saveData(); initDropdowns(); renderBasicDataLists(); try { renderTable(); }catch(e){} renderDataModal(); renderRules(); renderConstraints();
         }
 
         function toggleCTGrade() { document.getElementById('inTeacherClass').style.display = document.getElementById('isClassTeacher').checked ? 'block' : 'none'; }
@@ -1759,7 +1845,7 @@
         function addMasterClassMain() {
             let c = document.getElementById('inClass').value.trim();
             if(c && !classes.includes(c)) { 
-                classes.push(c); initEmptyTimetable(); saveData(); initDropdowns(); try { renderTable(); }catch(e){} 
+                classes.push(c); initEmptyTimetable(); saveData(); initDropdowns(); renderBasicDataLists(); try { renderTable(); }catch(e){} 
             }
             document.getElementById('inClass').value = "";
         }
@@ -1779,6 +1865,7 @@
                 }
                 saveData(); 
                 initDropdowns();
+                renderBasicDataLists();
                 if(typeof renderClassTeacherList === 'function') renderClassTeacherList();
             }
             document.getElementById('inTeacher').value = ""; 
@@ -1788,7 +1875,7 @@
 
         function addMasterSubject() {
             let s = document.getElementById('inSubject').value.trim();
-            if(s && !masterSubjects.includes(s)) { masterSubjects.push(s); saveData(); initDropdowns(); }
+            if(s && !masterSubjects.includes(s)) { masterSubjects.push(s); saveData(); initDropdowns(); renderBasicDataLists(); }
             document.getElementById('inSubject').value = "";
         }
 

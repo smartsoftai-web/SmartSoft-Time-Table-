@@ -2237,19 +2237,17 @@
 
             function getValidSlots(tt, busyGrid, block) {
                 let slots = [];
-                let isHard = /math|sci|eng|sin|tam|his|bud|rel|ගණිත|විද්‍යා|ඉංග්‍රීසි|සිංහල|දෙමළ|ඉතිහාසය|බුද්ධ|ආගම/i.test(block.subject);
-                let isSoft = /ict|තොරතුරු|ප්‍රායෝගික|තාක්ෂණ|සෞන්දර්ය|art|danc|music|චිත්‍ර|නැටුම්|සංගීත|basket|කාණ්ඩ/i.test(block.subject);
 
                 for (let d of days) {
                     let maxPD = _getMaxP(d);
                     for (let p = 1; p <= maxPD; p++) {
                         if (canPlaceBlock(tt, busyGrid, block, d, p)) {
-                            let score = Math.random() * 3;
-                            if (isHard && p <= 4) score += 6;
-                            if (isSoft && p >= 5) score += 6;
+                            // Unbiased scoring across all periods (morning & afternoon equally available for all subjects/teachers)
+                            let score = Math.random() * 4;
+                            // Prefer slots adjacent to teacher's existing classes to minimize idle windows
                             for (let tea of block.teachersArr) {
-                                if (p > 1 && busyGrid[d][p - 1].has(tea)) score += 2;
-                                if (p + block.duration <= maxPD && busyGrid[d][p + block.duration].has(tea)) score += 2;
+                                if (p > 1 && busyGrid[d][p - 1].has(tea)) score += 2.5;
+                                if (p + block.duration <= maxPD && busyGrid[d][p + block.duration].has(tea)) score += 2.5;
                             }
                             slots.push({ d, p, score });
                         }
@@ -2264,7 +2262,6 @@
                 if (depth > maxDepth) return false;
                 if (performance.now() - startTime > timeBudgetMs) return false;
 
-                let isHard = /math|sci|eng|sin|tam|his|bud|rel|ගණිත|විද්‍යා|ඉංග්‍රීසි|සිංහල|දෙමළ|ඉතිහාසය|බුද්ධ|ආගම/i.test(targetBlock.subject);
                 let candidatePositions = [];
 
                 for (let d of days) {
@@ -2312,7 +2309,7 @@
                         }
                         if (!validBlockers) continue;
 
-                        let score = (blockersSet.size * -15) + (Math.random() * 2) + (isHard && p <= 4 ? 3 : 0);
+                        let score = (blockersSet.size * -15) + (Math.random() * 2);
                         candidatePositions.push({ d, p, blockers: Array.from(blockersSet), score });
                     }
                 }
@@ -2414,12 +2411,26 @@
                             score -= idleGaps * 3;
                         }
                     }
-                    for (let p = 1; p <= Math.min(4, maxPD); p++) {
-                        for (let c of classes) {
+                }
+                // Reward balanced morning (<= _intv) and afternoon (> _intv) distribution for multi-period subjects
+                for (let c of classes) {
+                    let subjTimes = {};
+                    for (let d of days) {
+                        let maxPD = _getMaxP(d);
+                        for (let p = 1; p <= maxPD; p++) {
                             let cell = tt[d][p][c];
-                            if (cell && /math|sci|eng|sin|tam|his|bud|rel|ගණිත|විද්‍යා|ඉංග්‍රීසි|සිංහල|දෙමළ|ඉතිහාසය|බුද්ධ|ආගම/i.test(cell.subject)) {
-                                score += 2;
+                            if (cell && cell.subject) {
+                                if (!subjTimes[cell.subject]) subjTimes[cell.subject] = { before: 0, after: 0 };
+                                if (p <= _intv) subjTimes[cell.subject].before++;
+                                else subjTimes[cell.subject].after++;
                             }
+                        }
+                    }
+                    for (let sub in subjTimes) {
+                        let b = subjTimes[sub].before;
+                        let a = subjTimes[sub].after;
+                        if (b + a >= 3) {
+                            score -= Math.abs(b - a);
                         }
                     }
                 }
